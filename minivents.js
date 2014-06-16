@@ -56,7 +56,7 @@ var Events = (function () {
              * @param {Function} The function to be called, when the event is triggered.
              * @param {Object} Optionally, you can provide a context for the callback function.
              */
-            target.on = function on (type, func, ctx) {
+            target.on = function on (type, func, ctx, async) {
 
                 if (locked || (events[type] && events[type].locked)) {
                     return;
@@ -66,7 +66,7 @@ var Events = (function () {
                     f : func,
                     context : ctx,
                     silenced : false,
-                    // locked : false
+                    async : async === false ? -1 : async|0
                 });
 
             };
@@ -95,9 +95,11 @@ var Events = (function () {
              *
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
-            target.emit = function emit (type) {
+            target.emit = function emit (type, data, async) {
 
                 var args,
+                    asyncScore,
+                    callback,
                     list,
                     len,
                     j;
@@ -106,16 +108,31 @@ var Events = (function () {
                     return;
                 }
 
-                args = [].slice.apply(arguments);
                 list = (events[type] && events[type].callbacks) || [];
                 len = list.length;
                 j = 0;
 
-                args.shift();
+                async = async === false ? -1 : async|0;
 
-                for (; j < len; j += 1) {
-                    if (!list[j].silenced) {
-                       list[j].f.apply(list[j].context, args);
+                for (; j < len; j = j + 1) {
+                    callback = list[j];
+                    if (!callback.silenced) {
+                        asyncScore = callback.async + async;
+                        if ( (callback.async === 0 && async === 0) || asyncScore > 0 || callback.async === 1 ) {
+                            setTimeout(list[j].f.bind(list[j].context, { 
+                                "name" : type,
+                                "bus" : target,
+                                "async" : true,
+                                "data" : data
+                           }), 0);
+                        } else if (asyncScore < 0 || callback.async === -1) {
+                            list[j].f.apply(list[j].context, { 
+                                "name" : type,
+                                "bus" : target,
+                                "async" : false,
+                                "data" : data
+                           });
+                        }
                     }
                 }
 
