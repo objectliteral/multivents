@@ -73,6 +73,8 @@ var Events = (function () {
 
             };
 
+            target.attach = target.on;
+
             /**
              * This method allows it to remove event listeners. A reference to the function to be removed is required.
              *
@@ -91,6 +93,8 @@ var Events = (function () {
                 }
 
             };
+
+            target.detach = target.off;
 
             emit = function emit (type, data, async) {
 

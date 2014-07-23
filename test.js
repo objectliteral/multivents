@@ -116,6 +116,16 @@ describe('Event busses', function () {
       assert.equal(bus.emitAsync, bus.fireAsync);
     });
 
+    it('should contain a `attach` alias for the `on` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emit, bus.fire);
+    });
+
+    it('should contain a `detach` alias for the `off` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emit, bus.fire);
+    });
+
 });
 
 describe('`on` function', function () {
