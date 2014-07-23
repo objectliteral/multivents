@@ -139,14 +139,14 @@ var Events = (function () {
 
                         } else if (asyncScore < 0 || callback.async === -1) {
                             list[j].f.apply(list[j].context,
-                              [ {
+                              data.concat([ {
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
                                 bus : target,
                                 async : false,
                                 data : data
-                              } ].concat(data)
+                              } ])
                             );
                         }
                     }
@@ -170,6 +170,10 @@ var Events = (function () {
             target.emitAsync = function (type) {
                 return emit(type, Array.prototype.slice.call(arguments, 1), true);
             };
+
+            target.fire = target.trigger = target.emit;
+            target.fireSync = target.triggerSync = target.emitSync;
+            target.fireAsync = target.triggerAsync = target.emitAsync;
 
             /**
              * The `silence` method prevents any new messages from being sent over the message bus.

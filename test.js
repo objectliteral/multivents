@@ -2,51 +2,28 @@ var assert = require('assert'),
     Events = require('./minivents.js');
 
 describe('Events Constructor', function () {
-  it('should return an object containing the methods used by minivents if called with new', 
-    function () {
+  it('should return an object containing the methods used by minivents if called with new', function () {
       var bus = new Events();
-      assert.equal(true, typeof bus.emit === 'function');
-      assert.equal(true, typeof bus.off === 'function');
-      assert.equal(true, typeof bus.on === 'function');
-      assert.equal(true, typeof bus.reset === 'function');
-      assert.equal(true, typeof bus.silence === 'function');
-      assert.equal(true, typeof bus.unsilence === 'function');
-      assert.equal(true, typeof bus.lock === 'function');
-      assert.equal(true, typeof bus.unlock === 'function');
+      assert.equal('object', typeof bus);
   });
 
-  it('should return an object containing the methods used by minivents if called with an empty object', 
-    function () {
+  it('should return an object containing the methods used by minivents if called with an empty object', function () {
       var bus = Events({});
-      assert.equal(true, typeof bus.emit === 'function');
-      assert.equal(true, typeof bus.off === 'function');
-      assert.equal(true, typeof bus.on === 'function');
-      assert.equal(true, typeof bus.reset === 'function');
-      assert.equal(true, typeof bus.silence === 'function');
-      assert.equal(true, typeof bus.unsilence === 'function');
-      assert.equal(true, typeof bus.lock === 'function');
-      assert.equal(true, typeof bus.unlock === 'function');
+      assert.equal('object', typeof bus);
   });
 
-  it('should return an object containing the methods used by minivents if called with a string', 
-    function () {
+  it('should return an object if called with a string', function () {
       var bus = Events('test');
-      assert.equal(true, typeof bus.emit === 'function');
-      assert.equal(true, typeof bus.off === 'function');
-      assert.equal(true, typeof bus.on === 'function');
-      assert.equal(true, typeof bus.reset === 'function');
-      assert.equal(true, typeof bus.silence === 'function');
-      assert.equal(true, typeof bus.unsilence === 'function');
-      assert.equal(true, typeof bus.lock === 'function');
-      assert.equal(true, typeof bus.unlock === 'function');
+      assert.equal('object', typeof bus);
   });
 
-  it('should make named busses available via a `get` method', 
-    function () {
+  it('should contain a `get` function', function () {
+    assert.equal(true, typeof Events.get === 'function');
+  });
+
+  it('should make named busses available via a `get` method', function () {
       var bus = Events('test');
-      assert.equal(true, typeof Events.get === 'function');
       assert.equal(bus, Events.get('test'));
-      
   });
 
   it('should modify original object that was passed to it', function () {
@@ -54,6 +31,90 @@ describe('Events Constructor', function () {
     eventedObj = Events(obj);
     assert.equal(obj, eventedObj);
   });
+
+});
+
+describe('Event busses', function () {
+
+    it('should contain an `emit` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.emit);
+    });
+
+    it('should contain an `emitSync` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.emitSync);
+    });
+
+    it('should contain an `emitAsync` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.emitAsync);
+    });
+
+    it('should contain an `off` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.off);
+    });
+
+    it('should contain an `on` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.on);
+    });
+    
+    it('should contain an `reset` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.reset);
+    });
+
+    it('should contain an `silence` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.silence);
+    });
+    
+    it('should contain an `unsilence` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.unsilence);
+    });
+
+    it('should contain an `lock` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.lock);
+    });
+    
+    it('should contain an `unlock` function', function () {
+      var bus = Events('test');
+      assert.equal('function', typeof bus.unlock);
+    });
+    
+    it('should contain a `trigger` alias for the `emit` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emit, bus.trigger);
+    });
+
+    it('should contain a `triggerSync` alias for the `emitSync` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emitSync, bus.triggerSync);
+    });
+
+    it('should contain a `triggerAsync` alias for the `emitAsync` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emitAsync, bus.triggerAsync);
+    });
+
+    it('should contain a `fire` alias for the `emit` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emit, bus.fire);
+    });
+
+    it('should contain a `fireSync` alias for the `emitSync` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emitSync, bus.fireSync);
+    });
+
+    it('should contain a `fireAsync` alias for the `emitAsync` function', function () {
+      var bus = Events('test');
+      assert.equal(bus.emitAsync, bus.fireAsync);
+    });
 
 });
 
