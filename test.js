@@ -133,9 +133,32 @@ describe('`emit` function',  function () {
 
     it('should pass all of its additional arguments to the callback',  function () {
         var bus = Events({}),
-            f = function (arg) { assert.equal('bar', arg); };
+            f = function (arg0, arg1) { 
+              assert.equal('foo', arg0);
+              assert.equal('bar', arg1);
+            };
         bus.on('ping', f);
-        bus.emit('ping', 'bar');
+        bus.emit('ping', 'foo', 'bar');
+    });
+
+    it('should pass all of its additional arguments to the callback when explicitly called with the async flag',  function () {
+        var bus = Events({}),
+            f = function (arg0, arg1) { 
+              assert.equal('foo', arg0);
+              assert.equal('bar', arg1);
+            };
+        bus.on('ping', f);
+        bus.emitAsync('ping', 'foo', 'bar');
+    });
+
+    it('should pass all of its additional arguments to the callback when explicitly called with the sync flag',  function () {
+        var bus = Events({}),
+            f = function (arg0, arg1) { 
+              assert.equal('foo', arg0);
+              assert.equal('bar', arg1);
+            };
+        bus.on('ping', f);
+        bus.emitSync('ping', 'foo', 'bar');
     });
 
     it('should inject a callback\'s context',  function () {
@@ -145,6 +168,105 @@ describe('`emit` function',  function () {
         bus.on('ping', f, ctx);
         bus.emit('ping');
     });
+
+    it('should inject a callback\'s context when explicitly called with the async flag',  function () {
+        var bus = Events({}),
+            ctx = { }
+            f = function () { assert.equal(ctx, this); };
+        bus.on('ping', f, ctx);
+        bus.emitAsync('ping');
+    });
+
+    it('should inject a callback\'s context when explicitly called with the sync flag',  function () {
+        var bus = Events({}),
+            ctx = { }
+            f = function () { assert.equal(ctx, this); };
+        bus.on('ping', f, ctx);
+        bus.emitSync('ping');
+    });
+
+    it('should inject an event object containing information about the event', function () {
+        var bus = Events({}),
+            f = function (arg, evt) {
+                assert.equal('object', typeof evt);
+                assert.equal(f, evt.func);
+                assert.equal(undefined, evt.context);
+                assert.equal('ping', evt.name);
+                assert.equal(bus, evt.bus);
+                // assert.equal(true, evt.async);
+                //assert.equal(data, evt.data);
+            };
+        bus.on('ping', f);
+        bus.emit('ping', 'foo');
+    });
+
+    it('should inject an event object containing information about the event when explicitly called with the async flag', function () {
+        var bus = Events({}),
+            f = function (arg, evt) {
+                assert.equal('object', typeof evt);
+            };
+        bus.on('ping', f);
+        bus.emitAsync('ping', 'foo');
+    });
+
+    it('should inject an event object containing information about the event when explicitly called with the sync flag', function () {
+        var bus = Events({}),
+            f = function (arg, evt) {
+                assert.equal('object', typeof evt);
+            };
+        bus.on('ping', f);
+        bus.emitSync('ping', 'foo');
+    });
+});
+
+describe('the event object, passed to callback functions', function () {
+
+  it('should contain a reference to the callback function', function () {
+    var bus = Events({}),
+        f = function (evt) {
+            assert.equal(f, evt.func);
+        };
+    bus.on('ping', f);
+    bus.emit('ping');
+  });
+
+  it('should contain a reference to the context object that was declared for the callback function', function () {
+    var bus = Events({}),
+        ctx = {},
+        f = function (evt) {
+            assert.equal(ctx, evt.context);
+        };
+    bus.on('ping', f, ctx);
+    bus.emit('ping');
+  });
+
+  it('should contain the event name', function () {
+    var bus = Events({}),
+        f = function (evt) {
+            assert.equal('ping', evt.name);
+        };
+    bus.on('ping', f);
+    bus.emit('ping');
+  });
+
+  it('should contain a reference to the event bus on which the event was triggered', function () {
+    var bus = Events({}),
+        f = function (evt) {
+            assert.equal(bus, evt.bus);
+        };
+    bus.on('ping', f);
+    bus.emit('ping');
+  });
+
+  it('should contain information about whether the callback was executed asynchronously', function () {
+    var bus = Events({}),
+        f = function (evt) {
+            assert.equal(true, evt.async);
+        };
+    bus.on('ping', f);
+    bus.emit('ping');
+  });
+
 });
 
 describe('`reset` function',  function () {
