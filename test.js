@@ -133,9 +133,9 @@ describe('`emit` function',  function () {
 
     it('should pass all of its additional arguments to the callback',  function () {
         var bus = Events({}),
-            f = function (arg) { assert.equal('bar', arg.data.foo); };
+            f = function (arg) { assert.equal('bar', arg); };
         bus.on('ping', f);
-        bus.emit('ping', { foo: 'bar' });
+        bus.emit('ping', 'bar');
     });
 
     it('should inject a callback\'s context',  function () {
@@ -377,7 +377,7 @@ describe('Callback function execution', function () {
     var bus = Events({}),
         foo;
     bus.on('ping', function () { foo = 'bar'; }, null, false);
-    bus.emit('ping', null, false);
+    bus.emitSync('ping');
     assert.equal('bar', foo);
   });
 
@@ -393,7 +393,7 @@ describe('Callback function execution', function () {
     var bus = Events({}),
         foo;
     bus.on('ping', function () { foo = 'bar'; });
-    bus.emit('ping', null, false);
+    bus.emitSync('ping');
     assert.equal('bar', foo);
   });
 
@@ -401,7 +401,7 @@ describe('Callback function execution', function () {
     var bus = Events({}),
         foo;
     bus.on('ping', function () { assert.equal('bar', foo); }, null, true);
-    bus.emit('ping', null, true);
+    bus.emitAsync('ping');
     foo = 'bar';
   });
 
@@ -417,7 +417,7 @@ describe('Callback function execution', function () {
     var bus = Events({}),
         foo;
     bus.on('ping', function () { assert.equal('bar', foo); });
-    bus.emit('ping', null, true);
+    bus.emitAsync('ping');
     foo = 'bar';
   });
 
@@ -425,7 +425,7 @@ describe('Callback function execution', function () {
     var bus = Events({}),
         foo;
     bus.on('ping', function () { foo = 'bar'; });
-    bus.emit('ping', null, false);
+    bus.emitSync('ping');
     assert.equal('bar', foo);
   });
 
