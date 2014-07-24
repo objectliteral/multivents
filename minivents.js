@@ -119,7 +119,7 @@ var Events = (function () {
                     callback = list[j];
                     if (!callback.silenced) {
                         asyncScore = callback.async + async;
-                        if ( (callback.async === 0 && async === 0) || asyncScore > 0 || callback.async === 1 ) {
+                        if ( (callback.async === 0 && async === 0) || asyncScore > 0 || async === 1 ) {
 
                             setTimeout( 
 
@@ -141,7 +141,7 @@ var Events = (function () {
 
                             0);
 
-                        } else if (asyncScore < 0 || callback.async === -1) {
+                        } else if (asyncScore < 0 || async === -1) {
                             list[j].f.apply(list[j].context,
                               data.concat([ {
                                 func : callback.f,
