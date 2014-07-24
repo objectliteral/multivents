@@ -37,92 +37,92 @@ describe('Events Constructor', function () {
 describe('Event busses', function () {
 
     it('should contain an `emit` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.emit);
     });
 
     it('should contain an `emitSync` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.emitSync);
     });
 
     it('should contain an `emitAsync` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.emitAsync);
     });
 
     it('should contain an `off` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.off);
     });
 
     it('should contain an `on` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.on);
     });
     
     it('should contain an `reset` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.reset);
     });
 
     it('should contain an `silence` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.silence);
     });
     
     it('should contain an `unsilence` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.unsilence);
     });
 
     it('should contain an `lock` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.lock);
     });
     
     it('should contain an `unlock` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal('function', typeof bus.unlock);
     });
     
     it('should contain a `trigger` alias for the `emit` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emit, bus.trigger);
     });
 
     it('should contain a `triggerSync` alias for the `emitSync` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emitSync, bus.triggerSync);
     });
 
     it('should contain a `triggerAsync` alias for the `emitAsync` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emitAsync, bus.triggerAsync);
     });
 
     it('should contain a `fire` alias for the `emit` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emit, bus.fire);
     });
 
     it('should contain a `fireSync` alias for the `emitSync` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emitSync, bus.fireSync);
     });
 
     it('should contain a `fireAsync` alias for the `emitAsync` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emitAsync, bus.fireAsync);
     });
 
     it('should contain a `attach` alias for the `on` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emit, bus.fire);
     });
 
     it('should contain a `detach` alias for the `off` function', function () {
-      var bus = Events('test');
+      var bus = Events({});
       assert.equal(bus.emit, bus.fire);
     });
 
@@ -614,19 +614,19 @@ describe('Callback function execution', function () {
     foo = 'bar';
   });
 
-  it('should be synchronous if `on` specifies that it prefers synchronicity and `emit` prefers asynchronicity', function () {
-    var bus = Events({}),
-        foo;
-    bus.on('ping', function () { foo = 'bar'; });
-    bus.emitSync('ping');
-    assert.equal('bar', foo);
-  });
-
-  it('should be asynchronous if `on` specifies that it prefers asynchronicity and `emit` prefers synchronicity', function () {
+  it('should be asynchronous if `on` specifies that it prefers synchronicity and `emit` prefers asynchronicity', function () {
     var bus = Events({}),
         foo;
     bus.on('ping', function () { assert.equal('bar', foo); }, null, true);
-    bus.emit('ping');
+    bus.emitAsync('ping');
     foo = 'bar';
+  });
+
+  it('should be synchronous if `on` specifies that it prefers asynchronicity and `emit` prefers synchronicity', function () {
+    var bus = Events({}),
+        foo;
+    bus.on('ping', function () { foo = 'bar'; }, null, false);
+    bus.emitSync('ping');
+    assert.equal('bar', foo);
   });
 });
