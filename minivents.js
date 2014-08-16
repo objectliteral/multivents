@@ -57,6 +57,7 @@ var Events = (function () {
              * @param {String} The name of the event is specified by a string. It doesn't matter, whether this event name already exists or not.
              * @param {Function} The function to be called, when the event is triggered.
              * @param {Object} Optionally, you can provide a context for the callback function.
+             * @param {boolen} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              */
             target.on = function on (type, func, ctx, async) {
 
@@ -159,7 +160,7 @@ var Events = (function () {
             };
 
             /** 
-             * Calling this method triggers the specified event and will result in all registered callbacks being executed. There should be no reliance on the order in which the callbacks are being invoked.
+             * Calling this method triggers the specified event and will result in all registered callbacks being executed. You should no rely on the order in which the callbacks are being invoked.
              *
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
@@ -167,10 +168,20 @@ var Events = (function () {
                 return emit(type, Array.prototype.slice.call(arguments, 1));
             };
 
+            /** 
+             * This method works like `emit` but guarantees synchronous execution of all callbacks for this event.
+             *
+             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
+             */
             target.emitSync = function (type) {
                 return emit(type, Array.prototype.slice.call(arguments, 1), false);
             };
 
+            /** 
+             * This method works like `emit` but guarantees asynchronous execution of all callbacks for this event.
+             *
+             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
+             */
             target.emitAsync = function (type) {
                 return emit(type, Array.prototype.slice.call(arguments, 1), true);
             };
@@ -285,7 +296,7 @@ var Events = (function () {
             /**
              * This lets you remove all event listeners from the message bus or from a specified event type. (Also sets `silenced` and `locked` to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed
+             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole bus will be reset.
              */
             target.reset =  function reset (type) {
                 if (!isPublic(target)) {
@@ -303,6 +314,12 @@ var Events = (function () {
 
         };
 
+    /**
+     * This method returns a named bus.
+     *
+     * @param {String} The name of the public bus you want to retrieve.
+     * @return The public bus with the specified name
+     */
     f.get = function (name) {
         return busses[name];
     };
