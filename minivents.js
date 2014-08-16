@@ -14,6 +14,8 @@ var Events = (function () {
             return false;
         },
 
+        emit,
+
     /**
      * Calling the `Events` function creates a new message bus over which messages can be sent.
      * The function adds methods to an object that allow for listening to and triggering events.
@@ -55,8 +57,9 @@ var Events = (function () {
              * @param {String} The name of the event is specified by a string. It doesn't matter, whether this event name already exists or not.
              * @param {Function} The function to be called, when the event is triggered.
              * @param {Object} Optionally, you can provide a context for the callback function.
+             * @param {boolen} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              */
-            target.on = function on (type, func, ctx) {
+            target.on = function on (type, func, ctx, async) {
 
                 if (locked || (events[type] && events[type].locked)) {
                     return;
@@ -66,10 +69,12 @@ var Events = (function () {
                     f : func,
                     context : ctx,
                     silenced : false,
-                    // locked : false
+                    async : async === false ? -1 : async|0
                 });
 
             };
+
+            target.attach = target.on;
 
             /**
              * This method allows it to remove event listeners. A reference to the function to be removed is required.
@@ -89,15 +94,14 @@ var Events = (function () {
                 }
 
             };
-            
-            /** 
-             * Calling this method triggers the specified event and will result in all registered callbacks being executed. There should be no reliance on the order in which the callbacks are being invoked.
-             *
-             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
-             */
-            target.emit = function emit (type) {
+
+            target.detach = target.off;
+
+            emit = function emit (type, data, async) {
 
                 var args,
+                    asyncScore,
+                    callback,
                     list,
                     len,
                     j;
@@ -106,20 +110,85 @@ var Events = (function () {
                     return;
                 }
 
-                args = [].slice.apply(arguments);
                 list = (events[type] && events[type].callbacks) || [];
                 len = list.length;
                 j = 0;
 
-                args.shift();
+                async = async === false ? -1 : async|0;
 
-                for (; j < len; j += 1) {
-                    if (!list[j].silenced) {
-                       list[j].f.apply(list[j].context, args);
+                for (; j < len; j = j + 1) {
+                    callback = list[j];
+                    if (!callback.silenced) {
+                        asyncScore = callback.async + async;
+                        if ( (callback.async === 0 && async === 0) || asyncScore > 0 || async === 1 ) {
+
+                            setTimeout( 
+
+                              (function () {
+
+                                this.func.apply(this.context,
+                                  // [ this ].concat(this.data)
+                                  this.data.concat([ this ])
+                                );
+
+                              }).bind({
+                                func : callback.f,
+                                context : callback.context,
+                                name : type,
+                                bus : target,
+                                async : true,
+                                data : data
+                              }), 
+
+                            0);
+
+                        } else if (asyncScore < 0 || async === -1) {
+                            list[j].f.apply(list[j].context,
+                              data.concat([ {
+                                func : callback.f,
+                                context : callback.context,
+                                name : type,
+                                bus : target,
+                                async : false,
+                                data : data
+                              } ])
+                            );
+                        }
                     }
                 }
 
             };
+
+            /** 
+             * Calling this method triggers the specified event and will result in all registered callbacks being executed. You should no rely on the order in which the callbacks are being invoked.
+             *
+             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
+             */
+            target.emit = function (type) {
+                return emit(type, Array.prototype.slice.call(arguments, 1));
+            };
+
+            /** 
+             * This method works like `emit` but guarantees synchronous execution of all callbacks for this event.
+             *
+             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
+             */
+            target.emitSync = function (type) {
+                return emit(type, Array.prototype.slice.call(arguments, 1), false);
+            };
+
+            /** 
+             * This method works like `emit` but guarantees asynchronous execution of all callbacks for this event.
+             *
+             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
+             */
+            target.emitAsync = function (type) {
+                return emit(type, Array.prototype.slice.call(arguments, 1), true);
+            };
+
+            target.fire = target.trigger = target.emit;
+            target.fireSync = target.triggerSync = target.emitSync;
+            target.fireAsync = target.triggerAsync = target.emitAsync;
 
             /**
              * The `silence` method prevents any new messages from being sent over the message bus.
@@ -227,7 +296,7 @@ var Events = (function () {
             /**
              * This lets you remove all event listeners from the message bus or from a specified event type. (Also sets `silenced` and `locked` to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed
+             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole bus will be reset.
              */
             target.reset =  function reset (type) {
                 if (!isPublic(target)) {
@@ -245,6 +314,12 @@ var Events = (function () {
 
         };
 
+    /**
+     * This method returns a named bus.
+     *
+     * @param {String} The name of the public bus you want to retrieve.
+     * @return The public bus with the specified name
+     */
     f.get = function (name) {
         return busses[name];
     };
