@@ -62,7 +62,7 @@ var Events = (function () {
             target.on = function on (type, func, ctx, async) {
 
                 if (locked || (events[type] && events[type].locked)) {
-                    return;
+                    return target;
                 }
 
                 addEvent(type).callbacks.push({
@@ -71,6 +71,8 @@ var Events = (function () {
                     silenced : false,
                     async : async === false ? -1 : async|0
                 });
+
+                return target;
 
             };
 
@@ -115,6 +117,8 @@ var Events = (function () {
                     }
                 }
 
+                return target;
+
             };
 
             target.detach = target.off;
@@ -129,7 +133,7 @@ var Events = (function () {
                     j;
 
                 if (silenced || (events[type] && events[type].silenced)) {
-                    return;
+                    return target;
                 }
 
                 list = (events[type] && events[type].callbacks) || [];
@@ -179,6 +183,8 @@ var Events = (function () {
                     }
                 }
 
+                return target;
+
             };
 
             /** 
@@ -223,17 +229,17 @@ var Events = (function () {
                 var e, i, l;
 
                 if (isPublic(target)) {
-                    return false;
+                    return target;
                 }
 
                 if (type === undefined) {
                     silenced = true;
-                    return;
+                    return target;
                 }
                 
                 if (func === undefined) {
                     addEvent(type).silenced = true;
-                    return;
+                    return target;
                 }
 
                 e = events[type];
@@ -246,6 +252,8 @@ var Events = (function () {
                         }
                     }
                 }
+
+                return target;
 
             };
 
@@ -260,7 +268,7 @@ var Events = (function () {
                 var e, i, l;
 
                 if (isPublic(target)) {
-                    return false;
+                    return target;
                 }
 
                 if (type === undefined) {
@@ -282,6 +290,7 @@ var Events = (function () {
                     }
                 }
                 
+                return target;
 
             };
 
@@ -291,6 +300,7 @@ var Events = (function () {
              * @param {String} Optional: The name of the event to which no new callbacks shall be registerd.
              */
             target.lock = function lock (type) {
+
                 if (!isPublic(target)) {
                     if (type === undefined) {
                         locked = true;
@@ -298,6 +308,9 @@ var Events = (function () {
                         addEvent(type).locked = true;
                     }
                 }
+
+                return target;
+
             };
 
             /**
@@ -306,6 +319,7 @@ var Events = (function () {
              * @param {String} Optional: The name of the event that shall accept new callbacks again.
              */
             target.unlock = function unlock (type) {
+
                 if (!isPublic(target)) {
                     if (type === undefined) {
                         locked = false;
@@ -313,6 +327,9 @@ var Events = (function () {
                         addEvent(type).locked = false;
                     }
                 }
+
+                return target;
+
             };
 
             /**
@@ -321,6 +338,7 @@ var Events = (function () {
              * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.
              */
             target.reset =  function reset (type) {
+
                 if (!isPublic(target)) {
                     if (events !== null) {
                         if (type === undefined) {
@@ -330,6 +348,9 @@ var Events = (function () {
                         }
                     }
                 }
+
+                return target;
+
             };
 
             return target;
