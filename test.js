@@ -1,34 +1,34 @@
 var assert = require('assert'),
-    Events = require('./multivents.js');
+    Channel = require('./multivents.js');
 
-describe('Events Constructor', function () {
+describe('Channel Constructor', function () {
   it('should return an object containing the methods used by minivents if called with new', function () {
-      var channel = new Events();
+      var channel = new Channel();
       assert.equal('object', typeof channel);
   });
 
   it('should return an object containing the methods used by minivents if called with an empty object', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('object', typeof channel);
   });
 
   it('should return an object if called with a string', function () {
-      var channel = Events('test');
+      var channel = Channel('test');
       assert.equal('object', typeof channel);
   });
 
   it('should contain a `get` function', function () {
-    assert.equal(true, typeof Events.get === 'function');
+    assert.equal(true, typeof Channel.get === 'function');
   });
 
   it('should make named channels available via a `get` method', function () {
-      var channel = Events('test');
-      assert.equal(channel, Events.get('test'));
+      var channel = Channel('test');
+      assert.equal(channel, Channel.get('test'));
   });
 
   it('should modify original object that was passed to it', function () {
     var obj = { foo : 'bar' }; 
-    eventedObj = Events(obj);
+    eventedObj = Channel(obj);
     assert.equal(obj, eventedObj);
   });
 
@@ -37,92 +37,92 @@ describe('Events Constructor', function () {
 describe('Event channels', function () {
 
     it('should contain an `emit` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.emit);
     });
 
     it('should contain an `emitSync` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.emitSync);
     });
 
     it('should contain an `emitAsync` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.emitAsync);
     });
 
     it('should contain an `off` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.off);
     });
 
     it('should contain an `on` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.on);
     });
     
     it('should contain a `reset` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.reset);
     });
 
     it('should contain a `silence` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.silence);
     });
     
     it('should contain an `unsilence` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.unsilence);
     });
 
     it('should contain a `lock` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.lock);
     });
     
     it('should contain an `unlock` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal('function', typeof channel.unlock);
     });
     
     it('should contain a `trigger` alias for the `emit` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emit, channel.trigger);
     });
 
     it('should contain a `triggerSync` alias for the `emitSync` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emitSync, channel.triggerSync);
     });
 
     it('should contain a `triggerAsync` alias for the `emitAsync` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emitAsync, channel.triggerAsync);
     });
 
     it('should contain a `fire` alias for the `emit` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emit, channel.fire);
     });
 
     it('should contain a `fireSync` alias for the `emitSync` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emitSync, channel.fireSync);
     });
 
     it('should contain a `fireAsync` alias for the `emitAsync` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emitAsync, channel.fireAsync);
     });
 
     it('should contain an `attach` alias for the `on` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emit, channel.fire);
     });
 
     it('should contain a `detach` alias for the `off` function', function () {
-      var channel = Events({});
+      var channel = Channel({});
       assert.equal(channel.emit, channel.fire);
     });
 
@@ -131,7 +131,7 @@ describe('Event channels', function () {
 describe('`on` function', function () {
   
   it('should not throw any exceptions when called with an event name and a function', function () {
-    var channel = Events({});
+    var channel = Channel({});
     try {
         channel.on('ping', function () { });
     } catch (e) {
@@ -140,7 +140,7 @@ describe('`on` function', function () {
   });
 
   it('should not throw any exceptions when called with an already existing event name and a function', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () { });
     try {
         channel.on('ping', function () { });
@@ -150,7 +150,7 @@ describe('`on` function', function () {
   });
 
   it('should not throw any exceptions when called with an event name, a function and a context object', function () {
-    var channel = Events({});
+    var channel = Channel({});
     try {
         channel.on('ping', function () { }, { });
     } catch (e) {
@@ -159,7 +159,7 @@ describe('`on` function', function () {
   });
 
   it('should not throw any exceptions when called with an already existing event name, a function and a context object', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {});
     try {
         channel.on('ping', function () { }, { });
@@ -169,17 +169,17 @@ describe('`on` function', function () {
   });
 
   it('should return the channel it was called on when called with two arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.on('ping', function () {}));
   });
 
   it('should return the channel it was called on when called with three arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.on('ping', function () {}, this));
   });
 
   it('should return the channel it was called on when called with four arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.on('ping', function () {}, this, true));
   });
 
@@ -188,7 +188,7 @@ describe('`on` function', function () {
 describe('`off` function', function () {
   
   it('should not throw any exceptions when called with a string and a function', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { };
     channel.on('ping', f);
     try {
@@ -199,7 +199,7 @@ describe('`off` function', function () {
   });
 
   it('should not throw any exceptions when called with a function that is not registered as a callback for the specified event', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () { });
     try {
         channel.off('ping', function () { });
@@ -209,7 +209,7 @@ describe('`off` function', function () {
   });
 
   it('should not throw any exceptions when called with the name of an event that does not exist', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { };
     channel.on('ping', f);
     try {
@@ -220,7 +220,7 @@ describe('`off` function', function () {
   });
 
   it('should not throw any exceptions when called with the name of an event that does not exist', function () {
-    var channel = Events();
+    var channel = Channel();
     try {
         channel.off('ping');
     } catch (e) {
@@ -229,7 +229,7 @@ describe('`off` function', function () {
   });
 
   it('should not throw any exceptions when called with an event name and a function that was not registered for that event', function () {
-    var channel = Events();
+    var channel = Channel();
     channel.on('ping', function () {});
     try {
         channel.off('ping', function () { });
@@ -239,22 +239,22 @@ describe('`off` function', function () {
   });
 
   it('should return the channel it was called on when called with an event name and a function', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.off('ping', function () {}));
   });
 
   it('should return the channel it was called on when called with an event name', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.off('ping'));
   });
 
   it('should return the channel it was called on when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.off());
   });
 
   it('should result in the given callback no longer being triggered when called with an event type and a function reference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
     channel.on('ping', f);
     channel.off('ping', f);
@@ -262,7 +262,7 @@ describe('`off` function', function () {
   });
 
   it('should result in callbacks for the given type no longer being triggered if called with an event type', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
         f2 = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
     channel.on('ping', f);
@@ -272,7 +272,7 @@ describe('`off` function', function () {
   });
 
   it('should result in no more callbacks being triggered if called with no arguments', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
         f2 = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
     channel.on('ping', f);
@@ -283,7 +283,7 @@ describe('`off` function', function () {
   });
 
   it('should not affect any other function except for the given one when called with an event type and a function reference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
         f2 = function () { assert(true); };
     channel.on('ping', f);
@@ -293,7 +293,7 @@ describe('`off` function', function () {
   });
 
   it('should not affect any other events other than the given on if called with an event type', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
         f2 = function () { assert(true); };
     channel.on('ping', f);
@@ -304,8 +304,8 @@ describe('`off` function', function () {
   });
 
   it('should not affect any other channels other than the given one if called with no arguments', function () {
-    var channel = Events({}),
-        channel2 = Events({}),
+    var channel = Channel({}),
+        channel2 = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
         f2 = function () { assert(true); };
     channel.on('ping', f);
@@ -316,7 +316,7 @@ describe('`off` function', function () {
   });
 
   it('should not affect locked events when called with an event type and a function reference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         res = false,
         f = function () { res = true};
     channel.on('ping', f);
@@ -327,7 +327,7 @@ describe('`off` function', function () {
   });
 
    it('should not affect events on locked channels when called with an event type and a function reference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         res = false,
         f = function () { res = true};
     channel.on('ping', f);
@@ -338,7 +338,7 @@ describe('`off` function', function () {
   });
 
    it('should not affect locked events when called with an event type', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         res = false,
         f = function () { res = true};
     channel.on('ping', f);
@@ -349,7 +349,7 @@ describe('`off` function', function () {
   });
 
    it('should not affect events on locked channels when called with an event type', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         res = false,
         f = function () { res = true};
     channel.on('ping', f);
@@ -360,7 +360,7 @@ describe('`off` function', function () {
   });
 
    it('should not affect locked channels when called with no arguments', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         res = false,
         f = function () { res = true};
     channel.on('ping', f);
@@ -375,19 +375,19 @@ describe('`off` function', function () {
 describe('`emit` function',  function () {
 
     it('should return the channel it was called on when called with one arguments', function () {
-      var channel = Events();
+      var channel = Channel();
       assert.equal(channel, channel.emit('ping'));
     });
 
     it('should result in registered callbacks being invoked',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function () { assert(true); };
         channel.on('ping', f);
         channel.emit('ping');
     });
 
     it('should not throw any exceptions when called with the name of an event that does not exist', function () {
-      var channel = Events();
+      var channel = Channel();
       try {
           channel.emit('ping');
       } catch (e) {
@@ -396,7 +396,7 @@ describe('`emit` function',  function () {
     });
 
     it('should pass all of its additional arguments to the callback',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function (arg0, arg1) { 
               assert.equal('foo', arg0);
               assert.equal('bar', arg1);
@@ -406,7 +406,7 @@ describe('`emit` function',  function () {
     });
 
     it('should pass all of its additional arguments to the callback when explicitly called with the async flag',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function (arg0, arg1) { 
               assert.equal('foo', arg0);
               assert.equal('bar', arg1);
@@ -416,7 +416,7 @@ describe('`emit` function',  function () {
     });
 
     it('should pass all of its additional arguments to the callback when explicitly called with the sync flag',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function (arg0, arg1) { 
               assert.equal('foo', arg0);
               assert.equal('bar', arg1);
@@ -426,7 +426,7 @@ describe('`emit` function',  function () {
     });
 
     it('should inject a callback\'s context',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             ctx = { }
             f = function () { assert.equal(ctx, this); };
         channel.on('ping', f, ctx);
@@ -434,7 +434,7 @@ describe('`emit` function',  function () {
     });
 
     it('should inject a callback\'s context when explicitly called with the async flag',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             ctx = { }
             f = function () { assert.equal(ctx, this); };
         channel.on('ping', f, ctx);
@@ -442,7 +442,7 @@ describe('`emit` function',  function () {
     });
 
     it('should inject a callback\'s context when explicitly called with the sync flag',  function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             ctx = { }
             f = function () { assert.equal(ctx, this); };
         channel.on('ping', f, ctx);
@@ -450,7 +450,7 @@ describe('`emit` function',  function () {
     });
 
     it('should inject an event object containing information about the event', function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function (arg, evt) {
                 assert.equal('object', typeof evt);
                 assert.equal(f, evt.func);
@@ -465,7 +465,7 @@ describe('`emit` function',  function () {
     });
 
     it('should inject an event object containing information about the event when explicitly called with the async flag', function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function (arg, evt) {
                 assert.equal('object', typeof evt);
             };
@@ -474,7 +474,7 @@ describe('`emit` function',  function () {
     });
 
     it('should inject an event object containing information about the event when explicitly called with the sync flag', function () {
-        var channel = Events({}),
+        var channel = Channel({}),
             f = function (arg, evt) {
                 assert.equal('object', typeof evt);
             };
@@ -486,7 +486,7 @@ describe('`emit` function',  function () {
 describe('the event object, passed to callback functions', function () {
 
   it('should contain a reference to the callback function', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal(f, evt.func);
         };
@@ -495,7 +495,7 @@ describe('the event object, passed to callback functions', function () {
   });
 
   it('should contain a reference to the context object that was declared for the callback function', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         ctx = {},
         f = function (evt) {
             assert.equal(ctx, evt.context);
@@ -505,7 +505,7 @@ describe('the event object, passed to callback functions', function () {
   });
 
   it('should contain the event name', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal('ping', evt.name);
         };
@@ -514,7 +514,7 @@ describe('the event object, passed to callback functions', function () {
   });
 
   it('should contain a reference to the event channel on which the event was triggered', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal(channel, evt.channel);
         };
@@ -523,7 +523,7 @@ describe('the event object, passed to callback functions', function () {
   });
 
   it('should contain information about whether the callback was executed asynchronously', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal(true, evt.async);
         };
@@ -536,7 +536,7 @@ describe('the event object, passed to callback functions', function () {
 describe('`reset` function',  function () {
   
   it('should not throw any exceptions when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     try {
         channel.reset();
     } catch (e) {
@@ -545,7 +545,7 @@ describe('`reset` function',  function () {
   });
 
   it('should not throw any exceptions when called with the name of an event that does not exist', function () {
-    var channel = Events();
+    var channel = Channel();
     try {
         channel.reset('ping');
     } catch (e) {
@@ -554,17 +554,17 @@ describe('`reset` function',  function () {
   });
 
   it('should return the channel it was called on when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.reset());
   });
 
   it('should return the channel it was called on when called with an event type', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.reset('ping'));
   });
 
   it('should remove all callbacks from the channel if called with no arguments', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
@@ -573,7 +573,7 @@ describe('`reset` function',  function () {
   });
 
   it('should remove all callbacks from a specific event if called with the event type', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
@@ -586,7 +586,7 @@ describe('`reset` function',  function () {
   });
 
   it('should not affect public channels', function () {
-    var channel = Events('test');
+    var channel = Channel('test');
     channel.on('ping', function () {
       assert(true);
     });
@@ -595,7 +595,7 @@ describe('`reset` function',  function () {
   });
 
   it('should unlock a locked channel if called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     channel.lock();
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
@@ -609,7 +609,7 @@ describe('`reset` function',  function () {
   });
 
   it('should unsilence a silenced channel if called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
@@ -622,7 +622,7 @@ describe('`reset` function',  function () {
   });
 
   it('should unlock a locked event if called with the event name', function () {
-    var channel = Events();
+    var channel = Channel();
     channel.lock('ping');
     channel.lock('pong');
     channel.on('ping', function () {
@@ -645,7 +645,7 @@ describe('`reset` function',  function () {
   });
 
   it('should unsilence a silenced event if called with the event name', function () {
-    var channel = Events();
+    var channel = Channel();
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
@@ -672,17 +672,17 @@ describe('`reset` function',  function () {
 describe('`silence` function', function () {
 
   it('should return the channel it was called on when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.silence());
   });
 
   it('should return the channel it was called on when called with an event type', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.silence('ping'));
   });
 
   it('should disable triggering events of any type if called with no arguments', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
@@ -695,7 +695,7 @@ describe('`silence` function', function () {
   });
 
   it('should disable triggering events of a certain type if called with the event type', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
@@ -708,7 +708,7 @@ describe('`silence` function', function () {
   });
 
   it('should prevent the specified callback from being triggered if called with the event type and callback function', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
       f = function () {
         assert.fail(undefined, undefined, 'This function must not be executed.');
       };
@@ -721,7 +721,7 @@ describe('`silence` function', function () {
   });
 
   it('should not affect public channels if called with no arguments', function () {
-    var channel = Events('test');
+    var channel = Channel('test');
     channel.on('ping', function () {
       assert(true);
     });
@@ -730,7 +730,7 @@ describe('`silence` function', function () {
   });
 
   it('should not affect public channels if called with an event type', function () {
-    var channel = Events('test');
+    var channel = Channel('test');
     channel.on('ping', function () {
       assert(true);
     });
@@ -743,17 +743,17 @@ describe('`silence` function', function () {
 describe('`unsilence` function', function () {
 
   it('should return the channel it was called on when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.unsilence());
   });
 
   it('should return the channel it was called on when called with an event type', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.unsilence('ping'));
   });
 
   it('should re-enable triggering messages on a channel if called with no arguments', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {
       assert(true);
     });
@@ -763,7 +763,7 @@ describe('`unsilence` function', function () {
   });
 
   it('should re-enable triggering messages of a certain type if called with the event type', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () {
       assert(true);
     });
@@ -777,7 +777,7 @@ describe('`unsilence` function', function () {
   });
 
   it('should re-enable the specified callback if called with the event type and callback function', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
       f0 = function () {
         assert(true);
       },
@@ -797,17 +797,17 @@ describe('`unsilence` function', function () {
 describe('`lock` function', function () {
 
   it('should return the channel it was called on when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.lock());
   });
 
   it('should return the channel it was called on when called with event type', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.lock('ping'));
   });
 
   it('should prevent new callbacks from being attach to any events if called with no argument', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () { // this function should still be executed
       assert(true);
     });
@@ -823,7 +823,7 @@ describe('`lock` function', function () {
   });
 
   it('should prevent new callbacks from being attach to any events if called with an event name', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.on('ping', function () { // this function should still be executed
       assert(true);
     });
@@ -839,7 +839,7 @@ describe('`lock` function', function () {
   });
 
   it('should not affect public channels if called with no argument', function () {
-    var channel = Events('test');
+    var channel = Channel('test');
     channel.lock();
     channel.on('ping', function () {
       assert(true);
@@ -848,7 +848,7 @@ describe('`lock` function', function () {
   });
 
   it('should not affect public channels if called with an event name', function () {
-    var channel = Events('test');
+    var channel = Channel('test');
     channel.on('ping', function () {});
     channel.lock('ping');
     channel.on('ping', function () {
@@ -862,17 +862,17 @@ describe('`lock` function', function () {
 describe('`unlock` function', function () {
 
   it('should return the channel it was called on when called with no arguments', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.unlock());
   });
 
   it('should return the channel it was called on when called with event type', function () {
-    var channel = Events();
+    var channel = Channel();
     assert.equal(channel, channel.unlock('ping'));
   });
 
   it('should allow new callbacks to be attached to any events if called with no argument', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.lock();
     channel.unlock();
     channel.on('ping', function () {
@@ -886,7 +886,7 @@ describe('`unlock` function', function () {
   });
 
   it('should allow new callbacks to be attached to any events if called with an event name', function () {
-    var channel = Events({});
+    var channel = Channel({});
     channel.lock('ping');
     channel.lock('pong');
     channel.unlock('ping');
@@ -905,7 +905,7 @@ describe('`unlock` function', function () {
 describe('Callback function execution', function () {
 
   it('should be synchronous if `on` and `emit` specify that they prefer synchronicity', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { foo = 'bar'; }, null, false);
     channel.emitSync('ping');
@@ -913,7 +913,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be synchronous if `on` specifies that it prefers synchronicity and `emit` has no preference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { foo = 'bar'; }, this, false);
     channel.emit('ping');
@@ -921,7 +921,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be synchronous if `emit` specifies that it prefers synchronicity and `on` has no preference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { foo = 'bar'; });
     channel.emitSync('ping');
@@ -929,7 +929,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be asynchronous if `on` and `emit` specify that they prefer asynchronicity', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { assert.equal('bar', foo); }, null, true);
     channel.emitAsync('ping');
@@ -937,7 +937,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be asynchronous if `on` specifies that it prefers asynchronicity and `emit` has no preference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { assert.equal('bar', foo); }, null, true);
     channel.emit('ping');
@@ -945,7 +945,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be asynchronous if `emit` specifies that it prefers asynchronicity and `on` has no preference', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { assert.equal('bar', foo); });
     channel.emitAsync('ping');
@@ -953,7 +953,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be asynchronous if `on` specifies that it prefers synchronicity and `emit` prefers asynchronicity', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { assert.equal('bar', foo); }, null, true);
     channel.emitAsync('ping');
@@ -961,7 +961,7 @@ describe('Callback function execution', function () {
   });
 
   it('should be synchronous if `on` specifies that it prefers asynchronicity and `emit` prefers synchronicity', function () {
-    var channel = Events({}),
+    var channel = Channel({}),
         foo;
     channel.on('ping', function () { foo = 'bar'; }, null, false);
     channel.emitSync('ping');

@@ -32,7 +32,7 @@ The following documentation uses the terms *event* and *message* synonymously as
 
 ## How to use / API
 
-`Events` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Events` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels in the [extra paragraph I dedicated them](#named-event-channels). A channel provides a handful of methods that are discussed below.
+`Channel` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels in the [extra paragraph I dedicated them](#named-event-channels). A channel provides a handful of methods that are discussed below.
 
 `on`: With this method you can register callbacks to be executed when a certain event is triggered. You have to pass in the event name and the callback function, but you can optionally provide a third argument. This third argument should be an object which is then used as the callback function's `this` (context injection). The fourth parameter of the `on` function is a boolean that gives a preference on whether the callback function shall be executed asynchronously. Note, however, that asynchronous execution is not guarenteed; read why [in this paragraph](#asynchronous-callback-execution).
 
@@ -82,10 +82,10 @@ Those are the most important functions provided by *multivents*. If you want to 
 
 ### Basic usage
 
-Create a message channel using the `Events` constructor (here in conjunction with the `new` keyword).
+Create a message channel using the `Channel` constructor (here in conjunction with the `new` keyword).
 
 ```javascript
-var channel = new Events();
+var channel = new Channel();
 ```
 
 The new channel provides the `on` method that allows you to specify an event name and a function that is meant to be executed in case the given event is triggered.
@@ -130,7 +130,7 @@ channel.emit('event'); // 'ping event fired!'
 When registering a callback, you can specify the context in which the callback function will be executed.
 
 ```javascript
-var channel = new Events();
+var channel = new Channel();
 var bob = { name : 'Bob' };
 channel.on('greet', function () {
     console.log('Hello, I\'m ' + this.name + '!');
@@ -145,10 +145,10 @@ The `bob` object is used as the callback's `this` as it was provided to the `on`
 Let's start again by creating a new event channel.
 
 ```javascript
-var channel = Events({});
+var channel = Channel({});
 ```
 
-Remember that the `Events` constructor can be passed an object to be transformed into a message channel. We now create two events and register callback functions to them.
+Remember that the `Channel` constructor can be passed an object to be transformed into a message channel. We now create two events and register callback functions to them.
 
 ```javascript
 channel.on('ping', function () {
@@ -224,11 +224,11 @@ the callback would be executed asynchronously, because the `emitAsync` method wa
 
 ## Named Event channels
 
-When you call the `Events` constructor and pass it a string value, you create a *named channel* or *public channel* (which are two terms for the same thing). Because it has a name, such an event channel is "public" and can be retrieved via its name. The library contains a closure that keeps track of all named channels and allows you to retrieve them using the `Events` constructors `get` method.
+When you call the `Channel` constructor and pass it a string value, you create a *named channel* or *public channel* (which are two terms for the same thing). Because it has a name, such an event channel is "public" and can be retrieved via its name. The library contains a closure that keeps track of all named channels and allows you to retrieve them using the `Channel` constructor's `get` method.
 
 ```javascript
-Events('myEventchannel');
-var b = Events.get('myEventchannel'); // [b now contains an event channel]
+Channel('myEventchannel');
+var b = Channel.get('myEventchannel'); // [b now contains an event channel]
 ```
 
 Why? Well, unnamed channels have to be passed around in order to connect seperate parts of an application. If you don't want to do that, you can use public channels.
@@ -243,7 +243,7 @@ There have been no tests so far, determining this library's compatibility with J
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Peter Steinberg
+Copyright © 2014 Peter Steinberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
