@@ -127,6 +127,21 @@ Now, when you fire the event again, the `greet` function will no longer be invok
 bus.emit('event'); // 'ping event fired!'
 ```
 
+### Context injection
+
+When registering a callback, you can specify the context in which the callback function will be executed.
+
+```javascript
+var bus = new Events();
+var bob = { name : 'Bob' };
+bus.on('greet', function () {
+    console.log('Hello, I\'m ' + this.name + '!');
+}, bob);
+bus.emit('greet');
+```
+
+The `bob` object is used as the callback's `this` as it was provided to the `on` call as the third argument.
+
 ### Silencing and locking
 
 Let's start again by creating a new event bus.
