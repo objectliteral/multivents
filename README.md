@@ -237,9 +237,9 @@ Why? Well, unnamed busses have to be passed around in order to connect seperate 
 
 Because every part of your application will have access to public busses, they and their events can not be silenced or locked.
 
-## Compatability
+## Compatibility
 
-There have been no tests so far, determining this library's compatability with JavaScript execution environments.
+There have been no tests so far, determining this library's compatibility with JavaScript execution environments.
 
 ## License
 
