@@ -351,7 +351,7 @@ describe('`reset` function',  function () {
     bus.emit('ping');
   });
 
-  it('should remove all callbacks from a specified event if called with the event type', function () {
+  it('should remove all callbacks from a specific event if called with the event type', function () {
     var bus = Events({});
     bus.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
@@ -370,6 +370,79 @@ describe('`reset` function',  function () {
       assert(true);
     });
     bus.reset();
+    bus.emit('ping');
+  });
+
+  it('should unlock a locked bus if called with no arguments', function () {
+    var bus = Events();
+    bus.lock();
+    bus.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.emit('ping');
+    bus.reset();
+    bus.on('ping', function () {
+      assert(true);
+    });
+    bus.emit('ping');
+  });
+
+  it('should unsilence a silenced bus if called with no arguments', function () {
+    var bus = Events();
+    bus.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.silence();
+    bus.reset();
+    bus.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.emit('ping');
+  });
+
+  it('should unlock a locked event if called with the event name', function () {
+    var bus = Events();
+    bus.lock('ping');
+    bus.lock('pong');
+    bus.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.on('pong', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.emit('ping');
+    bus.emit('pong');
+    bus.reset('ping');
+    bus.on('ping', function () {
+      assert(true);
+    });
+    bus.on('pong', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.emit('pong');
+    bus.emit('ping');
+  });
+
+  it('should unsilence a silenced event if called with the event name', function () {
+    var bus = Events();
+    bus.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.on('pong', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.silence('ping');
+    bus.silence('pong');
+    bus.emit('ping');
+    bus.emit('pong');
+    bus.reset('ping');
+    bus.on('ping', function () {
+      assert(true);
+    });
+    bus.on('pong', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    bus.emit('pong')
     bus.emit('ping');
   });
 
