@@ -1,10 +1,10 @@
-# multivents
+# *multivents*
 
-multivents is a small library that allows you to create message channels, send messages over those channels and subscribe to messages.
+*multivents* is a small library that allows you to create message channels, send messages over those channels and subscribe to messages.
 
 ## Quick Start
 
-If you want to get started quickly, here is a basic example of how to use multivents:
+If you want to get started quickly, here is a basic example of how to use *multivents*:
 
 ```javascript
 var channel = new Events();
@@ -20,9 +20,9 @@ If that's all you wanted to know, great! If not, you may read on to find out mor
 
 ## Installation
 
-There's not really anything to install. If you want to use multivents in your project, include `multivents.js` or `multivents.min.js` and use it like described below. 
+There's not really anything to install. If you want to use *multivents* in your project, include `*multivents*.js` or `*multivents*.min.js` and use it like described below. 
 
-If you want to extend multivents to your needs you might want to run tests. In order to do this, you can clone this repository and run `npm install` and `gulp test`. Tests are written with assert and run with mocha (gulp-mocha).
+If you want to extend *multivents* to your needs you might want to run tests. In order to do this, you can clone this repository and run `npm install` and `gulp test`. Tests are written with assert and run with mocha (gulp-mocha).
 
 ## Terminology and Concept
 
@@ -40,9 +40,9 @@ The following documentation uses the terms *event* and *message* synonymously as
 
 `attach`: Alias for `on`.
     
-`off` : Removes an event listener. The function will no longer be invoked when the specified event is triggered. The event name as well as a reference to the function to be removed are required.
+`off` : Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
 
-`function off ( /* String */ type, /* Function */ callback )`
+`function off ( /* String */ type ?, /* Function */ callback ? )`
 
 `detach`: Alias for `off`.
 
@@ -52,7 +52,7 @@ The following documentation uses the terms *event* and *message* synonymously as
 
 `trigger`, `fire`: Aliases for `emit`
 
-Those are the most important functions provided by multivents. If you want to get started now, skip on to the [example code](#example).
+Those are the most important functions provided by *multivents*. If you want to get started now, skip on to the [example code](#example).
 
 ---
 
@@ -159,7 +159,7 @@ channel.on('pong', function () {
 });
 ```
 
-When a channel is silenced, none of its events can be triggered. Notice though, that multivents will not throw any exceptions.
+When a channel is silenced, none of its events can be triggered. Notice though, that *multivents* will not throw any exceptions.
 
 ```javascript
 channel.silence();
@@ -197,7 +197,7 @@ You can see, that attaching a new event listener when the channel was locked had
 
 ## Asynchronous Callback Execution
 
-By default, multivents calls event handler functions asynchronously.
+By default, *multivents* calls event handler functions asynchronously.
 
 In some rare cases, you might want to declare a callback that should explicitly be called synchronously. You can do that with a fourth argument in  the `on` function.
 
@@ -213,7 +213,7 @@ You can also emit an event, specifying its preference to call its callbacks sync
 channel.emitSync('ping');
 ```
 
-As said before, if neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, multivents does it asynchronously. If one party states a preference and the other one doesn't, the one who aired his opinion gets his will. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method the according execution style is guaranteed. E.g. in the following case:
+As said before, if neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, *multivents* does it asynchronously. If one party states a preference and the other one doesn't, the one who aired his opinion gets his will. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method the according execution style is guaranteed. E.g. in the following case:
 
 ```javascript
 channel.on('ping', f, null, false); // [`f` wants to be called asynchronously]
@@ -243,7 +243,7 @@ There have been no tests so far, determining this library's compatability with J
 
 The MIT License (MIT)
 
-Copyright (c) 2013 - 2014 Fabien Allouis O'Carroll, Peter Steinberg
+Copyright (c) 2014 Peter Steinberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
