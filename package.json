@@ -31,6 +31,7 @@
     "gulp-jshint": "^1.6.2",
     "gulp-mocha": "^0.4.1",
     "gulp-rename": "~1.2.0",
+    "gulp-sourcemaps": "^1.1.1",
     "gulp-uglify": "~0.3.0"
   },
   "license": "MIT",
