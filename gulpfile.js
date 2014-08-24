@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     mocha = require('gulp-mocha');
 
 gulp.task('hint', function () {
-    gulp.src('./minivents.js')
+    gulp.src('./multivents.js')
       .pipe(jshint())
       .pipe(jshint.reporter('default'));
 });
@@ -17,8 +17,8 @@ gulp.task('test', [], function () {
 });
 
 gulp.task('build', [], function () {
-    gulp.src('./minivents.js')
-      .pipe(rename('minivents.min.js'))
+    gulp.src('./multivents.js')
+      .pipe(rename('multivents.min.js'))
       .pipe(sourcemaps.init())
         .pipe(uglify())
       .pipe(sourcemaps.write('./', {includeContent:false}))

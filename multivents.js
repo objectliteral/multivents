@@ -2,12 +2,12 @@ var Events = (function () {
 
     'use strict';
 
-    var busses = { },
+    var channels = { },
 
-        isPublic = function (bus) {
+        isPublic = function (channel) {
             var b;
-            for (b in busses) {
-                if (busses[b] === bus) {
+            for (b in channels) {
+                if (channels[b] === channel) {
                     return true;
                 }
             }
@@ -17,9 +17,9 @@ var Events = (function () {
         emit,
 
     /**
-     * Calling the `Events` function creates a new message bus over which messages can be sent.
+     * Calling the `Events` function creates a new message channel over which messages can be sent.
      * The function adds methods to an object that allow for listening to and triggering events.
-     * You can pass in an object to transform it into a message bus or a string to create a public named bus.
+     * You can pass in an object to transform it into a message channel or a string to create a public named channel.
      */
         f = function Events (target) {
 
@@ -43,8 +43,8 @@ var Events = (function () {
             events = {};
 
             if (typeof target === 'string') {
-                busses[target] = {};
-                target = busses[target];
+                channels[target] = {};
+                target = channels[target];
             } else if (typeof target === 'object') {
                 target = target;
             } else {
@@ -135,7 +135,7 @@ var Events = (function () {
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
-                                bus : target,
+                                channel : target,
                                 async : true,
                                 data : data
                               }), 
@@ -148,7 +148,7 @@ var Events = (function () {
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
-                                bus : target,
+                                channel : target,
                                 async : false,
                                 data : data
                               } ])
@@ -191,7 +191,7 @@ var Events = (function () {
             target.fireAsync = target.triggerAsync = target.emitAsync;
 
             /**
-             * The `silence` method prevents any new messages from being sent over the message bus.
+             * The `silence` method prevents any new messages from being sent over the message channel.
              *
              * @param {String} Optional: The name of the event that is meant to be silenced.
              * @param {Function} Optional: The function that shall not be executed when the event is triggered in the future.
@@ -264,7 +264,7 @@ var Events = (function () {
             };
 
             /**
-             * `Lock` prevents new callbacks from being added. Affects the entire bus or specific events.
+             * `Lock` prevents new callbacks from being added. Affects the entire channel or specific events.
              *
              * @param {String} Optional: The name of the event to which no new callbacks shall be registerd.
              */
@@ -279,7 +279,7 @@ var Events = (function () {
             };
 
             /**
-             * Unlock allows callbacks from being added to a bus after it was locked.
+             * Unlock allows callbacks from being added to a channel after it was locked.
              *
              * @param {String} Optional: The name of the event that shall accept new callbacks again.
              */
@@ -294,9 +294,9 @@ var Events = (function () {
             };
 
             /**
-             * This lets you remove all event listeners from the message bus or from a specified event type. (Also sets `silenced` and `locked` to `false`).
+             * This lets you remove all event listeners from the message channel or from a specified event type. (Also sets `silenced` and `locked` to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole bus will be reset.
+             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.
              */
             target.reset =  function reset (type) {
                 if (!isPublic(target)) {
@@ -315,13 +315,13 @@ var Events = (function () {
         };
 
     /**
-     * This method returns a named bus.
+     * This method returns a named channel.
      *
-     * @param {String} The name of the public bus you want to retrieve.
-     * @return The public bus with the specified name
+     * @param {String} The name of the public channel you want to retrieve.
+     * @return The public channel with the specified name
      */
     f.get = function (name) {
-        return busses[name];
+        return channels[name];
     };
 
     return f;
