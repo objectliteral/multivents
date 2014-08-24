@@ -2,6 +2,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
+    sourcemaps = require('gulp-sourcemaps'),
     mocha = require('gulp-mocha');
 
 gulp.task('hint', function () {
@@ -17,8 +18,10 @@ gulp.task('test', [], function () {
 
 gulp.task('build', [], function () {
     gulp.src('./minivents.js')
-      .pipe(uglify())
       .pipe(rename('minivents.min.js'))
+      .pipe(sourcemaps.init())
+        .pipe(uglify())
+      .pipe(sourcemaps.write('./', {includeContent:false}))
       .pipe(gulp.dest('./'));
   });
 
