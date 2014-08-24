@@ -77,19 +77,41 @@ var Events = (function () {
             target.attach = target.on;
 
             /**
-             * This method allows it to remove event listeners. A reference to the function to be removed is required.
+             * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On public channels, only the first option (with both a type and a function reference) is permitted.
              *
-             * @param {String} The name of the event to which the callback belongs.
-             * @param {Function} The callback function to be removed.
+             * @param {String} Optional: The event name of the callbacks to be removed.
+             * @param {Function} Optional: The callback function to be removed.
              */
             target.off = function off (type, func) {
 
-                var list = (events[type] && events[type].callbacks) || [],
-                    i = (func === undefined) ? 0 : list.length - 1;
+                var _type,
+                    i;
 
-                for (; i >= 0; i = i - 1) {
-                    if (func === (list[i] && list[i].f)) {
-                        list.splice(i, 1);
+                if (locked === false) {
+                    if (!isPublic(target)) {
+                        if (type === undefined) {
+                            for (_type in events) {
+                                events[_type].callbacks = [];
+                            }
+                        } else if (events[type] && events[type].locked === false) {
+                            if (func === undefined) {
+                                events[type].callbacks = [];
+                            } else {
+                                for (i = 0; i < events[type].callbacks.length; i = i + 1) {
+                                    events[type].callbacks.splice(i, 1);
+                                }
+                            }
+                        }
+                    } else {
+                        if (type !== undefined) {
+                            if (events[type]) {
+                                if (func !== undefined) {
+                                    for (i = 0; i < events[type].callbacks.length; i = i + 1) {
+                                        events[type].callbacks.splice(i, 1);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
