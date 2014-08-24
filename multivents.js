@@ -353,6 +353,42 @@ var Channel = (function () {
 
             };
 
+            target.isSilenced = function isSilenced (type, func) {
+
+                var e, i, l;
+
+                if (type === undefined || silenced) {
+                    return silenced;
+                } else if (events[type] && (func === undefined || events[type].silenced)) {
+                    return  events[type].silenced;
+                } else {
+                    e = events[type];
+                    if (e !== undefined) {
+                        l = e.callbacks.length;
+                        for (i = 0; i < l; i = i + 1) {
+                            if (e.callbacks[i].f === func) {
+                                return e.callbacks[i].silenced;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+
+            };
+
+            target.isLocked = function isLocked (type) {
+
+                if (type === undefined || locked) {
+                    return locked;
+                } else {
+                    return (events[type] || false) && events[type].locked;
+                }
+
+                return false;
+
+            };
+
             return target;
 
         };
