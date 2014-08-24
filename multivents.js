@@ -1,4 +1,4 @@
-var Events = (function () {
+var Channel = (function () {
 
     'use strict';
 
@@ -378,8 +378,8 @@ var Events = (function () {
     } else if (typeof exports === 'object') {
         module.exports = factory();
     } else {
-        root.returnExports = factory();
+        root.Channel = factory();
   }
 }(this, function () {
-    return Events;
+    return Channel;
 }));
