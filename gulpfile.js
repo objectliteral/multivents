@@ -3,12 +3,13 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
+    stylish = require('jshint-stylish'),
     mocha = require('gulp-mocha');
 
 gulp.task('hint', function () {
     gulp.src('./multivents.js')
       .pipe(jshint())
-      .pipe(jshint.reporter('default'));
+      .pipe(jshint.reporter(stylish));
 });
 
 gulp.task('test', [], function () {
@@ -25,6 +26,4 @@ gulp.task('build', [], function () {
       .pipe(gulp.dest('./'));
   });
 
-gulp.task('default', [ 'hint', 'test', 'build' ], function () {
-  
-});
+gulp.task('default', [ 'hint', 'test', 'build' ]);
