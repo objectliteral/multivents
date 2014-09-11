@@ -1,13 +1,13 @@
-var Events = (function () {
+var Channel = (function () {
 
     'use strict';
 
-    var busses = { },
+    var channels = { },
 
-        isPublic = function (bus) {
+        isPublic = function (channel) {
             var b;
-            for (b in busses) {
-                if (busses[b] === bus) {
+            for (b in channels) {
+                if (channels[b] === channel) {
                     return true;
                 }
             }
@@ -17,9 +17,9 @@ var Events = (function () {
         emit,
 
     /**
-     * Calling the `Events` function creates a new message bus over which messages can be sent.
+     * Calling the `Events` function creates a new message channel over which messages can be sent.
      * The function adds methods to an object that allow for listening to and triggering events.
-     * You can pass in an object to transform it into a message bus or a string to create a public named bus.
+     * You can pass in an object to transform it into a message channel or a string to create a public named channel.
      */
         f = function Events (target) {
 
@@ -43,8 +43,8 @@ var Events = (function () {
             events = {};
 
             if (typeof target === 'string') {
-                busses[target] = {};
-                target = busses[target];
+                channels[target] = {};
+                target = channels[target];
             } else if (typeof target === 'object') {
                 target = target;
             } else {
@@ -62,7 +62,7 @@ var Events = (function () {
             target.on = function on (type, func, ctx, async) {
 
                 if (locked || (events[type] && events[type].locked)) {
-                    return;
+                    return target;
                 }
 
                 addEvent(type).callbacks.push({
@@ -72,26 +72,52 @@ var Events = (function () {
                     async : async === false ? -1 : async|0
                 });
 
+                return target;
+
             };
 
             target.attach = target.on;
 
             /**
-             * This method allows it to remove event listeners. A reference to the function to be removed is required.
+             * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On public channels, only the first option (with both a type and a function reference) is permitted.
              *
-             * @param {String} The name of the event to which the callback belongs.
-             * @param {Function} The callback function to be removed.
+             * @param {String} Optional: The event name of the callbacks to be removed.
+             * @param {Function} Optional: The callback function to be removed.
              */
             target.off = function off (type, func) {
 
-                var list = (events[type] && events[type].callbacks) || [],
-                    i = (func === undefined) ? 0 : list.length - 1;
+                var _type,
+                    i;
 
-                for (; i >= 0; i = i - 1) {
-                    if (func === (list[i] && list[i].f)) {
-                        list.splice(i, 1);
+                if (locked === false) {
+                    if (!isPublic(target)) {
+                        if (type === undefined) {
+                            for (_type in events) {
+                                events[_type].callbacks = [];
+                            }
+                        } else if (events[type] && events[type].locked === false) {
+                            if (func === undefined) {
+                                events[type].callbacks = [];
+                            } else {
+                                for (i = 0; i < events[type].callbacks.length; i = i + 1) {
+                                    events[type].callbacks.splice(i, 1);
+                                }
+                            }
+                        }
+                    } else {
+                        if (type !== undefined) {
+                            if (events[type]) {
+                                if (func !== undefined) {
+                                    for (i = 0; i < events[type].callbacks.length; i = i + 1) {
+                                        events[type].callbacks.splice(i, 1);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+
+                return target;
 
             };
 
@@ -107,7 +133,7 @@ var Events = (function () {
                     j;
 
                 if (silenced || (events[type] && events[type].silenced)) {
-                    return;
+                    return target;
                 }
 
                 list = (events[type] && events[type].callbacks) || [];
@@ -135,7 +161,7 @@ var Events = (function () {
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
-                                bus : target,
+                                channel : target,
                                 async : true,
                                 data : data
                               }), 
@@ -148,7 +174,7 @@ var Events = (function () {
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
-                                bus : target,
+                                channel : target,
                                 async : false,
                                 data : data
                               } ])
@@ -156,6 +182,8 @@ var Events = (function () {
                         }
                     }
                 }
+
+                return target;
 
             };
 
@@ -191,7 +219,7 @@ var Events = (function () {
             target.fireAsync = target.triggerAsync = target.emitAsync;
 
             /**
-             * The `silence` method prevents any new messages from being sent over the message bus.
+             * The `silence` method prevents any new messages from being sent over the message channel.
              *
              * @param {String} Optional: The name of the event that is meant to be silenced.
              * @param {Function} Optional: The function that shall not be executed when the event is triggered in the future.
@@ -201,17 +229,17 @@ var Events = (function () {
                 var e, i, l;
 
                 if (isPublic(target)) {
-                    return false;
+                    return target;
                 }
 
                 if (type === undefined) {
                     silenced = true;
-                    return;
+                    return target;
                 }
                 
                 if (func === undefined) {
                     addEvent(type).silenced = true;
-                    return;
+                    return target;
                 }
 
                 e = events[type];
@@ -224,6 +252,8 @@ var Events = (function () {
                         }
                     }
                 }
+
+                return target;
 
             };
 
@@ -238,7 +268,7 @@ var Events = (function () {
                 var e, i, l;
 
                 if (isPublic(target)) {
-                    return false;
+                    return target;
                 }
 
                 if (type === undefined) {
@@ -260,15 +290,17 @@ var Events = (function () {
                     }
                 }
                 
+                return target;
 
             };
 
             /**
-             * `Lock` prevents new callbacks from being added. Affects the entire bus or specific events.
+             * `Lock` prevents new callbacks from being added. Affects the entire channel or specific events.
              *
              * @param {String} Optional: The name of the event to which no new callbacks shall be registerd.
              */
             target.lock = function lock (type) {
+
                 if (!isPublic(target)) {
                     if (type === undefined) {
                         locked = true;
@@ -276,14 +308,18 @@ var Events = (function () {
                         addEvent(type).locked = true;
                     }
                 }
+
+                return target;
+
             };
 
             /**
-             * Unlock allows callbacks from being added to a bus after it was locked.
+             * Unlock allows callbacks from being added to a channel after it was locked.
              *
              * @param {String} Optional: The name of the event that shall accept new callbacks again.
              */
             target.unlock = function unlock (type) {
+
                 if (!isPublic(target)) {
                     if (type === undefined) {
                         locked = false;
@@ -291,14 +327,18 @@ var Events = (function () {
                         addEvent(type).locked = false;
                     }
                 }
+
+                return target;
+
             };
 
             /**
-             * This lets you remove all event listeners from the message bus or from a specified event type. (Also sets `silenced` and `locked` to `false`).
+             * This lets you remove all event listeners from the message channel or from a specified event type. (Also sets `silenced` and `locked` to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole bus will be reset.
+             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.
              */
             target.reset =  function reset (type) {
+
                 if (!isPublic(target)) {
                     if (events !== null) {
                         if (type === undefined) {
@@ -308,6 +348,45 @@ var Events = (function () {
                         }
                     }
                 }
+
+                return target;
+
+            };
+
+            target.isSilenced = function isSilenced (type, func) {
+
+                var e, i, l;
+
+                if (type === undefined || silenced) {
+                    return silenced;
+                } else if (events[type] && (func === undefined || events[type].silenced)) {
+                    return  events[type].silenced;
+                } else {
+                    e = events[type];
+                    if (e !== undefined) {
+                        l = e.callbacks.length;
+                        for (i = 0; i < l; i = i + 1) {
+                            if (e.callbacks[i].f === func) {
+                                return e.callbacks[i].silenced;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+
+            };
+
+            target.isLocked = function isLocked (type) {
+
+                if (type === undefined || locked) {
+                    return locked;
+                } else {
+                    return (events[type] || false) && events[type].locked;
+                }
+
+                return false;
+
             };
 
             return target;
@@ -315,13 +394,13 @@ var Events = (function () {
         };
 
     /**
-     * This method returns a named bus.
+     * This method returns a named channel.
      *
-     * @param {String} The name of the public bus you want to retrieve.
-     * @return The public bus with the specified name
+     * @param {String} The name of the public channel you want to retrieve.
+     * @return The public channel with the specified name
      */
     f.get = function (name) {
-        return busses[name];
+        return channels[name];
     };
 
     return f;
@@ -335,8 +414,8 @@ var Events = (function () {
     } else if (typeof exports === 'object') {
         module.exports = factory();
     } else {
-        root.returnExports = factory();
+        root.Channel = factory();
   }
 }(this, function () {
-    return Events;
+    return Channel;
 }));

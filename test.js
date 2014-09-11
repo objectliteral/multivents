@@ -1,151 +1,186 @@
 var assert = require('assert'),
-    Events = require('./minivents.js');
+    Channel = require('./multivents.js');
 
-describe('Events Constructor', function () {
+describe('Channel Constructor', function () {
   it('should return an object containing the methods used by minivents if called with new', function () {
-      var bus = new Events();
-      assert.equal('object', typeof bus);
+      var channel = new Channel();
+      assert.equal('object', typeof channel);
   });
 
   it('should return an object containing the methods used by minivents if called with an empty object', function () {
-      var bus = Events({});
-      assert.equal('object', typeof bus);
+      var channel = Channel({});
+      assert.equal('object', typeof channel);
   });
 
   it('should return an object if called with a string', function () {
-      var bus = Events('test');
-      assert.equal('object', typeof bus);
+      var channel = Channel('test');
+      assert.equal('object', typeof channel);
   });
 
   it('should contain a `get` function', function () {
-    assert.equal(true, typeof Events.get === 'function');
+    assert.equal(true, typeof Channel.get === 'function');
   });
 
-  it('should make named busses available via a `get` method', function () {
-      var bus = Events('test');
-      assert.equal(bus, Events.get('test'));
+  it('should make named channels available via a `get` method', function () {
+      var channel = Channel('test');
+      assert.equal(channel, Channel.get('test'));
   });
 
   it('should modify original object that was passed to it', function () {
     var obj = { foo : 'bar' }; 
-    eventedObj = Events(obj);
+    eventedObj = Channel(obj);
     assert.equal(obj, eventedObj);
   });
 
 });
 
-describe('Event busses', function () {
+describe('Event channels', function () {
 
     it('should contain an `emit` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.emit);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.emit);
     });
 
     it('should contain an `emitSync` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.emitSync);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.emitSync);
     });
 
     it('should contain an `emitAsync` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.emitAsync);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.emitAsync);
     });
 
     it('should contain an `off` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.off);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.off);
     });
 
     it('should contain an `on` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.on);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.on);
     });
     
-    it('should contain an `reset` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.reset);
+    it('should contain a `reset` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.reset);
     });
 
-    it('should contain an `silence` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.silence);
+    it('should contain a `silence` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.silence);
     });
     
     it('should contain an `unsilence` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.unsilence);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.unsilence);
     });
 
-    it('should contain an `lock` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.lock);
+    it('should contain a `lock` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.lock);
     });
     
     it('should contain an `unlock` function', function () {
-      var bus = Events({});
-      assert.equal('function', typeof bus.unlock);
+      var channel = Channel({});
+      assert.equal('function', typeof channel.unlock);
     });
     
     it('should contain a `trigger` alias for the `emit` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emit, bus.trigger);
+      var channel = Channel({});
+      assert.equal(channel.emit, channel.trigger);
     });
 
     it('should contain a `triggerSync` alias for the `emitSync` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emitSync, bus.triggerSync);
+      var channel = Channel({});
+      assert.equal(channel.emitSync, channel.triggerSync);
     });
 
     it('should contain a `triggerAsync` alias for the `emitAsync` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emitAsync, bus.triggerAsync);
+      var channel = Channel({});
+      assert.equal(channel.emitAsync, channel.triggerAsync);
     });
 
     it('should contain a `fire` alias for the `emit` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emit, bus.fire);
+      var channel = Channel({});
+      assert.equal(channel.emit, channel.fire);
     });
 
     it('should contain a `fireSync` alias for the `emitSync` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emitSync, bus.fireSync);
+      var channel = Channel({});
+      assert.equal(channel.emitSync, channel.fireSync);
     });
 
     it('should contain a `fireAsync` alias for the `emitAsync` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emitAsync, bus.fireAsync);
+      var channel = Channel({});
+      assert.equal(channel.emitAsync, channel.fireAsync);
     });
 
-    it('should contain a `attach` alias for the `on` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emit, bus.fire);
+    it('should contain an `attach` alias for the `on` function', function () {
+      var channel = Channel({});
+      assert.equal(channel.emit, channel.fire);
     });
 
     it('should contain a `detach` alias for the `off` function', function () {
-      var bus = Events({});
-      assert.equal(bus.emit, bus.fire);
+      var channel = Channel({});
+      assert.equal(channel.emit, channel.fire);
     });
 
 });
 
 describe('`on` function', function () {
   
-  it('should not throw any exceptions when called with a string and a function', function () {
-    var bus = Events({});
+  it('should not throw any exceptions when called with an event name and a function', function () {
+    var channel = Channel({});
     try {
-        bus.on('ping', function () { });
+        channel.on('ping', function () { });
     } catch (e) {
         assert.fail(undefined, e, e.toString());
     }
   });
 
-  it('should not throw any exceptions when called with a string, a function and an object', function () {
-    var bus = Events({});
+  it('should not throw any exceptions when called with an already existing event name and a function', function () {
+    var channel = Channel({});
+    channel.on('ping', function () { });
     try {
-        bus.on('ping', function () { }, { });
+        channel.on('ping', function () { });
     } catch (e) {
         assert.fail(undefined, e, e.toString());
     }
+  });
+
+  it('should not throw any exceptions when called with an event name, a function and a context object', function () {
+    var channel = Channel({});
+    try {
+        channel.on('ping', function () { }, { });
+    } catch (e) {
+        assert.fail(undefined, e, e.toString());
+    }
+  });
+
+  it('should not throw any exceptions when called with an already existing event name, a function and a context object', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {});
+    try {
+        channel.on('ping', function () { }, { });
+    } catch (e) {
+        assert.fail(undefined, e, e.toString());
+    }
+  });
+
+  it('should return the channel it was called on when called with two arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.on('ping', function () {}));
+  });
+
+  it('should return the channel it was called on when called with three arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.on('ping', function () {}, this));
+  });
+
+  it('should return the channel it was called on when called with four arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.on('ping', function () {}, this, true));
   });
 
 });
@@ -153,486 +188,716 @@ describe('`on` function', function () {
 describe('`off` function', function () {
   
   it('should not throw any exceptions when called with a string and a function', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         f = function () { };
-    bus.on('ping', f);
+    channel.on('ping', f);
     try {
-        bus.off('ping', f);
+        channel.off('ping', f);
     } catch (e) {
         assert.fail(undefined, e, e.toString());
     }
   });
 
   it('should not throw any exceptions when called with a function that is not registered as a callback for the specified event', function () {
-    var bus = Events({});
-    bus.on('ping', function () { });
+    var channel = Channel({});
+    channel.on('ping', function () { });
     try {
-        bus.off('ping', function () { });
+        channel.off('ping', function () { });
     } catch (e) {
         assert.fail(undefined, e, e.toString());
     }
   });
 
   it('should not throw any exceptions when called with the name of an event that does not exist', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         f = function () { };
-    bus.on('ping', f);
+    channel.on('ping', f);
     try {
-        bus.off('pong', f);
+        channel.off('pong', f);
     } catch (e) {
         assert.fail(undefined, e, e.toString());
     }
   });
 
-  it('should result in the given callback no longer being triggered', function () {
-    var bus = Events({}),
+  it('should not throw any exceptions when called with the name of an event that does not exist', function () {
+    var channel = Channel();
+    try {
+        channel.off('ping');
+    } catch (e) {
+        assert.fail(undefined, e, e.toString());
+    }
+  });
+
+  it('should not throw any exceptions when called with an event name and a function that was not registered for that event', function () {
+    var channel = Channel();
+    channel.on('ping', function () {});
+    try {
+        channel.off('ping', function () { });
+    } catch (e) {
+        assert.fail(undefined, e, e.toString());
+    }
+  });
+
+  it('should return the channel it was called on when called with an event name and a function', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.off('ping', function () {}));
+  });
+
+  it('should return the channel it was called on when called with an event name', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.off('ping'));
+  });
+
+  it('should return the channel it was called on when called with no arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.off());
+  });
+
+  it('should result in the given callback no longer being triggered when called with an event type and a function reference', function () {
+    var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
-    bus.on('ping', f);
-    bus.off('ping', f);
-    bus.emit('ping');
+    channel.on('ping', f);
+    channel.off('ping', f);
+    channel.emit('ping');
+  });
+
+  it('should result in callbacks for the given type no longer being triggered if called with an event type', function () {
+    var channel = Channel({}),
+        f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        f2 = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
+    channel.on('ping', f);
+    channel.on('ping', f2);
+    channel.off('ping');
+    channel.emit('ping');
+  });
+
+  it('should result in no more callbacks being triggered if called with no arguments', function () {
+    var channel = Channel({}),
+        f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        f2 = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
+    channel.on('ping', f);
+    channel.on('pong', f2);
+    channel.off();
+    channel.emit('ping');
+    channel.emit('pong');
+  });
+
+  it('should not affect any other function except for the given one when called with an event type and a function reference', function () {
+    var channel = Channel({}),
+        f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        f2 = function () { assert(true); };
+    channel.on('ping', f);
+    channel.on('ping', f2);
+    channel.off('ping', f);
+    channel.emit('ping');
+  });
+
+  it('should not affect any other events other than the given on if called with an event type', function () {
+    var channel = Channel({}),
+        f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        f2 = function () { assert(true); };
+    channel.on('ping', f);
+    channel.on('pong', f2);
+    channel.off('ping');
+    channel.emit('ping');
+    channel.emit('pong');
+  });
+
+  it('should not affect any other channels other than the given one if called with no arguments', function () {
+    var channel = Channel({}),
+        channel2 = Channel({}),
+        f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        f2 = function () { assert(true); };
+    channel.on('ping', f);
+    channel2.on('ping', f2);
+    channel.off();
+    channel.emit('ping');
+    channel2.emit('ping');
+  });
+
+  it('should not affect locked events when called with an event type and a function reference', function () {
+    var channel = Channel({}),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.lock('ping');
+    channel.off('ping', f);
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+   it('should not affect events on locked channels when called with an event type and a function reference', function () {
+    var channel = Channel({}),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.lock();
+    channel.off('ping', f);
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+   it('should not affect locked events when called with an event type', function () {
+    var channel = Channel({}),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.lock('ping');
+    channel.off('ping');
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+   it('should not affect events on locked channels when called with an event type', function () {
+    var channel = Channel({}),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.lock();
+    channel.off('ping');
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+   it('should not affect locked channels when called with no arguments', function () {
+    var channel = Channel({}),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.lock();
+    channel.off();
+    channel.emitSync('ping');
+    assert.equal(true, res);
   });
 
 });
 
 describe('`emit` function',  function () {
+
+    it('should return the channel it was called on when called with one arguments', function () {
+      var channel = Channel();
+      assert.equal(channel, channel.emit('ping'));
+    });
+
     it('should result in registered callbacks being invoked',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function () { assert(true); };
-        bus.on('ping', f);
-        bus.emit('ping');
+        channel.on('ping', f);
+        channel.emit('ping');
+    });
+
+    it('should not throw any exceptions when called with the name of an event that does not exist', function () {
+      var channel = Channel();
+      try {
+          channel.emit('ping');
+      } catch (e) {
+          assert.fail(undefined, e, e.toString());
+      }
     });
 
     it('should pass all of its additional arguments to the callback',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function (arg0, arg1) { 
               assert.equal('foo', arg0);
               assert.equal('bar', arg1);
             };
-        bus.on('ping', f);
-        bus.emit('ping', 'foo', 'bar');
+        channel.on('ping', f);
+        channel.emit('ping', 'foo', 'bar');
     });
 
     it('should pass all of its additional arguments to the callback when explicitly called with the async flag',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function (arg0, arg1) { 
               assert.equal('foo', arg0);
               assert.equal('bar', arg1);
             };
-        bus.on('ping', f);
-        bus.emitAsync('ping', 'foo', 'bar');
+        channel.on('ping', f);
+        channel.emitAsync('ping', 'foo', 'bar');
     });
 
     it('should pass all of its additional arguments to the callback when explicitly called with the sync flag',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function (arg0, arg1) { 
               assert.equal('foo', arg0);
               assert.equal('bar', arg1);
             };
-        bus.on('ping', f);
-        bus.emitSync('ping', 'foo', 'bar');
+        channel.on('ping', f);
+        channel.emitSync('ping', 'foo', 'bar');
     });
 
     it('should inject a callback\'s context',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             ctx = { }
             f = function () { assert.equal(ctx, this); };
-        bus.on('ping', f, ctx);
-        bus.emit('ping');
+        channel.on('ping', f, ctx);
+        channel.emit('ping');
     });
 
     it('should inject a callback\'s context when explicitly called with the async flag',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             ctx = { }
             f = function () { assert.equal(ctx, this); };
-        bus.on('ping', f, ctx);
-        bus.emitAsync('ping');
+        channel.on('ping', f, ctx);
+        channel.emitAsync('ping');
     });
 
     it('should inject a callback\'s context when explicitly called with the sync flag',  function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             ctx = { }
             f = function () { assert.equal(ctx, this); };
-        bus.on('ping', f, ctx);
-        bus.emitSync('ping');
+        channel.on('ping', f, ctx);
+        channel.emitSync('ping');
     });
 
     it('should inject an event object containing information about the event', function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function (arg, evt) {
                 assert.equal('object', typeof evt);
                 assert.equal(f, evt.func);
                 assert.equal(undefined, evt.context);
                 assert.equal('ping', evt.name);
-                assert.equal(bus, evt.bus);
+                assert.equal(channel, evt.channel);
                 // assert.equal(true, evt.async);
                 //assert.equal(data, evt.data);
             };
-        bus.on('ping', f);
-        bus.emit('ping', 'foo');
+        channel.on('ping', f);
+        channel.emit('ping', 'foo');
     });
 
     it('should inject an event object containing information about the event when explicitly called with the async flag', function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function (arg, evt) {
                 assert.equal('object', typeof evt);
             };
-        bus.on('ping', f);
-        bus.emitAsync('ping', 'foo');
+        channel.on('ping', f);
+        channel.emitAsync('ping', 'foo');
     });
 
     it('should inject an event object containing information about the event when explicitly called with the sync flag', function () {
-        var bus = Events({}),
+        var channel = Channel({}),
             f = function (arg, evt) {
                 assert.equal('object', typeof evt);
             };
-        bus.on('ping', f);
-        bus.emitSync('ping', 'foo');
+        channel.on('ping', f);
+        channel.emitSync('ping', 'foo');
     });
 });
 
 describe('the event object, passed to callback functions', function () {
 
   it('should contain a reference to the callback function', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal(f, evt.func);
         };
-    bus.on('ping', f);
-    bus.emit('ping');
+    channel.on('ping', f);
+    channel.emit('ping');
   });
 
   it('should contain a reference to the context object that was declared for the callback function', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         ctx = {},
         f = function (evt) {
             assert.equal(ctx, evt.context);
         };
-    bus.on('ping', f, ctx);
-    bus.emit('ping');
+    channel.on('ping', f, ctx);
+    channel.emit('ping');
   });
 
   it('should contain the event name', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal('ping', evt.name);
         };
-    bus.on('ping', f);
-    bus.emit('ping');
+    channel.on('ping', f);
+    channel.emit('ping');
   });
 
-  it('should contain a reference to the event bus on which the event was triggered', function () {
-    var bus = Events({}),
+  it('should contain a reference to the event channel on which the event was triggered', function () {
+    var channel = Channel({}),
         f = function (evt) {
-            assert.equal(bus, evt.bus);
+            assert.equal(channel, evt.channel);
         };
-    bus.on('ping', f);
-    bus.emit('ping');
+    channel.on('ping', f);
+    channel.emit('ping');
   });
 
   it('should contain information about whether the callback was executed asynchronously', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         f = function (evt) {
             assert.equal(true, evt.async);
         };
-    bus.on('ping', f);
-    bus.emit('ping');
+    channel.on('ping', f);
+    channel.emit('ping');
   });
 
 });
 
 describe('`reset` function',  function () {
   
-  it('should remove all callbacks from the bus if called with no arguments', function () {
-    var bus = Events({});
-    bus.on('ping', function () {
+  it('should not throw any exceptions when called with no arguments', function () {
+    var channel = Channel();
+    try {
+        channel.reset();
+    } catch (e) {
+        assert.fail(undefined, e, e.toString());
+    }
+  });
+
+  it('should not throw any exceptions when called with the name of an event that does not exist', function () {
+    var channel = Channel();
+    try {
+        channel.reset('ping');
+    } catch (e) {
+        assert.fail(undefined, e, e.toString());
+    }
+  });
+
+  it('should return the channel it was called on when called with no arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.reset());
+  });
+
+  it('should return the channel it was called on when called with an event type', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.reset('ping'));
+  });
+
+  it('should remove all callbacks from the channel if called with no arguments', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.reset();
-    bus.emit('ping');
+    channel.reset();
+    channel.emit('ping');
   });
 
   it('should remove all callbacks from a specific event if called with the event type', function () {
-    var bus = Events({});
-    bus.on('ping', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert(true);
     });
-    bus.reset('ping');
-    bus.emit('ping');
-    bus.emit('pong');
+    channel.reset('ping');
+    channel.emit('ping');
+    channel.emit('pong');
   });
 
-  it('should not affect public busses', function () {
-    var bus = Events('test');
-    bus.on('ping', function () {
+  it('should not affect public channels', function () {
+    var channel = Channel('test');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.reset();
-    bus.emit('ping');
+    channel.reset();
+    channel.emit('ping');
   });
 
-  it('should unlock a locked bus if called with no arguments', function () {
-    var bus = Events();
-    bus.lock();
-    bus.on('ping', function () {
+  it('should unlock a locked channel if called with no arguments', function () {
+    var channel = Channel();
+    channel.lock();
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('ping');
-    bus.reset();
-    bus.on('ping', function () {
+    channel.emit('ping');
+    channel.reset();
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.emit('ping');
+    channel.emit('ping');
   });
 
-  it('should unsilence a silenced bus if called with no arguments', function () {
-    var bus = Events();
-    bus.on('ping', function () {
+  it('should unsilence a silenced channel if called with no arguments', function () {
+    var channel = Channel();
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.silence();
-    bus.reset();
-    bus.on('ping', function () {
+    channel.silence();
+    channel.reset();
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('ping');
+    channel.emit('ping');
   });
 
   it('should unlock a locked event if called with the event name', function () {
-    var bus = Events();
-    bus.lock('ping');
-    bus.lock('pong');
-    bus.on('ping', function () {
+    var channel = Channel();
+    channel.lock('ping');
+    channel.lock('pong');
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('ping');
-    bus.emit('pong');
-    bus.reset('ping');
-    bus.on('ping', function () {
+    channel.emit('ping');
+    channel.emit('pong');
+    channel.reset('ping');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('pong');
-    bus.emit('ping');
+    channel.emit('pong');
+    channel.emit('ping');
   });
 
   it('should unsilence a silenced event if called with the event name', function () {
-    var bus = Events();
-    bus.on('ping', function () {
+    var channel = Channel();
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.silence('ping');
-    bus.silence('pong');
-    bus.emit('ping');
-    bus.emit('pong');
-    bus.reset('ping');
-    bus.on('ping', function () {
+    channel.silence('ping');
+    channel.silence('pong');
+    channel.emit('ping');
+    channel.emit('pong');
+    channel.reset('ping');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('pong')
-    bus.emit('ping');
+    channel.emit('pong')
+    channel.emit('ping');
   });
 
 });
 
 describe('`silence` function', function () {
+
+  it('should return the channel it was called on when called with no arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.silence());
+  });
+
+  it('should return the channel it was called on when called with an event type', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.silence('ping'));
+  });
+
   it('should disable triggering events of any type if called with no arguments', function () {
-    var bus = Events({});
-    bus.on('ping', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.silence();
-    bus.on('pong', function () {
+    channel.silence();
+    channel.on('pong', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('ping');
-    bus.emit('pong');
+    channel.emit('ping');
+    channel.emit('pong');
   });
 
   it('should disable triggering events of a certain type if called with the event type', function () {
-    var bus = Events({});
-    bus.on('ping', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert(true);
     });
-    bus.silence('ping');
-    bus.emit('ping');
-    bus.emit('pong');
+    channel.silence('ping');
+    channel.emit('ping');
+    channel.emit('pong');
   });
 
   it('should prevent the specified callback from being triggered if called with the event type and callback function', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
       f = function () {
         assert.fail(undefined, undefined, 'This function must not be executed.');
       };
-    bus.on('ping', f);
-    bus.on('ping', function () {
+    channel.on('ping', f);
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.silence('ping', f);
-    bus.emit('ping');
+    channel.silence('ping', f);
+    channel.emit('ping');
   });
 
-  it('should not affect public busses if called with no arguments', function () {
-    var bus = Events('test');
-    bus.on('ping', function () {
+  it('should not affect public channels if called with no arguments', function () {
+    var channel = Channel('test');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.silence();
-    bus.emit('ping');
+    channel.silence();
+    channel.emit('ping');
   });
 
-  it('should not affect public busses if called with an event type', function () {
-    var bus = Events('test');
-    bus.on('ping', function () {
+  it('should not affect public channels if called with an event type', function () {
+    var channel = Channel('test');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.silence('ping');
-    bus.emit('ping');
+    channel.silence('ping');
+    channel.emit('ping');
   });
+
 });
 
 describe('`unsilence` function', function () {
-  it('should re-enable triggering messages on a bus if called with no arguments', function () {
-    var bus = Events({});
-    bus.on('ping', function () {
+
+  it('should return the channel it was called on when called with no arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.unsilence());
+  });
+
+  it('should return the channel it was called on when called with an event type', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.unsilence('ping'));
+  });
+
+  it('should re-enable triggering messages on a channel if called with no arguments', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.silence();
-    bus.unsilence();
-    bus.emit('ping');
+    channel.silence();
+    channel.unsilence();
+    channel.emit('ping');
   });
 
   it('should re-enable triggering messages of a certain type if called with the event type', function () {
-    var bus = Events({});
-    bus.on('ping', function () {
+    var channel = Channel({});
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.on('pong', function () {
+    channel.on('pong', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.silence('ping');
-    bus.silence('pong');
-    bus.unsilence('ping');
-    bus.emit('ping');
+    channel.silence('ping');
+    channel.silence('pong');
+    channel.unsilence('ping');
+    channel.emit('ping');
   });
 
   it('should re-enable the specified callback if called with the event type and callback function', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
       f0 = function () {
         assert(true);
       },
       f1 = function () {
         assert.fail(undefined, undefined, 'This function must not be executed.');
       };
-    bus.on('ping', f0);
-    bus.on('ping', f1);
-    bus.silence('ping', f0);
-    bus.silence('ping', f1);
-    bus.unsilence('ping', f0);
-    bus.emit('ping');
+    channel.on('ping', f0);
+    channel.on('ping', f1);
+    channel.silence('ping', f0);
+    channel.silence('ping', f1);
+    channel.unsilence('ping', f0);
+    channel.emit('ping');
   });
+
 });
 
 describe('`lock` function', function () {
 
+  it('should return the channel it was called on when called with no arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.lock());
+  });
+
+  it('should return the channel it was called on when called with event type', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.lock('ping'));
+  });
+
   it('should prevent new callbacks from being attach to any events if called with no argument', function () {
-    var bus = Events({});
-    bus.on('ping', function () { // this function should still be executed
+    var channel = Channel({});
+    channel.on('ping', function () { // this function should still be executed
       assert(true);
     });
-    bus.lock();
-    bus.on('ping', function () { // this function should not be executed
+    channel.lock();
+    channel.on('ping', function () { // this function should not be executed
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('ping');
-    bus.on('pong', function () { // and this function should not be executed either
+    channel.emit('ping');
+    channel.on('pong', function () { // and this function should not be executed either
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('pong');
+    channel.emit('pong');
   });
 
   it('should prevent new callbacks from being attach to any events if called with an event name', function () {
-    var bus = Events({});
-    bus.on('ping', function () { // this function should still be executed
+    var channel = Channel({});
+    channel.on('ping', function () { // this function should still be executed
       assert(true);
     });
-    bus.lock('ping');
-    bus.on('ping', function () { // this function should not be executed
+    channel.lock('ping');
+    channel.on('ping', function () { // this function should not be executed
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('ping');
-    bus.on('pong', function () { // this function should be executed as it belongs to a different (unlocked) event
+    channel.emit('ping');
+    channel.on('pong', function () { // this function should be executed as it belongs to a different (unlocked) event
       assert(true);
     });
-    bus.emit('pong');
+    channel.emit('pong');
   });
 
-  it('should not affect public busses if called with no argument', function () {
-    var bus = Events('test');
-    bus.lock();
-    bus.on('ping', function () {
+  it('should not affect public channels if called with no argument', function () {
+    var channel = Channel('test');
+    channel.lock();
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.emit('ping');
+    channel.emit('ping');
   });
 
-  it('should not affect public busses if called with an event name', function () {
-    var bus = Events('test');
-    bus.on('ping', function () {});
-    bus.lock('ping');
-    bus.on('ping', function () {
+  it('should not affect public channels if called with an event name', function () {
+    var channel = Channel('test');
+    channel.on('ping', function () {});
+    channel.lock('ping');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.emit('ping');
+    channel.emit('ping');
   });
 
 });
 
 describe('`unlock` function', function () {
 
+  it('should return the channel it was called on when called with no arguments', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.unlock());
+  });
+
+  it('should return the channel it was called on when called with event type', function () {
+    var channel = Channel();
+    assert.equal(channel, channel.unlock('ping'));
+  });
+
   it('should allow new callbacks to be attached to any events if called with no argument', function () {
-    var bus = Events({});
-    bus.lock();
-    bus.unlock();
-    bus.on('ping', function () {
+    var channel = Channel({});
+    channel.lock();
+    channel.unlock();
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.emit('ping');
-    bus.on('pong', function () {
+    channel.emit('ping');
+    channel.on('pong', function () {
       assert(true);
     });
-    bus.emit('pong');
+    channel.emit('pong');
   });
 
   it('should allow new callbacks to be attached to any events if called with an event name', function () {
-    var bus = Events({});
-    bus.lock('ping');
-    bus.lock('pong');
-    bus.unlock('ping');
-    bus.on('ping', function () {
+    var channel = Channel({});
+    channel.lock('ping');
+    channel.lock('pong');
+    channel.unlock('ping');
+    channel.on('ping', function () {
       assert(true);
     });
-    bus.emit('ping');
-    bus.on('pong', function () { // this function should not execute as the pong event has been locked
+    channel.emit('ping');
+    channel.on('pong', function () { // this function should not execute as the pong event has been locked
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    bus.emit('pong');
+    channel.emit('pong');
   });
 
 });
@@ -640,66 +905,221 @@ describe('`unlock` function', function () {
 describe('Callback function execution', function () {
 
   it('should be synchronous if `on` and `emit` specify that they prefer synchronicity', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { foo = 'bar'; }, null, false);
-    bus.emitSync('ping');
+    channel.on('ping', function () { foo = 'bar'; }, null, false);
+    channel.emitSync('ping');
     assert.equal('bar', foo);
   });
 
   it('should be synchronous if `on` specifies that it prefers synchronicity and `emit` has no preference', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { foo = 'bar'; }, this, false);
-    bus.emit('ping');
+    channel.on('ping', function () { foo = 'bar'; }, this, false);
+    channel.emit('ping');
     assert.equal('bar', foo);
   });
 
   it('should be synchronous if `emit` specifies that it prefers synchronicity and `on` has no preference', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { foo = 'bar'; });
-    bus.emitSync('ping');
+    channel.on('ping', function () { foo = 'bar'; });
+    channel.emitSync('ping');
     assert.equal('bar', foo);
   });
 
   it('should be asynchronous if `on` and `emit` specify that they prefer asynchronicity', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { assert.equal('bar', foo); }, null, true);
-    bus.emitAsync('ping');
+    channel.on('ping', function () { assert.equal('bar', foo); }, null, true);
+    channel.emitAsync('ping');
     foo = 'bar';
   });
 
   it('should be asynchronous if `on` specifies that it prefers asynchronicity and `emit` has no preference', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { assert.equal('bar', foo); }, null, true);
-    bus.emit('ping');
+    channel.on('ping', function () { assert.equal('bar', foo); }, null, true);
+    channel.emit('ping');
     foo = 'bar';
   });
 
   it('should be asynchronous if `emit` specifies that it prefers asynchronicity and `on` has no preference', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { assert.equal('bar', foo); });
-    bus.emitAsync('ping');
+    channel.on('ping', function () { assert.equal('bar', foo); });
+    channel.emitAsync('ping');
     foo = 'bar';
   });
 
   it('should be asynchronous if `on` specifies that it prefers synchronicity and `emit` prefers asynchronicity', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { assert.equal('bar', foo); }, null, true);
-    bus.emitAsync('ping');
+    channel.on('ping', function () { assert.equal('bar', foo); }, null, true);
+    channel.emitAsync('ping');
     foo = 'bar';
   });
 
   it('should be synchronous if `on` specifies that it prefers asynchronicity and `emit` prefers synchronicity', function () {
-    var bus = Events({}),
+    var channel = Channel({}),
         foo;
-    bus.on('ping', function () { foo = 'bar'; }, null, false);
-    bus.emitSync('ping');
+    channel.on('ping', function () { foo = 'bar'; }, null, false);
+    channel.emitSync('ping');
     assert.equal('bar', foo);
   });
+});
+
+describe('`isSilenced` function', function () {
+
+  it('should return `false` on a newly created channel when called with no arguments', function () {
+    var channel = new Channel();
+    assert.equal(false, channel.isSilenced());
+  });
+
+  it('should return `true` on a previously silenced channel when called with no arguments', function () {
+    var channel = new Channel();
+    channel.silence();
+    assert.equal(true, channel.isSilenced());
+  });
+
+  it('should return `false` on a previously unsilenced channel when called with no arguments', function () {
+    var channel = new Channel();
+    channel.silence();
+    channel.unsilence();
+    assert.equal(false, channel.isSilenced());
+  });
+
+  it('should return `false` for an event that does not exist when called with an event name', function () {
+    var channel = new Channel();
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` for an event that was not silenced when called with an event name', function () {
+    var channel = new Channel();
+    channel.on('ping', function () {});
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `true` on a previously silenced event when called with an event name', function () {
+    var channel = new Channel();
+    channel.silence('ping');
+    assert.equal(true, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` on a previously unsilenced event when called with an event name', function () {
+    var channel = new Channel();
+    channel.silence('ping');
+    channel.unsilence('ping');
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` when called with a non existing event name and a function', function () {
+    var channel = new Channel(),
+        f = function () {};
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` when called with an event name and a function that was not registered for that event', function () {
+    var channel = new Channel(),
+        f = function () {};
+    channel.on('ping', function () {});
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` for a function that was not silenced when called with an event name and a function', function () {
+    var channel = new Channel(),
+        f = function () {};
+    channel.on('ping', f);
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `true` for a function that was previously silenced when called with an event name and a function', function () {
+    var channel = new Channel(),
+        f = function () {};
+    channel.on('ping', f);
+    channel.silence('ping', f);
+    assert.equal(true, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` for a function that was previously unsilenced when called with an event name and a function', function () {
+    var channel = new Channel(),
+        f = function () {};
+    channel.on('ping', f);
+    channel.silence('ping', f);
+    channel.unsilence('ping', f);
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `true` if the given event is not silenced but the channel is', function () {
+    var channel = new Channel();
+    channel.silence();
+    assert.equal(true, channel.isSilenced('ping'));
+  });
+  
+  it('should return `true` if the given function is not silenced but the channel is', function () {
+    var channel = new Channel(),
+        f = function () {};
+    channel.silence();
+    assert.equal(true, channel.isSilenced('ping', f));
+  });
+
+  it('should return `true` if the given function is not silenced but the event is', function () {
+    var channel = new Channel(),
+        f = function () {};
+    channel.silence('ping');
+    assert.equal(true, channel.isSilenced('ping', f));
+  });
+
+});
+
+describe('`isLocked` function', function () {
+
+  it('should return `false` on a newly created channel when called with no arguments', function () {
+    var channel = new Channel();
+    assert.equal(false, channel.isLocked());
+  });
+
+  it('should return `true` on a previously locked channel when called with no arguments', function () {
+    var channel = new Channel();
+    channel.lock();
+    assert.equal(true, channel.isLocked());
+  });
+
+  it('should return `false` on a previously unlocked channel when called with no arguments', function () {
+    var channel = new Channel();
+    channel.lock();
+    channel.unlock();
+    assert.equal(false, channel.isLocked());
+  });
+
+  it('should return `false` for an event that does not exist when called with an event name', function () {
+    var channel = new Channel();
+    assert.equal(false, channel.isLocked('ping'));
+  });
+
+  it('should return `false` for an event that was not locked when called with an event name', function () {
+    var channel = new Channel();
+    channel.on('ping', function () {});
+    assert.equal(false, channel.isLocked('ping'));
+  });
+
+  it('should return `true` on a previously locked event when called with an event name', function () {
+    var channel = new Channel();
+    channel.lock('ping');
+    assert.equal(true, channel.isLocked('ping'));
+  });
+
+  it('should return `false` on a previously unlocked event when called with an event name', function () {
+    var channel = new Channel();
+    channel.lock('ping');
+    channel.unlock('ping');
+    assert.equal(false, channel.isLocked('ping'));
+  });
+
+  it('should return `true` if the given event is not locked but the channel is', function () {
+    var channel = new Channel();
+    channel.lock();
+    assert.equal(true, channel.isLocked('ping'));
+  });
+  
 });

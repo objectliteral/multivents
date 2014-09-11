@@ -1,25 +1,23 @@
 {
-  "name": "minivents",
-  "version": "2.0.0",
-  "description": "Tiny eventing for javascript",
-  "main": "minivents.js",
+  "name": "multivents",
+  "version": "5.0.0",
+  "description": "JavaScript Event System",
+  "main": "multivents.js",
   "scripts": {
     "test": "gulp test",
     "build": "gulp"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/objectliteral/minivents.git"
+    "url": "git://github.com/objectliteral/multivents.git"
   },
   "keywords": [
     "events",
-    "minivents"
+    "minivents",
+    "multivents",
+    "asynchronous"
   ],
   "contributors": [
-    {
-      "name": "Fabien O'Carroll",
-      "email": "fabien@allou.is"
-    },
     {
       "name": "Peter Steinberg",
       "email": "petersteinberg@outlook.com"
@@ -36,7 +34,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/objectliteral/minivents/issues"
+    "url": "https://github.com/objectliteral/multivents/issues"
   },
   "readmeFilename": "README.md"
 }
