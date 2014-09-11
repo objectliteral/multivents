@@ -1,3 +1,6 @@
+/*jshint loopfunc:true*/
+/*global define,module,setTimeout*/
+
 var Channel = (function () {
 
     'use strict';
@@ -38,7 +41,8 @@ var Channel = (function () {
                 silenced = false;
 
             /**
-             * The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called, when the event is triggered.
+             * The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called, 
+             * when the event is triggered.
              */
             events = {};
 
@@ -69,7 +73,7 @@ var Channel = (function () {
                     f : func,
                     context : ctx,
                     silenced : false,
-                    async : async === false ? -1 : async|0
+                    async : async === false ? -1 : async||0 // this could be a bitwise or, but my jshintrc forbids that; logical or works fine aswell
                 });
 
                 return target;
@@ -79,7 +83,9 @@ var Channel = (function () {
             target.attach = target.on;
 
             /**
-             * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On public channels, only the first option (with both a type and a function reference) is permitted.
+             * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the 
+             * type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On 
+             * public channels, only the first option (with both a type and a function reference) is permitted.
              *
              * @param {String} Optional: The event name of the callbacks to be removed.
              * @param {Function} Optional: The callback function to be removed.
@@ -93,7 +99,9 @@ var Channel = (function () {
                     if (!isPublic(target)) {
                         if (type === undefined) {
                             for (_type in events) {
-                                events[_type].callbacks = [];
+                                if (events.hasOwnProperty(_type)) {
+                                    events[_type].callbacks = [];
+                                }
                             }
                         } else if (events[type] && events[type].locked === false) {
                             if (func === undefined) {
@@ -105,13 +113,9 @@ var Channel = (function () {
                             }
                         }
                     } else {
-                        if (type !== undefined) {
-                            if (events[type]) {
-                                if (func !== undefined) {
-                                    for (i = 0; i < events[type].callbacks.length; i = i + 1) {
-                                        events[type].callbacks.splice(i, 1);
-                                    }
-                                }
+                        if (type !== undefined && events[type] && func !== undefined) {
+                            for (i = 0; i < events[type].callbacks.length; i = i + 1) {
+                                events[type].callbacks.splice(i, 1);
                             }
                         }
                     }
@@ -125,8 +129,7 @@ var Channel = (function () {
 
             emit = function emit (type, data, async) {
 
-                var args,
-                    asyncScore,
+                var asyncScore,
                     callback,
                     list,
                     len,
@@ -140,7 +143,7 @@ var Channel = (function () {
                 len = list.length;
                 j = 0;
 
-                async = async === false ? -1 : async|0;
+                async = async === false ? -1 : async||0; // this could be a bitwise or, but my jshintrc forbids that; logical or works fine aswell
 
                 for (; j < len; j = j + 1) {
                     callback = list[j];
@@ -150,14 +153,14 @@ var Channel = (function () {
 
                             setTimeout( 
 
-                              (function () {
+                              function () {
 
                                 this.func.apply(this.context,
                                   // [ this ].concat(this.data)
                                   this.data.concat([ this ])
                                 );
 
-                              }).bind({
+                              }.bind({
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
@@ -170,7 +173,7 @@ var Channel = (function () {
 
                         } else if (asyncScore < 0 || async === -1) {
                             list[j].f.apply(list[j].context,
-                              data.concat([ {
+                                data.concat([ {
                                 func : callback.f,
                                 context : callback.context,
                                 name : type,
@@ -188,7 +191,8 @@ var Channel = (function () {
             };
 
             /** 
-             * Calling this method triggers the specified event and will result in all registered callbacks being executed. You should no rely on the order in which the callbacks are being invoked.
+             * Calling this method triggers the specified event and will result in all registered callbacks being executed. You should no rely on 
+             * the order in which the callbacks are being invoked.
              *
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
@@ -333,9 +337,11 @@ var Channel = (function () {
             };
 
             /**
-             * This lets you remove all event listeners from the message channel or from a specified event type. (Also sets `silenced` and `locked` to `false`).
+             * This lets you remove all event listeners from the message channel or from a specified event type. (Also sets `silenced` and `locked` 
+             * to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.
+             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will 
+             * be reset.
              */
             target.reset =  function reset (type) {
 
@@ -409,6 +415,7 @@ var Channel = (function () {
 
 // see UMD pattern at https://github.com/umdjs/umd/blob/master/returnExports.js
 (function (root, factory) {
+    'use strict';
     if (typeof define === 'function' && define.amd) {
         define([], factory);
     } else if (typeof exports === 'object') {
@@ -417,5 +424,6 @@ var Channel = (function () {
         root.Channel = factory();
   }
 }(this, function () {
+    'use strict';
     return Channel;
 }));
