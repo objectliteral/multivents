@@ -7,7 +7,9 @@
 If you want to get started quickly, here is a basic example of how to use *multivents*:
 
 ```javascript
-var channel = new Events();
+var Channel = require('multivents');
+
+var channel = new Channel();
 
 channel.on('greet', function (who) {
     console.log('hello ' + who);
@@ -20,7 +22,7 @@ If that's all you wanted to know, great! If not, you may read on to find out mor
 
 ## Installation
 
-There's not really anything to install. If you want to use *multivents* in your project, include `multivents.js` or `multivents.min.js` and use it like described below. 
+There's not really anything to install. If you want to use *multivents* in your project, include `multivents.js` or `multivents.min.js` and use it like described below.
 
 If you want to extend *multivents* to your needs you might want to run tests. In order to do this, you can clone this repository and run `npm install` and `gulp test`. Tests are written with [assert](https://github.com/defunctzombie/commonjs-assert) and run with [mocha](http://visionmedia.github.io/mocha/) ([gulp-mocha](https://github.com/sindresorhus/gulp-mocha)).
 
@@ -82,7 +84,13 @@ Those are the most important functions provided by *multivents*. If you want to 
 
 ### Basic usage
 
-Create a message channel using the `Channel` constructor (here in conjunction with the `new` keyword).
+First, you want to include *multivents* in your project. If you are writing for nodejs, you would `npm install multivents` and then in your project:
+
+```javascript
+var Channel = require('multivents');
+```
+
+Now we can use *multivents*, to create a message channel using the `Channel` constructor (here in conjunction with the `new` keyword).
 
 ```javascript
 var channel = new Channel();
