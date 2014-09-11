@@ -7,6 +7,7 @@
     "test": "gulp test",
     "build": "gulp"
   },
+  "homepage": "https://github.com/objectliteral/multivents/",
   "repository": {
     "type": "git",
     "url": "git://github.com/objectliteral/multivents.git"
@@ -17,12 +18,10 @@
     "multivents",
     "asynchronous"
   ],
-  "contributors": [
-    {
-      "name": "Peter Steinberg",
-      "email": "petersteinberg@outlook.com"
-    }
-  ],
+  "author": {
+    "name": "Peter Steinberg",
+    "email": "objectliteral@outlook.com"
+  },
   "devDependencies": {
     "assert": "^1.1.1",
     "gulp": "~3.6.2",
