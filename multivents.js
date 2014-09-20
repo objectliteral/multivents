@@ -433,7 +433,7 @@ var Channel = (function () {
 
                     if (methods[value] !== undefined) {
                         for (_method in methods[value]) {
-                            if (prohibitions.indexOf(_method) === -1 && that[methods[value][_method]] !== undefined) {
+                            if (prohibitions.indexOf(methods[value][_method]) === -1 && that[methods[value][_method]] !== undefined) {
                                 _channel[methods[value][_method]] = that[methods[value][_method]];
                             }
                         }
