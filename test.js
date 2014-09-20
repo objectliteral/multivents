@@ -1349,25 +1349,47 @@ describe('`restrict` function', function () {
 
   });
 
-  it('should create an object with the `silence` method when called with `\'silence\'`', function () {
+  it('should create an object with the `silence` and `unsilence` method when called with `\'silence\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['silence']);
 
     assert.equal('function', typeof channel2.silence);
+    assert.equal('function', typeof channel2.unsilence);
 
   });
 
-  it('should create an object with the `unsilence` method when called with `\'unsilence\'`', function () {
+  it('should create an object with the `unsilence` and `silence` method when called with `\'unsilence\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['unsilence']);
 
     assert.equal('function', typeof channel2.unsilence);
+    assert.equal('function', typeof channel2.silence);
 
   });
 
-  it('should create an object with the `lock` method when called with `\'lock\'`', function () {
+  it('should create an object with only the `silence` method when called with `\'silence\'` and `\'unsilence\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['silence'], ['unsilence']);
+
+    assert.equal('function', typeof channel2.silence);
+    assert.equal('undefined', typeof channel2.unsilence);
+
+  });
+
+  it('should create an object with only the `unsilence` method when called with `\'unsilence\'` and `\'silence\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['unsilence'], ['silence']);
+
+    assert.equal('function', typeof channel2.unsilence);
+    assert.equal('undefined', typeof channel2.silence);
+
+  });
+
+  it('should create an object with the `lock` and `unlock` method when called with `\'lock\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['lock']);
@@ -1376,12 +1398,32 @@ describe('`restrict` function', function () {
 
   });
 
-  it('should create an object with the `unlock` method when called with `\'unlock\'`', function () {
+  it('should create an object with the `unlock` and `lock` method when called with `\'unlock\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['unlock']);
 
     assert.equal('function', typeof channel2.unlock);
+
+  });
+
+  it('should create an object with only the `lock` method when called with `\'lock\'` and `\'unlock\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['lock'], ['unlock']);
+
+    assert.equal('function', typeof channel2.lock);
+    assert.equal('undefined', typeof channel2.unlock);
+
+  });
+
+  it('should create an object with only the `unlock` method when called with `\'unlock\'` and `\'lock\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['unlock'], ['lock']);
+
+    assert.equal('function', typeof channel2.unlock);
+    assert.equal('undefined', typeof channel2.lock);
 
   });
 
