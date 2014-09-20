@@ -1124,12 +1124,12 @@ describe('`isLocked` function', function () {
   
 });
 
-describe('`createWrapper` function', function () {
+describe('`restrict` function', function () {
 
   it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync` methods when called with `\'emit\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['emit']);
+        channel2 = channel.restrict(['emit']);
 
     assert.equal('function', typeof channel2.emit);
     assert.equal('function', typeof channel2.emitSync);
@@ -1146,7 +1146,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync` methods when called with `\'fire\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['fire']);
+        channel2 = channel.restrict(['fire']);
 
     assert.equal('function', typeof channel2.emit);
     assert.equal('function', typeof channel2.emitSync);
@@ -1163,7 +1163,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync` methods when called with `\'trigger\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['trigger']);
+        channel2 = channel.restrict(['trigger']);
 
     assert.equal('function', typeof channel2.emit);
     assert.equal('function', typeof channel2.emitSync);
@@ -1180,7 +1180,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync` methods when called with `\'emitSync\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['emitSync']);
+        channel2 = channel.restrict(['emitSync']);
 
     assert.equal('function', typeof channel2.emitSync);
     assert.equal('function', typeof channel2.fireSync);
@@ -1191,7 +1191,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync` methods when called with `\'fireSync\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['fireSync']);
+        channel2 = channel.restrict(['fireSync']);
 
     assert.equal('function', typeof channel2.emitSync);
     assert.equal('function', typeof channel2.fireSync);
@@ -1202,7 +1202,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync` methods when called with `\'triggerSync\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['triggerSync']);
+        channel2 = channel.restrict(['triggerSync']);
 
     assert.equal('function', typeof channel2.emitSync);
     assert.equal('function', typeof channel2.fireSync);
@@ -1213,7 +1213,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync` methods when called with `\'emitAsync\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['emitAsync']);
+        channel2 = channel.restrict(['emitAsync']);
 
     assert.equal('function', typeof channel2.emitAsync);
     assert.equal('function', typeof channel2.fireAsync);
@@ -1224,7 +1224,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync` methods when called with `\'fireAsync\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['fireAsync']);
+        channel2 = channel.restrict(['fireAsync']);
 
     assert.equal('function', typeof channel2.emitAsync);
     assert.equal('function', typeof channel2.fireAsync);
@@ -1235,7 +1235,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync` methods when called with `\'triggerAsync\'`', function () {
     
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['triggerAsync']);
+        channel2 = channel.restrict(['triggerAsync']);
 
     assert.equal('function', typeof channel2.emitAsync);
     assert.equal('function', typeof channel2.fireAsync);
@@ -1246,9 +1246,9 @@ describe('`createWrapper` function', function () {
   it('should not have methods for asynchronous event dispatching when called with `\'emitSync\’`, `\'fireSync\’` or `\'triggerSync\’`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['emitSync']),
-        channel3 = channel.createWrapper(['fireSync']),
-        channel4 = channel.createWrapper(['triggerSync']);
+        channel2 = channel.restrict(['emitSync']),
+        channel3 = channel.restrict(['fireSync']),
+        channel4 = channel.restrict(['triggerSync']);
 
     assert.equal(undefined, channel2.emit);
     assert.equal(undefined, channel2.fire);
@@ -1279,9 +1279,9 @@ describe('`createWrapper` function', function () {
   it('should not have methods for synchronous event dispatching when called with `\'emitAsync\’`, `\'fireAsync\’` or `\'triggerAsync\’`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['emitAsync']),
-        channel3 = channel.createWrapper(['fireAsync']),
-        channel4 = channel.createWrapper(['triggerAsync']);
+        channel2 = channel.restrict(['emitAsync']),
+        channel3 = channel.restrict(['fireAsync']),
+        channel4 = channel.restrict(['triggerAsync']);
 
     assert.equal(undefined, channel2.emit);
     assert.equal(undefined, channel2.fire);
@@ -1312,7 +1312,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `on`, `attach` methods when called with `\'on\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['on']);
+        channel2 = channel.restrict(['on']);
 
     assert.equal('function', typeof channel2.on);
     assert.equal('function', typeof channel2.attach);
@@ -1322,7 +1322,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `on`, `attach` methods when called with `\'attach\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['attach']);
+        channel2 = channel.restrict(['attach']);
 
     assert.equal('function', typeof channel2.on);
     assert.equal('function', typeof channel2.attach);
@@ -1332,7 +1332,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `off`, `detach` methods when called with `\'off\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['off']);
+        channel2 = channel.restrict(['off']);
 
     assert.equal('function', typeof channel2.off);
     assert.equal('function', typeof channel2.detach);
@@ -1342,7 +1342,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `off`, `detach` methods when called with `\'detach\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['detach']);
+        channel2 = channel.restrict(['detach']);
 
     assert.equal('function', typeof channel2.off);
     assert.equal('function', typeof channel2.detach);
@@ -1352,7 +1352,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `silence` method when called with `\'silence\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['silence']);
+        channel2 = channel.restrict(['silence']);
 
     assert.equal('function', typeof channel2.silence);
 
@@ -1361,7 +1361,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `unsilence` method when called with `\'unsilence\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['unsilence']);
+        channel2 = channel.restrict(['unsilence']);
 
     assert.equal('function', typeof channel2.unsilence);
 
@@ -1370,7 +1370,7 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `lock` method when called with `\'lock\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['lock']);
+        channel2 = channel.restrict(['lock']);
 
     assert.equal('function', typeof channel2.lock);
 
@@ -1379,28 +1379,28 @@ describe('`createWrapper` function', function () {
   it('should create an object with the `unlock` method when called with `\'unlock\'`', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(['unlock']);
+        channel2 = channel.restrict(['unlock']);
 
     assert.equal('function', typeof channel2.unlock);
 
   });
 
-  it('should have the `isSilenced`, `isLocked` and `createWrapper` methods by default, when no prohibitions are specified', function () {
+  it('should have the `isSilenced`, `isLocked` and `restrict` methods by default, when no prohibitions are specified', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper();
+        channel2 = channel.restrict();
 
     assert.equal('function', typeof channel2.isSilenced);
     assert.equal('function', typeof channel2.isLocked);
-    assert.equal('function', typeof channel2.createWrapper);
+    assert.equal('function', typeof channel2.restrict);
 
   });
 
   it('should prevent giving permissions to the wrapper that the target itself does not have', function () {
 
     var channel = new Channel(),
-        channel2 = channel.createWrapper(),
-        channel3 = channel2.createWrapper(['emit']);
+        channel2 = channel.restrict(),
+        channel3 = channel2.restrict(['emit']);
 
     assert.equal(undefined, channel3.emit);
 

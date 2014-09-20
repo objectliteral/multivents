@@ -389,7 +389,7 @@ var Channel = (function () {
 
             };
 
-            target.createWrapper = function (permissions, prohibitions) {
+            target.restrict = function (permissions, prohibitions) {
 
                 var _channel = {},
                     _method,
@@ -400,7 +400,7 @@ var Channel = (function () {
                     permissions = [];
                 }
 
-                permissions.push('isSilenced', 'isLocked', 'createWrapper');
+                permissions.push('isSilenced', 'isLocked', 'restrict');
 
                 if (prohibitions === undefined) {
                     prohibitions = [];
@@ -426,7 +426,7 @@ var Channel = (function () {
                     'unlock' : [ 'unlock', 'lock' ],
                     'isSilenced' : [ 'isSilenced' ],
                     'isLocked' : [ 'isLocked' ],
-                    'createWrapper' : [ 'createWrapper' ]
+                    'restrict' : [ 'restrict' ]
                 };
 
                 permissions.forEach(function (value) {
