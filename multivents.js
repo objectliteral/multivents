@@ -66,7 +66,7 @@ var Channel = (function () {
             target.on = function on (type, func, ctx, async) {
 
                 if (locked || (events[type] && events[type].locked)) {
-                    return target;
+                    return this;
                 }
 
                 addEvent(type).callbacks.push({
@@ -157,7 +157,7 @@ var Channel = (function () {
                     j;
 
                 if (silenced || (events[type] && events[type].silenced)) {
-                    return target;
+                    return this;
                 }
 
                 list = (events[type] && events[type].callbacks) || [];
@@ -218,7 +218,7 @@ var Channel = (function () {
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
             target.emit = function (type) {
-                return emit.call(target, type, Array.prototype.slice.call(arguments, 1));
+                return emit.call(this, type, Array.prototype.slice.call(arguments, 1));
             };
 
             /** 
@@ -227,7 +227,7 @@ var Channel = (function () {
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
             target.emitSync = function (type) {
-                return emit.call(target, type, Array.prototype.slice.call(arguments, 1), false);
+                return emit.call(this, type, Array.prototype.slice.call(arguments, 1), false);
             };
 
             /** 
@@ -236,7 +236,7 @@ var Channel = (function () {
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
             target.emitAsync = function (type) {
-                return emit.call(target, type, Array.prototype.slice.call(arguments, 1), true);
+                return emit.call(this, type, Array.prototype.slice.call(arguments, 1), true);
             };
 
             target.publish = target.fire = target.trigger = target.emit;
@@ -254,17 +254,17 @@ var Channel = (function () {
                 var e, i, l;
 
                 if (isPublic(target)) {
-                    return target;
+                    return this;
                 }
 
                 if (type === undefined) {
                     silenced = true;
-                    return target;
+                    return this;
                 }
                 
                 if (func === undefined) {
                     addEvent(type).silenced = true;
-                    return target;
+                    return this;
                 }
 
                 e = events[type];
@@ -293,7 +293,7 @@ var Channel = (function () {
                 var e, i, l;
 
                 if (isPublic(target)) {
-                    return target;
+                    return this;
                 }
 
                 if (type === undefined) {
