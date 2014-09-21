@@ -83,6 +83,27 @@ var Channel = (function () {
             target.subscribe = target.attach = target.on;
 
             /**
+             * This method does the same as `on` but it registers a callback that will only be executed once.
+             * 
+             * @param {String} The name of the event is specified by a string. It doesn't matter, whether this event name already exists or not.
+             * @param {Function} The function to be called, when the event is triggered.
+             * @param {Object} Optionally, you can provide a context for the callback function.
+             * @param {boolen} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
+             */
+            target.once = function on (type, func, ctx, async) {
+
+                var f = function () {
+                    func.apply(this, [].slice.call.arguments);
+                    target.off(type, f);
+                };
+
+                target.on(type, f, ctx, async);
+
+                return this;
+
+            };
+
+            /**
              * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the 
              * type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On 
              * public channels, only the first option (with both a type and a function reference) is permitted.
