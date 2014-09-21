@@ -43,6 +43,10 @@ The following documentation uses the terms *event* and *message* synonymously as
 `function on ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )`
 
 `attach`: Alias for `on`.
+
+`once`: When you want a callback to be only executed once, you can use the `once` method (which is to be used just like `on`).
+
+`function once ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )`
     
 `off` : Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
 
