@@ -34,13 +34,9 @@ The following documentation uses the terms *event* and *message* synonymously as
 
 ## How to use / API
 
-<<<<<<< HEAD
-`Channel` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels [down below](#named-event-channels). A channel provides a handful of methods that are discussed below.
-=======
 ### Basic functions
 
 `Channel` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels in the [extra paragraph I dedicated them](#named-event-channels). A channel provides a handful of methods that are discussed below.
->>>>>>> multivents_wrappers
 
 `on`: With this method you can register callbacks to be executed when a certain event is triggered. You have to pass in the event name and the callback function, but you can optionally provide a third argument. This third argument should be an object which is then used as the callback function's `this` (context injection). The fourth parameter of the `on` function is a boolean that gives a preference on whether the callback function shall be executed asynchronously. Note, however, that asynchronous execution is not guarenteed; read why [in this paragraph](#asynchronous-callback-execution).
 
