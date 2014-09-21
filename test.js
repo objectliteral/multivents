@@ -60,6 +60,11 @@ describe('Event channels', function () {
       var channel = Channel({});
       assert.equal('function', typeof channel.on);
     });
+
+    it('should contain an `once` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.once);
+    });
     
     it('should contain a `reset` function', function () {
       var channel = Channel({});
@@ -1593,6 +1598,45 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
         channel3 = channel2.restrict(['emit']);
 
     assert.equal(undefined, channel3.emit);
+
+  });
+
+});
+
+describe('`once` method', function () {
+
+  it('should register an event callback that gets executed only once', function () {
+
+    var channel = new Channel(),
+      check = 0;
+
+    channel.once('test', function () {
+      check++;
+    });
+
+    channel.emitSync('test');
+
+    assert.equal(1, check);
+
+    channel.emitSync('test');
+
+    assert.equal(1, check);
+
+  });
+
+  it('should preserve the injected context', function () {
+
+    var channel = new Channel(),
+      check,
+      obj = {};
+
+    channel.once('test', function () {
+      check = this;
+    }, obj);
+
+    channel.emitSync('test');
+
+    assert.equal(obj, check);
 
   });
 
