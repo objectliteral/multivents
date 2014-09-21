@@ -80,7 +80,7 @@ var Channel = (function () {
 
             };
 
-            target.attach = target.on;
+            target.subscribe = target.attach = target.on;
 
             /**
              * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the 
@@ -125,7 +125,7 @@ var Channel = (function () {
 
             };
 
-            target.detach = target.off;
+            target.unsubscribe = target.detach = target.off;
 
             emit = function emit (type, data, async) {
 
@@ -218,9 +218,9 @@ var Channel = (function () {
                 return emit.call(target, type, Array.prototype.slice.call(arguments, 1), true);
             };
 
-            target.fire = target.trigger = target.emit;
-            target.fireSync = target.triggerSync = target.emitSync;
-            target.fireAsync = target.triggerAsync = target.emitAsync;
+            target.publish = target.fire = target.trigger = target.emit;
+            target.publishSync = target.fireSync = target.triggerSync = target.emitSync;
+            target.publishAsync = target.fireAsync = target.triggerAsync = target.emitAsync;
 
             /**
              * The `silence` method prevents any new messages from being sent over the message channel.
@@ -413,19 +413,24 @@ var Channel = (function () {
                 }
 
                 methods = { 
-                    'on' : [ 'on', 'attach' ],
-                    'attach' : [ 'on', 'attach' ],
-                    'off' : [ 'off', 'detach' ],
-                    'detach' : [ 'off', 'detach' ],
-                    'emit' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync' ],
-                    'fire' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync' ],
-                    'trigger' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync' ],
-                    'emitSync' : [ 'emitSync', 'fireSync', 'triggerSync' ],
-                    'fireSync' : [ 'emitSync', 'fireSync', 'triggerSync' ],
-                    'triggerSync' : [ 'emitSync', 'fireSync', 'triggerSync' ],
-                    'emitAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync' ],
-                    'fireAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync' ],
-                    'triggerAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync' ],
+                    'on' : [ 'on', 'attach', 'subscribe' ],
+                    'attach' : [ 'on', 'attach', 'subscribe' ],
+                    'subscribe' : [ 'on', 'attach', 'subscribe' ],
+                    'off' : [ 'off', 'detach', 'unsubscribe' ],
+                    'detach' : [ 'off', 'detach', 'unsubscribe' ],
+                    'unsubscribe' : [ 'off', 'detach', 'unsubscribe' ],
+                    'emit' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
+                    'fire' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
+                    'trigger' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
+                    'publish' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
+                    'emitSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
+                    'fireSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
+                    'publishSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
+                    'triggerSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
+                    'emitAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync', 'publishAsync' ],
+                    'fireAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync', 'publishAsync' ],
+                    'triggerAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync', 'publishAsync' ],
+                    'publishAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync', 'publishAsync' ],
                     'silence' : [ 'silence', 'unsilence' ],
                     'unsilence' : [ 'unsilence', 'silence' ],
                     'lock' : [ 'lock', 'unlock' ],
