@@ -419,7 +419,6 @@ var Channel = (function () {
             target.restrict = function (permissions, prohibitions) {
 
                 var _channel = {},
-                    _method,
                     methods,
                     that = this;
 
@@ -440,10 +439,30 @@ var Channel = (function () {
                     'off' : [ 'off', 'detach', 'unsubscribe' ],
                     'detach' : [ 'off', 'detach', 'unsubscribe' ],
                     'unsubscribe' : [ 'off', 'detach', 'unsubscribe' ],
-                    'emit' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
-                    'fire' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
-                    'trigger' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
-                    'publish' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync', 'publish', 'publishSync', 'publishAsync' ],
+                    'emit' : [
+                        'emit', 'emitSync', 'emitAsync',
+                        'fire', 'fireSync', 'fireAsync',
+                        'trigger', 'triggerSync', 'triggerAsync',
+                        'publish', 'publishSync', 'publishAsync'
+                    ],
+                    'fire' : [
+                        'emit', 'emitSync', 'emitAsync',
+                        'fire', 'fireSync', 'fireAsync',
+                        'trigger', 'triggerSync', 'triggerAsync',
+                        'publish', 'publishSync', 'publishAsync'
+                    ],
+                    'trigger' : [
+                        'emit', 'emitSync', 'emitAsync',
+                        'fire', 'fireSync', 'fireAsync',
+                        'trigger', 'triggerSync', 'triggerAsync',
+                        'publish', 'publishSync', 'publishAsync'
+                    ],
+                    'publish' : [
+                        'emit', 'emitSync', 'emitAsync',
+                        'fire', 'fireSync', 'fireAsync',
+                        'trigger', 'triggerSync', 'triggerAsync',
+                        'publish', 'publishSync', 'publishAsync'
+                    ],
                     'emitSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
                     'fireSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
                     'publishSync' : [ 'emitSync', 'fireSync', 'triggerSync', 'publishSync' ],
@@ -456,7 +475,7 @@ var Channel = (function () {
                     'unsilence' : [ 'unsilence', 'silence' ],
                     'lock' : [ 'lock', 'unlock' ],
                     'unlock' : [ 'unlock', 'lock' ],
-                    'isSilenced' : [ 'isSilenced' ],
+                    'isSilenced' : [ 'isSilenced' ],
                     'isLocked' : [ 'isLocked' ],
                     'restrict' : [ 'restrict' ]
                 };
@@ -464,11 +483,11 @@ var Channel = (function () {
                 permissions.forEach(function (value) {
 
                     if (methods[value] !== undefined) {
-                        for (_method in methods[value]) {
-                            if (prohibitions.indexOf(methods[value][_method]) === -1 && that[methods[value][_method]] !== undefined) {
-                                _channel[methods[value][_method]] = that[methods[value][_method]];
+                        methods[value].forEach(function (_method) {
+                            if (prohibitions.indexOf(_method) === -1 && that[_method] !== undefined) {
+                                _channel[_method] = that[_method];
                             }
-                        }
+                        });
                     }
 
                 });
