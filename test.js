@@ -116,14 +116,54 @@ describe('Event channels', function () {
       assert.equal(channel.emitAsync, channel.fireAsync);
     });
 
+    it('should contain a `publish` alias for the `emit` function', function () {
+      var channel = Channel({});
+      assert.equal(channel.emit, channel.publish);
+    });
+
+    it('should contain a `publishSync` alias for the `emitSync` function', function () {
+      var channel = Channel({});
+      assert.equal(channel.emitSync, channel.publishSync);
+    });
+
+    it('should contain a `publishAsync` alias for the `emitAsync` function', function () {
+      var channel = Channel({});
+      assert.equal(channel.emitAsync, channel.publishAsync);
+    });
+
     it('should contain an `attach` alias for the `on` function', function () {
       var channel = Channel({});
-      assert.equal(channel.emit, channel.fire);
+      assert.equal(channel.on, channel.attach);
+    });
+
+    it('should contain an `subscribe` alias for the `on` function', function () {
+      var channel = Channel({});
+      assert.equal(channel.on, channel.subscribe);
     });
 
     it('should contain a `detach` alias for the `off` function', function () {
       var channel = Channel({});
-      assert.equal(channel.emit, channel.fire);
+      assert.equal(channel.off, channel.detach);
+    });
+
+    it('should contain a `unsubscribe` alias for the `off` function', function () {
+      var channel = Channel({});
+      assert.equal(channel.off, channel.unsubscribe);
+    });
+
+    it('should contain an `isSilenced` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.isSilenced);
+    });
+
+    it('should contain an `isLocked` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.isLocked);
+    });
+
+    it('should contain a `restrict` function', function () {
+      var channel = Channel({});
+      assert.equal('function', typeof channel.restrict);
     });
 
 });
@@ -1126,7 +1166,7 @@ describe('`isLocked` function', function () {
 
 describe('`restrict` function', function () {
 
-  it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync` methods when called with `\'emit\'`', function () {
+  it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'emit\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['emit']);
@@ -1139,11 +1179,14 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.fireAsync);
     assert.equal('function', typeof channel2.trigger);
     assert.equal('function', typeof channel2.triggerSync);
-    assert.equal('function', typeof channel2.trigger);
+    assert.equal('function', typeof channel2.triggerAsync);
+    assert.equal('function', typeof channel2.publish);
+    assert.equal('function', typeof channel2.publishSync);
+    assert.equal('function', typeof channel2.publishAsync);
 
   });
 
-  it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync` methods when called with `\'fire\'`', function () {
+  it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'fire\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['fire']);
@@ -1156,11 +1199,14 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.fireAsync);
     assert.equal('function', typeof channel2.trigger);
     assert.equal('function', typeof channel2.triggerSync);
-    assert.equal('function', typeof channel2.trigger);
+    assert.equal('function', typeof channel2.triggerAsync);
+    assert.equal('function', typeof channel2.publish);
+    assert.equal('function', typeof channel2.publishSync);
+    assert.equal('function', typeof channel2.publishAsync);
 
   });
 
-  it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync` methods when called with `\'trigger\'`', function () {
+  it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'trigger\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['trigger']);
@@ -1173,11 +1219,34 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.fireAsync);
     assert.equal('function', typeof channel2.trigger);
     assert.equal('function', typeof channel2.triggerSync);
-    assert.equal('function', typeof channel2.trigger);
+    assert.equal('function', typeof channel2.triggerAsync);
+    assert.equal('function', typeof channel2.publish);
+    assert.equal('function', typeof channel2.publishSync);
+    assert.equal('function', typeof channel2.publishAsync);
 
   });
 
-  it('should create an object with the `emitSync`, `fireSync`, `triggerSync` methods when called with `\'emitSync\'`', function () {
+it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'publish\'`', function () {
+    
+    var channel = new Channel(),
+        channel2 = channel.restrict(['publish']);
+
+    assert.equal('function', typeof channel2.emit);
+    assert.equal('function', typeof channel2.emitSync);
+    assert.equal('function', typeof channel2.emitAsync);
+    assert.equal('function', typeof channel2.fire);
+    assert.equal('function', typeof channel2.fireSync);
+    assert.equal('function', typeof channel2.fireAsync);
+    assert.equal('function', typeof channel2.trigger);
+    assert.equal('function', typeof channel2.triggerSync);
+    assert.equal('function', typeof channel2.triggerAsync);
+    assert.equal('function', typeof channel2.publish);
+    assert.equal('function', typeof channel2.publishSync);
+    assert.equal('function', typeof channel2.publishAsync);
+
+  });
+
+  it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'emitSync\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['emitSync']);
@@ -1185,10 +1254,11 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.emitSync);
     assert.equal('function', typeof channel2.fireSync);
     assert.equal('function', typeof channel2.triggerSync);
+    assert.equal('function', typeof channel2.publishSync);
 
   });
 
-  it('should create an object with the `emitSync`, `fireSync`, `triggerSync` methods when called with `\'fireSync\'`', function () {
+  it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'fireSync\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['fireSync']);
@@ -1196,10 +1266,11 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.emitSync);
     assert.equal('function', typeof channel2.fireSync);
     assert.equal('function', typeof channel2.triggerSync);
+    assert.equal('function', typeof channel2.publishSync);
 
   });
 
-  it('should create an object with the `emitSync`, `fireSync`, `triggerSync` methods when called with `\'triggerSync\'`', function () {
+  it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'triggerSync\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['triggerSync']);
@@ -1207,10 +1278,23 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.emitSync);
     assert.equal('function', typeof channel2.fireSync);
     assert.equal('function', typeof channel2.triggerSync);
+    assert.equal('function', typeof channel2.publishSync);
 
   });
 
-  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync` methods when called with `\'emitAsync\'`', function () {
+  it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'publishSync\'`', function () {
+    
+    var channel = new Channel(),
+        channel2 = channel.restrict(['publishSync']);
+
+    assert.equal('function', typeof channel2.emitSync);
+    assert.equal('function', typeof channel2.fireSync);
+    assert.equal('function', typeof channel2.triggerSync);
+    assert.equal('function', typeof channel2.publishSync);
+
+  });
+
+  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'emitAsync\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['emitAsync']);
@@ -1218,10 +1302,11 @@ describe('`restrict` function', function () {
     assert.equal('function', typeof channel2.emitAsync);
     assert.equal('function', typeof channel2.fireAsync);
     assert.equal('function', typeof channel2.triggerAsync);
+    assert.equal('function', typeof channel2.publishAsync);
 
   });
 
-  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync` methods when called with `\'fireAsync\'`', function () {
+  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'fireAsync\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['fireAsync']);
@@ -1232,7 +1317,7 @@ describe('`restrict` function', function () {
 
   });
 
-  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync` methods when called with `\'triggerAsync\'`', function () {
+  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'triggerAsync\'`', function () {
     
     var channel = new Channel(),
         channel2 = channel.restrict(['triggerAsync']);
@@ -1243,36 +1328,64 @@ describe('`restrict` function', function () {
 
   });
 
-  it('should not have methods for asynchronous event dispatching when called with `\'emitSync\’`, `\'fireSync\’` or `\'triggerSync\’`', function () {
+  it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'publishAsync\'`', function () {
+    
+    var channel = new Channel(),
+        channel2 = channel.restrict(['publishAsync']);
+
+    assert.equal('function', typeof channel2.emitAsync);
+    assert.equal('function', typeof channel2.fireAsync);
+    assert.equal('function', typeof channel2.triggerAsync);
+
+  });
+
+  it('should not have methods for asynchronous event dispatching when called with `\'emitSync\’`, `\'fireSync\’`,`\'triggerSync\’`, or `\'publishSync\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['emitSync']),
         channel3 = channel.restrict(['fireSync']),
-        channel4 = channel.restrict(['triggerSync']);
+        channel4 = channel.restrict(['triggerSync']),
+        channel5 = channel.restrict(['publishSync']);
 
     assert.equal(undefined, channel2.emit);
     assert.equal(undefined, channel2.fire);
     assert.equal(undefined, channel2.trigger);
+    assert.equal(undefined, channel2.publish);
 
     assert.equal(undefined, channel2.emitAsync);
     assert.equal(undefined, channel2.fireAsync);
     assert.equal(undefined, channel2.triggerAsync);
+    assert.equal(undefined, channel2.publishAsync);
 
     assert.equal(undefined, channel3.emit);
     assert.equal(undefined, channel3.fire);
     assert.equal(undefined, channel3.trigger);
+    assert.equal(undefined, channel3.publish);
 
     assert.equal(undefined, channel3.emitAsync);
     assert.equal(undefined, channel3.fireAsync);
     assert.equal(undefined, channel3.triggerAsync);
+    assert.equal(undefined, channel3.publishAsync);
 
     assert.equal(undefined, channel4.emit);
     assert.equal(undefined, channel4.fire);
     assert.equal(undefined, channel4.trigger);
+    assert.equal(undefined, channel4.publish);
 
     assert.equal(undefined, channel4.emitAsync);
     assert.equal(undefined, channel4.fireAsync);
     assert.equal(undefined, channel4.triggerAsync);
+    assert.equal(undefined, channel4.publishAsync);
+
+    assert.equal(undefined, channel5.emit);
+    assert.equal(undefined, channel5.fire);
+    assert.equal(undefined, channel5.trigger);
+    assert.equal(undefined, channel5.publish);
+
+    assert.equal(undefined, channel5.emitAsync);
+    assert.equal(undefined, channel5.fireAsync);
+    assert.equal(undefined, channel5.triggerAsync);
+    assert.equal(undefined, channel5.publishAsync);
 
   });
 
@@ -1309,43 +1422,78 @@ describe('`restrict` function', function () {
 
   });
 
-  it('should create an object with the `on`, `attach` methods when called with `\'on\'`', function () {
+  it('should create an object with the `on`, `attach`, `subscribe` methods when called with `\'on\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['on']);
 
     assert.equal('function', typeof channel2.on);
     assert.equal('function', typeof channel2.attach);
+    assert.equal('function', typeof channel2.subscribe);
 
   });
 
-  it('should create an object with the `on`, `attach` methods when called with `\'attach\'`', function () {
+  it('should create an object with the `on`, `attach`, `subscribe` methods when called with `\'attach\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['attach']);
 
     assert.equal('function', typeof channel2.on);
     assert.equal('function', typeof channel2.attach);
+    assert.equal('function', typeof channel2.subscribe);
 
   });
 
-  it('should create an object with the `off`, `detach` methods when called with `\'off\'`', function () {
+  it('should create an object with the `on`, `attach`, `subscribe` methods when called with `\'subscribe\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['subscribe']);
+
+    assert.equal('function', typeof channel2.on);
+    assert.equal('function', typeof channel2.attach);
+    assert.equal('function', typeof channel2.subscribe);
+
+  });
+
+  it('should create an object with the `off`, `detach`, `unsubscribe` methods when called with `\'off\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['off']);
 
     assert.equal('function', typeof channel2.off);
     assert.equal('function', typeof channel2.detach);
+    assert.equal('function', typeof channel2.unsubscribe)
 
   });
 
-  it('should create an object with the `off`, `detach` methods when called with `\'detach\'`', function () {
+  it('should create an object with the `off`, `detach`, `unsubscribe` methods when called with `\'detach\'`', function () {
 
     var channel = new Channel(),
         channel2 = channel.restrict(['detach']);
 
     assert.equal('function', typeof channel2.off);
     assert.equal('function', typeof channel2.detach);
+    assert.equal('function', typeof channel2.unsubscribe);
+
+  });it('should create an object with the `off`, `detach`, `unsubscribe` methods when called with `\'unsubscribe\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['unsubscribe']);
+
+    assert.equal('function', typeof channel2.off);
+    assert.equal('function', typeof channel2.detach);
+    assert.equal('function', typeof channel2.unsubscribe);
+
+  });
+
+  it('should create an object with the `off`, `detach`, `unsubscribe` methods when called with `\'detach\'`', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['detach']);
+
+    assert.equal('function', typeof channel2.off);
+    assert.equal('function', typeof channel2.detach);
+    assert.equal('function', typeof channel2.unsubscribe);
 
   });
 
