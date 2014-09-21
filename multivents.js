@@ -76,7 +76,7 @@ var Channel = (function () {
                     async : async === false ? -1 : async||0 // this could be a bitwise or, but my jshintrc forbids that; logical or works fine aswell
                 });
 
-                return target;
+                return this;
 
             };
 
@@ -121,7 +121,7 @@ var Channel = (function () {
                     }
                 }
 
-                return target;
+                return this;
 
             };
 
@@ -186,7 +186,7 @@ var Channel = (function () {
                     }
                 }
 
-                return target;
+                return this;
 
             };
 
@@ -197,7 +197,7 @@ var Channel = (function () {
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
             target.emit = function (type) {
-                return emit(type, Array.prototype.slice.call(arguments, 1));
+                return emit.call(target, type, Array.prototype.slice.call(arguments, 1));
             };
 
             /** 
@@ -206,7 +206,7 @@ var Channel = (function () {
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
             target.emitSync = function (type) {
-                return emit(type, Array.prototype.slice.call(arguments, 1), false);
+                return emit.call(target, type, Array.prototype.slice.call(arguments, 1), false);
             };
 
             /** 
@@ -215,7 +215,7 @@ var Channel = (function () {
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
              */
             target.emitAsync = function (type) {
-                return emit(type, Array.prototype.slice.call(arguments, 1), true);
+                return emit.call(target, type, Array.prototype.slice.call(arguments, 1), true);
             };
 
             target.fire = target.trigger = target.emit;
@@ -257,7 +257,7 @@ var Channel = (function () {
                     }
                 }
 
-                return target;
+                return this;
 
             };
 
@@ -294,7 +294,7 @@ var Channel = (function () {
                     }
                 }
                 
-                return target;
+                return this;
 
             };
 
@@ -313,7 +313,7 @@ var Channel = (function () {
                     }
                 }
 
-                return target;
+                return this;
 
             };
 
@@ -332,7 +332,7 @@ var Channel = (function () {
                     }
                 }
 
-                return target;
+                return this;
 
             };
 
@@ -355,7 +355,7 @@ var Channel = (function () {
                     }
                 }
 
-                return target;
+                return this;
 
             };
 
@@ -392,6 +392,62 @@ var Channel = (function () {
                 }
 
                 return false;
+
+            };
+
+            target.restrict = function (permissions, prohibitions) {
+
+                var _channel = {},
+                    _method,
+                    methods,
+                    that = this;
+
+                if (permissions === undefined) {
+                    permissions = [];
+                }
+
+                permissions.push('isSilenced', 'isLocked', 'restrict');
+
+                if (prohibitions === undefined) {
+                    prohibitions = [];
+                }
+
+                methods = { 
+                    'on' : [ 'on', 'attach' ],
+                    'attach' : [ 'on', 'attach' ],
+                    'off' : [ 'off', 'detach' ],
+                    'detach' : [ 'off', 'detach' ],
+                    'emit' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync' ],
+                    'fire' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync' ],
+                    'trigger' : [ 'emit', 'emitSync', 'emitAsync', 'fire', 'fireSync', 'fireAsync', 'trigger', 'triggerSync', 'triggerAsync' ],
+                    'emitSync' : [ 'emitSync', 'fireSync', 'triggerSync' ],
+                    'fireSync' : [ 'emitSync', 'fireSync', 'triggerSync' ],
+                    'triggerSync' : [ 'emitSync', 'fireSync', 'triggerSync' ],
+                    'emitAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync' ],
+                    'fireAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync' ],
+                    'triggerAsync' : [ 'emitAsync', 'fireAsync', 'triggerAsync' ],
+                    'silence' : [ 'silence', 'unsilence' ],
+                    'unsilence' : [ 'unsilence', 'silence' ],
+                    'lock' : [ 'lock', 'unlock' ],
+                    'unlock' : [ 'unlock', 'lock' ],
+                    'isSilenced' : [ 'isSilenced' ],
+                    'isLocked' : [ 'isLocked' ],
+                    'restrict' : [ 'restrict' ]
+                };
+
+                permissions.forEach(function (value) {
+
+                    if (methods[value] !== undefined) {
+                        for (_method in methods[value]) {
+                            if (prohibitions.indexOf(methods[value][_method]) === -1 && that[methods[value][_method]] !== undefined) {
+                                _channel[methods[value][_method]] = that[methods[value][_method]];
+                            }
+                        }
+                    }
+
+                });
+
+                return _channel;
 
             };
 

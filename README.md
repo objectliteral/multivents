@@ -34,7 +34,13 @@ The following documentation uses the terms *event* and *message* synonymously as
 
 ## How to use / API
 
+<<<<<<< HEAD
 `Channel` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels [down below](#named-event-channels). A channel provides a handful of methods that are discussed below.
+=======
+### Basic functions
+
+`Channel` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels in the [extra paragraph I dedicated them](#named-event-channels). A channel provides a handful of methods that are discussed below.
+>>>>>>> multivents_wrappers
 
 `on`: With this method you can register callbacks to be executed when a certain event is triggered. You have to pass in the event name and the callback function, but you can optionally provide a third argument. This third argument should be an object which is then used as the callback function's `this` (context injection). The fourth parameter of the `on` function is a boolean that gives a preference on whether the callback function shall be executed asynchronously. Note, however, that asynchronous execution is not guarenteed; read why [in this paragraph](#asynchronous-callback-execution).
 
@@ -56,7 +62,7 @@ The following documentation uses the terms *event* and *message* synonymously as
 
 Those are the most important functions provided by *multivents*. If you want to get started now, skip on to the [example code](#example-code).
 
----
+### Silencing and locking
 
 `silence`: This method prevents callbacks from being executed. You can use `silence` on different things depending on the arguments you provide. If you call it without any arguments, the whole message channel is silenced and emitting events on this channel won't work. If you call `silence` with one argument, you can specify an event that should no longer be emittable, while all other events on this channel will still work fine. If you call `silence` with two arguments, you can silence one specific callback function from executing. When the according event is triggered, all of its other callbacks are still being invoked, except the one you silenced.
 
@@ -79,6 +85,14 @@ Those are the most important functions provided by *multivents*. If you want to 
 `reset`: This method lets you remove all callbacks from an event or even all callbacks of all events on an entire channel. If you call this function without any arguments, you reset the whole channel. Note, that `reset` also unsilences and unlocks an event.
 
 `function reset ( /* String */ type ? )`
+
+### Restricting
+
+You can create a wrapper object for an event channel so that you can give limited access to that channel, allowing other parts of your code to only access certain methods of the channel. For instance you may not want to allow a module to silence or lock a channel, but you want it to be able to trigger events. For this you can use the `restrict` method.
+
+`restrict`: You can pass in an array of methods you want to make accessible on the wrapper object.
+
+`function restrict ( /* String[] */ permissions ? )`
 
 ## Example Code
 
@@ -202,6 +216,19 @@ channel.emit('peng'); // 'peng event fired'
 ```
 
 You can see, that attaching a new event listener when the channel was locked had no effect. You can also lock a single event.
+
+### Restricting
+
+You can create restricted access to a channel using the `restrict` method:
+
+```javascript
+var restrictedChannel = channel.restrict(['emit', 'on']);
+console.log(typeof restrictedChannel.emit); // 'function'
+console.log(typeof restrictedChannel.on); // 'function'
+console.log(typeof restrictedChannel.silence); // 'undefined'
+```
+
+The new object only provides the functions you chose in the `restrict`-call.
 
 ## Asynchronous Callback Execution
 
