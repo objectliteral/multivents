@@ -1,0 +1,43 @@
+{
+  "name": "multivents",
+  "version": "5.1.5",
+  "homepage": "https://github.com/objectliteral/multivents",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/objectliteral/multivents.git"
+  },
+  "authors": [
+    "Peter Steinberg <objectliteral@outlook.com>"
+  ],
+  "description": "JavaScript Event System",
+  "main": "multivents.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "events",
+    "minivents",
+    "multivents",
+    "asynchronous"
+  ],
+  "devDependencies": {
+    "assert": "^1.1.1",
+    "gulp": "~3.6.2",
+    "gulp-jshint": "^1.6.2",
+    "gulp-mocha": "^0.4.1",
+    "gulp-rename": "~1.2.0",
+    "gulp-sourcemaps": "^1.1.1",
+    "gulp-uglify": "~0.3.0",
+    "jshint-stylish": "^0.4.0"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
