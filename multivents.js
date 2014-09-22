@@ -92,9 +92,13 @@ var Channel = (function () {
              */
             target.once = function on (type, func, ctx, async) {
 
-                var f = function () {
-                    func.apply(this, [].slice.call(arguments));
-                    target.off(type, f);
+                var called = false,
+                    f = function () {
+                        if (!called) {
+                            func.apply(this, [].slice.call(arguments));
+                            target.off(type, f);
+                            called = true;
+                        }
                 };
 
                 target.on(type, f, ctx, async);
