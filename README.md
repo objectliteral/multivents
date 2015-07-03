@@ -24,6 +24,8 @@ If that's all you wanted to know, great! If not, you may read on to find out mor
 
 There's not really anything to install. If you want to use *multivents* in your project, include `multivents.js` or `multivents.min.js` and use it like described below.
 
+*multivents* supports both CommonJS-style environments as well as AMD.
+
 If you want to extend *multivents* to your needs you might want to run tests. In order to do this, you can clone this repository and run `npm install` and `gulp test`. Tests are written with [assert](https://github.com/defunctzombie/commonjs-assert) and run with [mocha](http://visionmedia.github.io/mocha/) ([gulp-mocha](https://github.com/sindresorhus/gulp-mocha)).
 
 ## Terminology and Concept
@@ -47,7 +49,7 @@ The following documentation uses the terms *event* and *message* synonymously as
 `once`: When you want a callback to be only executed once, you can use the `once` method (which is to be used just like `on`).
 
 `function once ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )`
-    
+
 `off` : Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
 
 `function off ( /* String */ type ?, /* Function */ callback ? )`
@@ -127,7 +129,7 @@ var greet = function (who) {
 channel.on('ping', greet);
 ```
 
-You can trigger an event using the channel' `emit` method and optionally provide additional arguments that will be passed on to the callback.
+You can trigger an event using the channel's `emit` method and optionally provide additional arguments that will be passed on to the callback.
 
 ```javascript
 channel.emit('ping', 'world');
@@ -157,7 +159,7 @@ var bob = { name : 'Bob' };
 channel.on('greet', function () {
     console.log('Hello, I\'m ' + this.name + '!');
 }, bob);
-channel.emit('greet');
+channel.emit('greet'); // 'Hello, I'm Bob!'
 ```
 
 The `bob` object is used as the callback's `this` as it was provided to the `on` call as the third argument.
@@ -185,8 +187,8 @@ When a channel is silenced, none of its events can be triggered. Notice though, 
 
 ```javascript
 channel.silence();
-channel.emit('ping'); [nothing happens]
-channel.emit('pong'); [nothing happens]
+channel.emit('ping'); // [nothing happens]
+channel.emit('pong'); // [nothing happens]
 ```
 
 Let's now unsilence the channel and silence just the `pong` event.
@@ -195,7 +197,7 @@ Let's now unsilence the channel and silence just the `pong` event.
 channel.unsilence();
 channel.silence('pong');
 channel.emit('pong'); // [nothing happens]
-channel.emit('ping'); 'ping event fired'
+channel.emit('ping'); // 'ping event fired'
 ```
 
 When a channel is silenced, you can still attach new event listeners. That's not the case, when the channel is locked.
@@ -248,11 +250,11 @@ You can also emit an event, specifying its preference to call its callbacks sync
 channel.emitSync('ping');
 ```
 
-As said before, if neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, *multivents* does it asynchronously. If one party states a preference and the other one doesn't, the one who aired his opinion gets his will. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method the according execution style is guaranteed. E.g. in the following case:
+If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, *multivents* does it asynchronously. If one party states a preference and the other one doesn't, the one who aired his opinion gets his will. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method the according execution style is guaranteed. E.g. in the following case:
 
 ```javascript
-channel.on('ping', f, null, false); // [`f` wants to be called asynchronously]
-channel.emitAsync('ping'); [`emitAsync` guarantees asynchronous execution]
+channel.on('ping', f, null, false); // [`f` wants to be called synchronously]
+channel.emitAsync('ping'); // [`emitAsync` guarantees asynchronous execution]
 ```
 
 the callback would be executed asynchronously, because the `emitAsync` method was used and is stronger than the async flag in the `on` call.
