@@ -41,7 +41,7 @@ var Channel = (function () {
                 silenced = false;
 
             /**
-             * The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called, 
+             * The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called,
              * when the event is triggered.
              */
             events = {};
@@ -54,14 +54,14 @@ var Channel = (function () {
             } else {
                 target = this || {};
             }
-            
+
             /**
              * With this method you can register callbacks to be executed when a certain event is triggered.
-             * 
+             *
              * @param {String} The name of the event is specified by a string. It doesn't matter, whether this event name already exists or not.
              * @param {Function} The function to be called, when the event is triggered.
              * @param {Object} Optionally, you can provide a context for the callback function.
-             * @param {boolen} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
+             * @param {boolean} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              */
             target.on = function on (type, func, ctx, async) {
 
@@ -84,11 +84,11 @@ var Channel = (function () {
 
             /**
              * This method does the same as `on` but it registers a callback that will only be executed once.
-             * 
+             *
              * @param {String} The name of the event is specified by a string. It doesn't matter, whether this event name already exists or not.
              * @param {Function} The function to be called, when the event is triggered.
              * @param {Object} Optionally, you can provide a context for the callback function.
-             * @param {boolen} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
+             * @param {boolean} A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              */
             target.once = function on (type, func, ctx, async) {
 
@@ -99,7 +99,7 @@ var Channel = (function () {
                             target.off(type, f);
                             called = true;
                         }
-                };
+                    };
 
                 target.on(type, f, ctx, async);
 
@@ -108,8 +108,8 @@ var Channel = (function () {
             };
 
             /**
-             * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the 
-             * type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On 
+             * This method allows it to remove event listeners. If a reference to a function is given, only that function is removed. If only the
+             * type is given, all callbacks are removed from that event. If no arguments are passed, all callbacks on all events are removed. On
              * public channels, only the first option (with both a type and a function reference) is permitted.
              *
              * @param {String} Optional: The event name of the callbacks to be removed.
@@ -168,7 +168,7 @@ var Channel = (function () {
                 len = list.length;
                 j = 0;
 
-                async = async === false ? -1 : async||0; // this could be a bitwise or, but my jshintrc forbids that; logical or works fine aswell
+                async = async === false ? -1 : async||0; // this could be a bitwise OR, but my jshintrc forbids that; logical OR works fine aswell
 
                 for (; j < len; j = j + 1) {
                     callback = list[j];
@@ -176,7 +176,7 @@ var Channel = (function () {
                         asyncScore = callback.async + async;
                         if ( (callback.async === 0 && async === 0) || asyncScore > 0 || async === 1 ) {
 
-                            setTimeout( 
+                            setTimeout(
 
                               function () {
 
@@ -192,7 +192,7 @@ var Channel = (function () {
                                 channel : target,
                                 async : true,
                                 data : data
-                              }), 
+                              }),
 
                             0);
 
@@ -215,8 +215,8 @@ var Channel = (function () {
 
             };
 
-            /** 
-             * Calling this method triggers the specified event and will result in all registered callbacks being executed. You should no rely on 
+            /**
+             * Calling this method triggers the specified event and will result in all registered callbacks being executed. You should no rely on
              * the order in which the callbacks are being invoked.
              *
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
@@ -225,7 +225,7 @@ var Channel = (function () {
                 return emit.call(this, type, Array.prototype.slice.call(arguments, 1));
             };
 
-            /** 
+            /**
              * This method works like `emit` but guarantees synchronous execution of all callbacks for this event.
              *
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
@@ -234,7 +234,7 @@ var Channel = (function () {
                 return emit.call(this, type, Array.prototype.slice.call(arguments, 1), false);
             };
 
-            /** 
+            /**
              * This method works like `emit` but guarantees asynchronous execution of all callbacks for this event.
              *
              * @param {String} The name of the event to be triggered. Any additional arguments will be passed to the callback function.
@@ -248,13 +248,13 @@ var Channel = (function () {
             target.publishAsync = target.fireAsync = target.triggerAsync = target.emitAsync;
 
             /**
-             * The `silence` method prevents any new messages from being sent over the message channel.
+             * The `silence` method prevents any new messages from being sent over the message channel. Affects the entire channel or specific events or even specific callbacks.
              *
-             * @param {String} Optional: The name of the event that is meant to be silenced.
-             * @param {Function} Optional: The function that shall not be executed when the event is triggered in the future.
+             * @param {String} Optional: The name of the event that is meant to be silenced. If no event type is specified, the whole channel will be silenced.
+             * @param {Function} Optional: The function that shall not be executed when the event is triggered in the future. If no function is specified the whole event type will be silenced.
              */
-            target.silence = function silence (type, func) { 
-                
+            target.silence = function silence (type, func) {
+
                 var e, i, l;
 
                 if (isPublic(target)) {
@@ -265,7 +265,7 @@ var Channel = (function () {
                     silenced = true;
                     return this;
                 }
-                
+
                 if (func === undefined) {
                     addEvent(type).silenced = true;
                     return this;
@@ -307,7 +307,7 @@ var Channel = (function () {
                 if (func === undefined) {
                     addEvent(type).silenced = false;
                 }
-                
+
                 e = events[type];
 
                 if (e !== undefined) {
@@ -318,7 +318,7 @@ var Channel = (function () {
                         }
                     }
                 }
-                
+
                 return this;
 
             };
@@ -326,7 +326,7 @@ var Channel = (function () {
             /**
              * `Lock` prevents new callbacks from being added. Affects the entire channel or specific events.
              *
-             * @param {String} Optional: The name of the event to which no new callbacks shall be registerd.
+             * @param {String} Optional: The name of the event to which no new callbacks shall be registerd. If no event name is specified, the whole channel will be locked.
              */
             target.lock = function lock (type) {
 
@@ -362,10 +362,10 @@ var Channel = (function () {
             };
 
             /**
-             * This lets you remove all event listeners from the message channel or from a specified event type. (Also sets `silenced` and `locked` 
+             * This lets you remove all event listeners from the message channel or from a specified event type. (Also sets `silenced` and `locked`
              * to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will 
+             * @param {String} Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will
              * be reset.
              */
             target.reset =  function reset (type) {
@@ -384,6 +384,12 @@ var Channel = (function () {
 
             };
 
+            /**
+             * Returns whether the channel or an event type or a specific callback is silenced.
+             *
+             * @param {String} Optional: The name of the event whose status is being requested. If no event type is specified, the whole channel's status will be returned.
+             * @param {Function} Optional: The function whose status is being requested. If no function is specified the whole event type's status will be returned.
+             */
             target.isSilenced = function isSilenced (type, func) {
 
                 var e, i, l;
@@ -408,6 +414,11 @@ var Channel = (function () {
 
             };
 
+            /**
+             * Returns whether the channel or an event type is locked.
+             *
+             * @param {String} Optional: The name of the event whose status is being requested. If no event type is specified, the whole channel's status will be returned.
+             */
             target.isLocked = function isLocked (type) {
 
                 if (type === undefined || locked) {
@@ -436,7 +447,7 @@ var Channel = (function () {
                     prohibitions = [];
                 }
 
-                methods = { 
+                methods = {
                     'on' : [ 'on', 'attach', 'subscribe' ],
                     'attach' : [ 'on', 'attach', 'subscribe' ],
                     'subscribe' : [ 'on', 'attach', 'subscribe' ],
