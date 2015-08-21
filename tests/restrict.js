@@ -4,7 +4,7 @@ var assert = require('assert'),
 describe('`restrict` function', function () {
 
   it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'emit\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['emit']);
 
@@ -24,7 +24,7 @@ describe('`restrict` function', function () {
   });
 
   it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'fire\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['fire']);
 
@@ -44,7 +44,7 @@ describe('`restrict` function', function () {
   });
 
   it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'trigger\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['trigger']);
 
@@ -64,7 +64,7 @@ describe('`restrict` function', function () {
   });
 
 it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `fireSync`, `fireAsync`, `trigger`, `triggerSync`, `triggerAsync`, `publish`, `publishSync`, `publishAsync` methods when called with `\'publish\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['publish']);
 
@@ -84,7 +84,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'emitSync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['emitSync']);
 
@@ -96,7 +96,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'fireSync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['fireSync']);
 
@@ -108,7 +108,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'triggerSync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['triggerSync']);
 
@@ -120,7 +120,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitSync`, `fireSync`, `triggerSync`, `publishSync` methods when called with `\'publishSync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['publishSync']);
 
@@ -132,7 +132,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'emitAsync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['emitAsync']);
 
@@ -144,7 +144,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'fireAsync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['fireAsync']);
 
@@ -155,7 +155,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'triggerAsync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['triggerAsync']);
 
@@ -166,7 +166,7 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
   });
 
   it('should create an object with the `emitAsync`, `fireAsync`, `triggerAsync`, `publishAsync` methods when called with `\'publishAsync\'`', function () {
-    
+
     var channel = new Channel(),
         channel2 = channel.restrict(['publishAsync']);
 
@@ -430,6 +430,22 @@ it('should create an object with the `emit`, `emitSync`, `emitAsync`, `fire`, `f
         channel3 = channel2.restrict(['emit']);
 
     assert.equal(undefined, channel3.emit);
+
+  });
+
+  it('should fire events on the original channel', function () {
+
+    var channel = new Channel(),
+        channel2 = channel.restrict(['emit'], ['silence', 'lock']),
+        foo = false;
+
+    channel.on('foo', function () {
+      foo = 'bar';
+    });
+
+    channel2.emitSync('foo');
+
+    assert.equal(foo, 'bar');
 
   });
 
