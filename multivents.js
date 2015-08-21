@@ -431,6 +431,14 @@ var Channel = (function () {
 
             };
 
+            /**
+             * This function creates a restricted access reference to the channel.
+             *
+             * NOTE: Try not to use this function. Better alternatives will be integrated into the code in the future.
+             *
+             * @param {Array} The function that ought to be still accessible by the restricted channel.
+             * @return A channel with some methods disabled.
+             */
             target.restrict = function (permissions, prohibitions) {
 
                 var _channel = {},
