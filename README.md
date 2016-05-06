@@ -236,7 +236,7 @@ The new object only provides the functions you chose in the `restrict`-call.
 
 By default, *multivents* calls event handler functions asynchronously.
 
-In some rare cases, you might want to declare a callback that should explicitly be called synchronously. You can do that with a fourth argument in  the `on` function.
+In some cases you might want to declare a callback that is explicitly meant to be invoked synchronously. You can do that with a fourth argument in  the `on` function.
 
 ```javascript
 channel.on('ping', f, null, false);
@@ -244,37 +244,33 @@ channel.on('ping', f, null, false);
 
 Above you can see a callback registration that declares the callback's preference to be executed synchronously.
 
-You can also emit an event, specifying its preference to call its callbacks synchronously.
+You can also emit an event with a preference to have its callbacks be executed synchronously.
 
 ```javascript
 channel.emitSync('ping');
 ```
 
-If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, *multivents* does it asynchronously. If one party states a preference and the other one doesn't, the one who aired his opinion gets his will. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method the according execution style is guaranteed. E.g. in the following case:
+If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, *multivents* does it asynchronously. If one part (`emit` or `on`) states a preference and the other one doesn't, the preference will be respected. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method, the according execution style is guaranteed. E.g. in the following case:
 
 ```javascript
 channel.on('ping', f, null, false); // [`f` wants to be called synchronously]
 channel.emitAsync('ping'); // [`emitAsync` guarantees asynchronous execution]
 ```
 
-the callback would be executed asynchronously, because the `emitAsync` method was used and is stronger than the async flag in the `on` call.
+the callback will be executed asynchronously, because the `emitAsync` method was used and is stronger than the async flag in the `on` call.
 
 ## Named Event channels
 
-When you call the `Channel` constructor and pass it a string value, you create a *named channel* or *public channel* (which are two terms for the same thing). Because it has a name, such an event channel is "public" and can be retrieved via its name. The library contains a closure that keeps track of all named channels and allows you to retrieve them using the `Channel` constructor's `get` method.
+When you call the `Channel` constructor and pass it a string value, you create a *named channel* or *public channel* (which are two terms for the same thing). Because it has a name, such an event channel is "public" and can be retrieved via its name. *multivents* contains a closure that keeps track of all named channels and allows you to retrieve them using the `Channel` constructor's `get` method.
 
 ```javascript
 Channel('myEventchannel');
 var b = Channel.get('myEventchannel'); // [b now contains an event channel]
 ```
 
-Why? Well, unnamed channels have to be passed around in order to connect seperate parts of an application. If you don't want to do that, you can use public channels.
+Why? Well, unnamed channels have to be passed around in order to connect separate parts of an application. If you don't want to do that, you can use public channels.
 
 Because every part of your application will have access to public channels, they and their events can not be silenced or locked.
-
-## Compatibility
-
-There have been no tests so far, determining this library's compatibility with JavaScript execution environments.
 
 ## License
 
