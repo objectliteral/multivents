@@ -24,14 +24,17 @@
   },
   "devDependencies": {
     "assert": "~1.4.1",
+    "eslint-plugin-closuredepth": "^1.0.1",
+    "eslint-plugin-extra-rules": "^0.6.1",
+    "eslint-plugin-no-unsafe-chars": "^1.0.2",
+    "eslint-plugin-node": "^4.0.1",
+    "eslint-plugin-objects": "^1.1.1",
     "gulp": "~3.9.1",
-    "gulp-jshint": "~2.0.0",
+    "gulp-eslint": "^3.0.1",
     "gulp-mocha": "~3.0.1",
     "gulp-rename": "~1.2.2",
     "gulp-sourcemaps": "~2.4.1",
-    "gulp-uglify": "~2.0.1",
-    "jshint": "^2.9.2",
-    "jshint-stylish": "~2.2.0"
+    "gulp-uglify": "~2.0.1"
   },
   "license": "MIT",
   "bugs": {

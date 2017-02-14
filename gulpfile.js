@@ -1,15 +1,15 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
-    jshint = require('gulp-jshint'),
+    eslint = require('gulp-eslint'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
-    stylish = require('jshint-stylish'),
     mocha = require('gulp-mocha');
 
 gulp.task('hint', function () {
     gulp.src('./multivents.js')
-      .pipe(jshint())
-      .pipe(jshint.reporter(stylish));
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
 });
 
 gulp.task('test', [], function () {
