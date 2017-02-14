@@ -110,7 +110,7 @@ Channel = (function () {
          * @param {boolean} A preference regarding whether this callback shall the executed
          *                  asynchronously. (Not a guarantee!)
          */
-        target.once = function on (type, func, ctx, async) {
+        target.once = function once (type, func, ctx, async) {
 
             var called,
                 callbackFunction;
