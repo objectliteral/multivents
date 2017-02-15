@@ -13,6 +13,13 @@ describe('`unsilence` function', function () {
     assert.equal(channel, channel.unsilence('ping'));
   });
 
+  it('should return the channel it was called on when called with an event type and a callback function', function () {
+    var channel = Channel(),
+        f = function () {};
+    channel.on('ping', f);
+    assert.equal(channel, channel.unsilence('ping', f));
+  });
+
   it('should re-enable triggering messages on a channel if called with no arguments', function () {
     var channel = Channel({});
     channel.on('ping', function () {

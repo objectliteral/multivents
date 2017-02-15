@@ -8,9 +8,35 @@ describe('`silence` function', function () {
     assert.equal(channel, channel.silence());
   });
 
-  it('should return the channel it was called on when called with an event type', function () {
+  it('should return the channel it was called on when called with an event type that does exist', function () {
+    var channel = Channel();
+    channel.on('ping', function () {});
+    assert.equal(channel, channel.silence('ping'));
+  });
+
+  it('should return the channel it was called on when called with an event type that does not exist', function () {
     var channel = Channel();
     assert.equal(channel, channel.silence('ping'));
+  });
+
+  it('should return the channel it was called on when called with an event type and a callback function that do exist', function () {
+    var channel = Channel(),
+        f = function () {};
+    channel.on('ping', f);
+    assert.equal(channel, channel.silence('ping', f));
+  });
+
+  it('should return the channel it was called on when called with an event type and a callback function that does not exist', function () {
+    var channel = Channel(),
+        f = function () {};
+    channel.on('ping', function () {});
+    assert.equal(channel, channel.silence('ping', f));
+  });
+
+  it('should return the channel it was called on when called with an event type and a callback function that both do not exist', function () {
+    var channel = Channel(),
+        f = function () {};
+    assert.equal(channel, channel.silence('ping', f));
   });
 
   it('should disable triggering events of any type if called with no arguments', function () {
