@@ -4,8 +4,10 @@
   "description": "JavaScript Event System",
   "main": "multivents.js",
   "scripts": {
+    "lint": "gulp lint",
     "test": "gulp test",
-    "build": "gulp"
+    "build": "gulp build",
+    "all": "gulp"
   },
   "homepage": "https://github.com/objectliteral/multivents/",
   "repository": {
