@@ -1,10 +1,10 @@
-# *multivents*
+# multivents
 
-*multivents* is a small library that allows you to create message channels, send messages over those channels and subscribe to messages.
+**multivents** is a small library that allows you to create message channels, send messages over those channels and subscribe to messages.
 
 ## Quick Start
 
-If you want to get started quickly, here is a basic example of how to use *multivents*:
+If you want to get started quickly, here is a basic example of how to use **multivents**:
 
 ```javascript
 var Channel = require('multivents');
@@ -22,15 +22,19 @@ If that's all you wanted to know, great! If not, you may read on to find out mor
 
 ## Installation
 
-There's not really anything to install. If you want to use *multivents* in your project, include `multivents.js` or `multivents.min.js` and use it like described below.
+There's not really anything to install. If you want to use **multivents** in your project, include `multivents.js` or `multivents.min.js` and use it like described below.
 
-*multivents* supports both CommonJS-style environments as well as AMD.
+**multivents** supports both CommonJS-style environments as well as AMD. You can also install it via npm:
 
-If you want to extend *multivents* to your needs you might want to run tests. In order to do this, you can clone this repository and run `npm install` and `gulp test`. Tests are written with [assert](https://github.com/defunctzombie/commonjs-assert) and run with [mocha](http://visionmedia.github.io/mocha/) ([gulp-mocha](https://github.com/sindresorhus/gulp-mocha)).
+```
+npm install --save multivents
+```
+
+If you want to extend **multivents** to your needs you might want to run tests. In order to do this, you can clone this repository and run `npm install` and `npm test`. Tests are written with [assert](https://github.com/defunctzombie/commonjs-assert) and run with [mocha](http://visionmedia.github.io/mocha/) ([gulp-mocha](https://github.com/sindresorhus/gulp-mocha)).
 
 ## Terminology and Concept
 
-This library has the concept of so called *message channels* or *event channels*. A channel is a communication device that has events associated with it. When a message is sent over a message channel, all callback functions registered for that specific message will be executed.
+This library implements so called *message channels* or *event channels*. A channel is a communication device that has events associated with it. When a message is sent over a message channel, all callback functions registered for that specific message will be executed.
 
 The following documentation uses the terms *event* and *message* synonymously as well as event *name* and event *type*. *Listening for an event* or *adding a callback* is the process that registers a function to be executed when an event is *emitted* / *triggered* / *fired* i.e. a message is being *sent*.
 
@@ -100,7 +104,7 @@ You can create a wrapper object for an event channel so that you can give limite
 
 ### Basic usage
 
-First, you want to include *multivents* in your project. If you are writing for nodejs, you would `npm install multivents` and then in your project:
+First, you want to include**multivents**in your project. If you are writing for nodejs, you would `npm install multivents` and then in your project:
 
 ```javascript
 var Channel = require('multivents');
@@ -183,7 +187,7 @@ channel.on('pong', function () {
 });
 ```
 
-When a channel is silenced, none of its events can be triggered. Notice though, that *multivents* will not throw any exceptions.
+When a channel is silenced, none of its events can be triggered. Notice though, that**multivents**will not throw any exceptions.
 
 ```javascript
 channel.silence();
@@ -234,7 +238,7 @@ The new object only provides the functions you chose in the `restrict`-call.
 
 ## Asynchronous Callback Execution
 
-By default, *multivents* calls event handler functions asynchronously.
+By default,**multivents**calls event handler functions asynchronously.
 
 In some cases you might want to declare a callback that is explicitly meant to be invoked synchronously. You can do that with a fourth argument in  the `on` function.
 
@@ -250,7 +254,7 @@ You can also emit an event with a preference to have its callbacks be executed s
 channel.emitSync('ping');
 ```
 
-If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, *multivents* does it asynchronously. If one part (`emit` or `on`) states a preference and the other one doesn't, the preference will be respected. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method, the according execution style is guaranteed. E.g. in the following case:
+If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled,**multivents**does it asynchronously. If one part (`emit` or `on`) states a preference and the other one doesn't, the preference will be respected. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the `emitSync` or `emitAsync` method, the according execution style is guaranteed. E.g. in the following case:
 
 ```javascript
 channel.on('ping', f, null, false); // [`f` wants to be called synchronously]
@@ -261,7 +265,7 @@ the callback will be executed asynchronously, because the `emitAsync` method was
 
 ## Named Event channels
 
-When you call the `Channel` constructor and pass it a string value, you create a *named channel* or *public channel* (which are two terms for the same thing). Because it has a name, such an event channel is "public" and can be retrieved via its name. *multivents* contains a closure that keeps track of all named channels and allows you to retrieve them using the `Channel` constructor's `get` method.
+When you call the `Channel` constructor and pass it a string value, you create a *named channel* or *public channel* (which are two terms for the same thing). Because it has a name, such an event channel is "public" and can be retrieved via its name.**multivents**contains a closure that keeps track of all named channels and allows you to retrieve them using the `Channel` constructor's `get` method.
 
 ```javascript
 Channel('myEventchannel');
@@ -276,7 +280,7 @@ Because every part of your application will have access to public channels, they
 
 The MIT License (MIT)
 
-Copyright © 2014-2016 Peter Steinberg
+Copyright © 2014-2017 Peter Steinberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
