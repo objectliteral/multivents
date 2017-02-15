@@ -191,7 +191,7 @@
             "error"
         ],
         "no-invalid-this": [
-            "error"
+            "warn"
         ],
         "no-iterator": [
             "error"
@@ -206,7 +206,7 @@
             "error"
         ],
         "no-magic-numbers": [
-            "warn"
+            "off"
         ],
         "no-multi-spaces": [
             "error"
@@ -377,7 +377,7 @@
             "off"
         ],
         "no-sync": [
-            "error"
+            "off"
         ],
 
         "array-bracket-spacing": [
@@ -490,7 +490,7 @@
             5
         ],
         "max-len": [
-            "error",
+            "warn",
             {
                 "code": 120
             }
@@ -505,7 +505,7 @@
         ],
         "max-statements": [
             "error",
-            15
+            18
         ],
         "max-statements-per-line": [
             "error",
@@ -676,7 +676,7 @@
             "warn"
         ],
         "extra-rules/no-long-files": [
-            "warn",
+            "off",
             80
         ],
         "camel_case": [
