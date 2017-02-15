@@ -7,28 +7,9 @@ Channel = (function () {
     'use strict';
 
     var ChannelConstructor,
-        channels,
-        isPublic;
+        channels;
 
     channels = { };
-
-    isPublic = function (channel) {
-
-        var index,
-            isPublicChannel;
-            
-        isPublicChannel = false;
-
-        for (index in channels) {
-            if (channels[index] === channel) {
-                isPublicChannel = true;
-                break;
-            }
-        }
-
-        return isPublicChannel;
-
-    };
 
     /**
      * Calling the `Channel` function creates a new message channel over which messages can be sent.
@@ -41,11 +22,11 @@ Channel = (function () {
             channel,
             emit,
             events,
+            isPublic,
             locked,
             silenced;
 
-        locked = false;
-        silenced = false;
+        locked = silenced = false;
 
         addEvent = function (eventName, override) {
 
@@ -67,7 +48,9 @@ Channel = (function () {
          */
         events = {};
 
-        if (typeof target === 'string') {
+        isPublic = typeof target === 'string';
+
+        if (isPublic) {
             channels[target] = {};
             channel = channels[target];
         } else if (typeof target === 'object') {
@@ -218,7 +201,7 @@ Channel = (function () {
                     return this;
                 }
 
-                if (isPublic(this) === false) {
+                if (isPublic === false) {
                     if (typeof type === "undefined") {
                         for (typeIndex in events) {
                             if (events.hasOwnProperty(typeIndex)) {
@@ -292,38 +275,44 @@ Channel = (function () {
              */
             "silence": (function () {
 
-                return isPublic(this) ? this : function silence (type, func) {
-
-                    var callbackCount,
-                        evt,
-                        index;
-
-                    if (typeof type === "undefined") {
-                        silenced = true;
-
+                if (isPublic === true) {
+                    return function () {
                         return this;
-                    }
+                    };
+                } else {
+                    return function silence (type, func) {
 
-                    if (typeof func === "undefined") {
-                        addEvent(type).silenced = true;
+                        var callbackCount,
+                            evt,
+                            index;
 
-                        return this;
-                    }
+                        if (typeof type === "undefined") {
+                            silenced = true;
 
-                    evt = events[type];
+                            return this;
+                        }
 
-                    if (typeof evt !== "undefined") {
-                        callbackCount = evt.callbacks.length;
-                        for (index = 0; index < callbackCount; index = index + 1) {
-                            if (evt.callbacks[index].callbackFunction === func) {
-                                evt.callbacks[index].silenced = true;
+                        if (typeof func === "undefined") {
+                            addEvent(type).silenced = true;
+
+                            return this;
+                        }
+
+                        evt = events[type];
+
+                        if (typeof evt !== "undefined") {
+                            callbackCount = evt.callbacks.length;
+                            for (index = 0; index < callbackCount; index = index + 1) {
+                                if (evt.callbacks[index].callbackFunction === func) {
+                                    evt.callbacks[index].silenced = true;
+                                }
                             }
                         }
-                    }
 
-                    return this;
+                        return this;
 
-                };
+                    };
+                }
 
             }()),
 
@@ -378,17 +367,23 @@ Channel = (function () {
              */
             "lock": (function () {
                 
-                return isPublic(this) ? this : function lock (type) {
+                if (isPublic === true) {
+                    return function () {
+                        return this;
+                    };
+                } else {
+                    return function lock (type) {
 
-                    if (typeof type === "undefined") {
-                        locked = true;
-                    } else {
-                        addEvent(type).locked = true;
-                    }
+                        if (typeof type === "undefined") {
+                            locked = true;
+                        } else {
+                            addEvent(type).locked = true;
+                        }
 
-                    return this;
+                        return this;
 
-                };
+                    };
+                }
 
             }()),
 
@@ -421,7 +416,7 @@ Channel = (function () {
              */
             "reset": function reset (type) {
 
-                if (!isPublic(this)) {
+                if (isPublic === false) {
                     if (events !== null) {
                         if (typeof type === "undefined") {
                             events = { };
