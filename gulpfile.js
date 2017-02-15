@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     mocha = require('gulp-mocha');
 
-gulp.task('hint', function () {
+gulp.task('lint', function () {
     gulp.src('./multivents.js')
       .pipe(eslint())
       .pipe(eslint.format())
