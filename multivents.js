@@ -283,51 +283,55 @@ Channel = (function () {
             /**
              * The `silence` method prevents any new messages from being sent over the message channel.
              * Affects the entire channel or specific events or even specific callbacks.
+             * Does not affect public channels at all.
              *
              * @param {String} Optional: The name of the event that is meant to be silenced.
              *                 If no event type is specified, the whole channel will be silenced.
              * @param {Function} Optional: The function that is no longer to be executed when the event is triggered.
              *                   If no function is specified the whole event type will be silenced.
              */
-            "silence": function silence (type, func) {
+            "silence": (function () {
 
-                var callbackCount,
-                    evt,
-                    index;
+                return isPublic(this) ? this : function silence (type, func) {
 
-                if (isPublic(this)) {
-                    return this;
-                }
+                    var callbackCount,
+                        evt,
+                        index;
 
-                if (typeof type === "undefined") {
-                    silenced = true;
+                    if (typeof type === "undefined") {
+                        silenced = true;
 
-                    return this;
-                }
+                        return this;
+                    }
 
-                if (typeof func === "undefined") {
-                    addEvent(type).silenced = true;
+                    if (typeof func === "undefined") {
+                        addEvent(type).silenced = true;
 
-                    return this;
-                }
+                        return this;
+                    }
 
-                evt = events[type];
+                    evt = events[type];
 
-                if (typeof evt !== "undefined") {
-                    callbackCount = evt.callbacks.length;
-                    for (index = 0; index < callbackCount; index = index + 1) {
-                        if (evt.callbacks[index].callbackFunction === func) {
-                            evt.callbacks[index].silenced = true;
+                    if (typeof evt !== "undefined") {
+                        callbackCount = evt.callbacks.length;
+                        for (index = 0; index < callbackCount; index = index + 1) {
+                            if (evt.callbacks[index].callbackFunction === func) {
+                                evt.callbacks[index].silenced = true;
+                            }
                         }
                     }
-                }
 
-                return this;
+                    return this;
 
-            },
+                };
+
+            }()),
 
             /**
              * With this method you can enable message sending after it was disable using `silence`.
+             *
+             * This method does not check if the channel is public, because if it were, it could not
+             * have been silenced in the first place.
              *
              * @param {String} Optional: The name of the event that is meant to be unsilenced.
              * @param {Function} Optional: The function that shall be executed again, after being silenced.
@@ -337,10 +341,6 @@ Channel = (function () {
                 var callbackCount,
                     evt,
                     index;
-
-                if (isPublic(this)) {
-                    return this;
-                }
 
                 if (typeof type === "undefined") {
                     silenced = false;
@@ -371,37 +371,41 @@ Channel = (function () {
 
             /**
              * `Lock` prevents new callbacks from being added. Affects the entire channel or specific events.
+             * Does not affect public channels at all.
              *
              * @param {String} Optional: The name of the event to which no new callbacks shall be registerd.
              *                 If no event name is specified, the whole channel will be locked.
              */
-            "lock": function lock (type) {
+            "lock": (function () {
+                
+                return isPublic(this) ? this : function lock (type) {
 
-                if (!isPublic(this)) {
                     if (typeof type === "undefined") {
                         locked = true;
                     } else {
                         addEvent(type).locked = true;
                     }
-                }
 
-                return this;
+                    return this;
 
-            },
+                };
+
+            }()),
 
             /**
              * Unlock allows callbacks from being added to a channel after it was locked.
+             *
+             * This method does not check if the channel is public, because if it were, it could not
+             * have been locked in the first place.
              *
              * @param {String} Optional: The name of the event that shall accept new callbacks again.
              */
             "unlock": function unlock (type) {
 
-                if (!isPublic(this)) {
-                    if (typeof type === "undefined") {
-                        locked = false;
-                    } else {
-                        addEvent(type).locked = false;
-                    }
+                if (typeof type === "undefined") {
+                    locked = false;
+                } else {
+                    addEvent(type).locked = false;
                 }
 
                 return this;
