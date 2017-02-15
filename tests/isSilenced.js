@@ -3,6 +3,137 @@ var assert = require('assert'),
 
 describe('`isSilenced` function', function () {
 
+  it('should return `false` on a public channel when called with no arguments', function () {
+    var channel = new Channel('test');
+    assert.equal(false, channel.isSilenced());
+  });
+
+  it('should return `false` on a public channel when called with no arguments after `silence` was called', function () {
+    var channel = new Channel('test');
+    channel.silence();
+    assert.equal(false, channel.isSilenced());
+  });
+
+  it('should return `false` on a public channel when called with an event name that does not exist', function () {
+    var channel = new Channel('test');
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name that does exist', function () {
+    var channel = new Channel('test');
+    channel.on('ping', function () {});
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name that does not exist after silence was called', function () {
+    var channel = new Channel('test');
+    channel.silence();
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name that does exist after silence was called on the channel', function () {
+    var channel = new Channel('test');
+    channel.on('ping', function () {});
+    channel.silence();
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name that does exist after silence was called on the event', function () {
+    var channel = new Channel('test');
+    channel.on('ping', function () {});
+    channel.silence('ping');
+    assert.equal(false, channel.isSilenced('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that do exist', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', f);
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that does not exist', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', function () {});
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that both do not exist', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that do exist after `silence` was called on the channel', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', f);
+    channel.silence();
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that does not exist after `silence` was called on the channel', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', function () {});
+    channel.silence();
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that both do not exist after `silence` was called on the channel', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+        channel.silence();
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that do exist after `silence` was called on the event', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', f);
+    channel.silence('ping');
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that does not exist after `silence` was called on the event', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', function () {});
+    channel.silence('ping');
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that both do not exist after `silence` was called on the event', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+        channel.silence('ping');
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that do exist after `silence` was called on the callback function', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', f);
+    channel.silence('ping', f);
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that does not exist after `silence` was called on the callback function', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+    channel.on('ping', function () {});
+    channel.silence('ping', f);
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
+  it('should return `false` on a public channel when called with an event name and callback function that both do not exist after `silence` was called on the callback function', function () {
+    var channel = new Channel('test'),
+        f = function () {};
+        channel.silence('ping', f);
+    assert.equal(false, channel.isSilenced('ping', f));
+  });
+
   it('should return `false` on a newly created channel when called with no arguments', function () {
     var channel = new Channel();
     assert.equal(false, channel.isSilenced());

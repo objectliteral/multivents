@@ -3,6 +3,34 @@ var assert = require('assert'),
 
 describe('`isLocked` function', function () {
 
+  it('should return `false` on a public channel when called with no arguments', function () {
+    var channel = new Channel('test');
+    assert.equal(false, channel.isLocked());
+  });
+
+  it('should return `false` on a public channel when called with no arguments after `lock` was called', function () {
+    var channel = new Channel('test');
+    channel.lock('test');
+    assert.equal(false, channel.isLocked());
+  });
+
+  it('should return `false` on a public channel when called with an event name', function () {
+    var channel = new Channel('test');
+    assert.equal(false, channel.isLocked('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name after `lock` was called on the channel', function () {
+    var channel = new Channel('test');
+    channel.lock();
+    assert.equal(false, channel.isLocked('ping'));
+  });
+
+  it('should return `false` on a public channel when called with an event name after `lock` was called on the event', function () {
+    var channel = new Channel('test');
+    channel.lock('ping');
+    assert.equal(false, channel.isLocked('ping'));
+  });
+
   it('should return `false` on a newly created channel when called with no arguments', function () {
     var channel = new Channel();
     assert.equal(false, channel.isLocked());
