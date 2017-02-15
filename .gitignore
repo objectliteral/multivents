@@ -1,6 +1,6 @@
 node_modules
-minivents.sublime-project
-minivents.sublime-workspace
+multivents.sublime-project
+multivents.sublime-workspace
 
 # OS generated files #
 ######################
@@ -11,3 +11,6 @@ minivents.sublime-workspace
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+multivents.min.js
+multivents.min.js.map
