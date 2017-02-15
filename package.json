@@ -1,6 +1,6 @@
 {
   "name": "multivents",
-  "version": "5.1.7",
+  "version": "5.1.8",
   "description": "JavaScript Event System",
   "main": "multivents.js",
   "scripts": {
