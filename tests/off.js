@@ -186,4 +186,67 @@ describe('`off` function', function () {
     assert.equal(true, res);
   });
 
+  it('should not affect public channels when called with no arguments', function () {
+    var channel = Channel('test'),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.off();
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+  it('should not affect public channels when called with an event type', function () {
+    var channel = Channel('test'),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.off('ping');
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+  it('should affect public channels when called with an event type and a callback function', function () {
+    var channel = Channel('test'),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.off('ping', f);
+    channel.emitSync('ping');
+    assert.equal(false, res);
+  });
+
+  it('should not affect public channels when called with an event type and a callback function that does not exist', function () {
+    var channel = Channel('test'),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.off('ping', function () {});
+    channel.emitSync('ping');
+    assert.equal(true, res);
+  });
+
+   it('should not affect callbacks on public channels when called with an event type and a different callback function that is also registered for that event', function () {
+    var channel = Channel('test'),
+        res = 0,
+        f = function () { res = 1},
+        f2 = function () { res = 2 };
+    channel.on('ping', f);
+    channel.on('ping', f2);
+    channel.off('ping', f2);
+    channel.emitSync('ping');
+    assert.equal(1, res);
+  });
+
+  it('should not affect callbacks on public channels when called with an event type and a callback function that is also registered for another event (should only affect the event-callback-combination that is passed to `off`)', function () {
+    var channel = Channel('test'),
+        res = false,
+        f = function () { res = true};
+    channel.on('ping', f);
+    channel.on('pong', f);
+    channel.off('ping', f);
+    channel.emitSync('pong');
+    assert.equal(true, res);
+  });
+
 });
