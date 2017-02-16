@@ -20,9 +20,9 @@ gulp.task('pre-test', function () {
 });
 
 gulp.task('test', [ 'pre-test' ], function () {
-  gulp.src('./tests/*.js')
+    gulp.src('./tests/*.js')
       .pipe(mocha({ reporter: 'progress' }))
-      .pipe(istanbul.writeReports());
+      .pipe(istanbul.writeReports({ reporters: [ 'text', 'html' ] }));
 });
 
 gulp.task('build', [], function () {
