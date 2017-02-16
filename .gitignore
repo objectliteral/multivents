@@ -14,3 +14,6 @@ Thumbs.db
 
 multivents.min.js
 multivents.min.js.map
+
+.nyc_output
+coverage
