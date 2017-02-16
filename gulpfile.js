@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     eslint = require('gulp-eslint'),
+    istanbul = require('gulp-istanbul'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
     mocha = require('gulp-mocha');
@@ -12,9 +13,16 @@ gulp.task('lint', function () {
       .pipe(eslint.failAfterError());
 });
 
-gulp.task('test', [], function () {
+gulp.task('pre-test', function () {
+    gulp.src('./multivents.js')
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire());
+});
+
+gulp.task('test', [ 'pre-test' ], function () {
   gulp.src('./tests/*.js')
-      .pipe(mocha());
+      .pipe(mocha({ reporter: 'progress' }))
+      .pipe(istanbul.writeReports());
 });
 
 gulp.task('build', [], function () {
