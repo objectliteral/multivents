@@ -133,9 +133,4 @@ describe('Event channels', function () {
       assert.equal('function', typeof channel.isLocked);
     });
 
-    it('should contain a `restrict` function', function () {
-      var channel = Channel({});
-      assert.equal('function', typeof channel.restrict);
-    });
-
 });
