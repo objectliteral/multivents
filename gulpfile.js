@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     istanbul = require('gulp-istanbul'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
-    mocha = require('gulp-mocha');
+    mocha = require('gulp-mocha'),
+    gzip = require('gulp-gzip');
 
 gulp.task('lint', function () {
     gulp.src('./multivents.js')
@@ -34,4 +35,10 @@ gulp.task('build', [], function () {
       .pipe(gulp.dest('./'));
 });
 
-gulp.task('default', [ 'lint', 'test', 'build' ]);
+gulp.task('compress', [], function () {
+    gulp.src('./multivents.min.js')
+        .pipe(gzip())
+        .pipe(gulp.dest('.'));
+});
+
+gulp.task('default', [ 'lint', 'test', 'build', 'compress' ]);
