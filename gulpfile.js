@@ -32,6 +32,6 @@ gulp.task('build', [], function () {
         .pipe(uglify())
       .pipe(sourcemaps.write('./', {includeContent:false}))
       .pipe(gulp.dest('./'));
-  });
+});
 
-gulp.task('default', [ 'hint', 'test', 'build' ]);
+gulp.task('default', [ 'lint', 'test', 'build' ]);
