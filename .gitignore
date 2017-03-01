@@ -1,9 +1,10 @@
 node_modules
+npm-debug.log
+
 multivents.sublime-project
 multivents.sublime-workspace
+.vscode
 
-# OS generated files #
-######################
 .DS_Store
 .DS_Store?
 ._*
@@ -14,6 +15,9 @@ Thumbs.db
 
 multivents.min.js
 multivents.min.js.map
+
+dist
+build
 
 .nyc_output
 coverage
