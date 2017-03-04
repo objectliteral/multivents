@@ -1,5 +1,7 @@
 # multivents
 
+![https://img.shields.io/travis/objectliteral/multivents/master.svg](https://travis-ci.org/objectliteral/multivents)
+
 **multivents** is a small library that allows you to create message channels, send messages over those channels and subscribe to messages.
 
 ## Quick Start
