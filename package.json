@@ -1,7 +1,7 @@
 {
   "name": "multivents",
   "version": "6.0.1",
-  "description": "JavaScript Event System",
+  "description": "Multifunctional Events for JavaScript",
   "main": "multivents.js",
   "scripts": {
     "lint": "gulp lint",
@@ -19,11 +19,15 @@
     "events",
     "minivents",
     "multivents",
-    "asynchronous"
+    "async",
+    "asynchronous",
+    "publish-subscribe",
+    "pub-sub"
   ],
   "author": {
     "name": "Peter Steinberg",
-    "email": "objectliteral@outlook.com"
+    "email": "objectliteral@outlook.com",
+    "url": "https://github.com/objectliteral"
   },
   "devDependencies": {
     "assert": "~1.4.1",
