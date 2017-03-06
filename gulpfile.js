@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
     mocha = require('gulp-mocha'),
-    gzip = require('gulp-gzip');
+    gzip = require('gulp-gzip'),
+    umd = require('gulp-umd');
 
 gulp.task('lint', function () {
     return gulp.src('./multivents.js')
@@ -26,9 +27,21 @@ gulp.task('test', [ 'pre-test' ], function () {
         .pipe(istanbul.writeReports({ reporters: [ 'text', 'html' ] }));
 });
 
-gulp.task('build', [], function () {
+gulp.task('umd', function () {
     return gulp.src('./multivents.js')
-        .pipe(rename('multivents.min.js'))
+        .pipe(rename('multivents.umd.js'))
+        .pipe(umd({
+            exports: function (file) {
+                return 'Channel';
+            },
+            templateName: 'web'
+        }))
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build', [ 'umd' ], function () {
+    return gulp.src('./dist/multivents.umd.js')
+        .pipe(rename('multivents.umd.min.js'))
         .pipe(sourcemaps.init())
             .pipe(uglify())
         .pipe(sourcemaps.write('./', {includeContent:false}))
@@ -36,7 +49,7 @@ gulp.task('build', [], function () {
 });
 
 gulp.task('compress', [ 'build' ], function () {
-    return gulp.src('./dist/multivents.min.js')
+    return gulp.src('./dist/multivents.umd.min.js')
         .pipe(gzip())
         .pipe(gulp.dest('./dist/'));
 });

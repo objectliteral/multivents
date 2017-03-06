@@ -1,5 +1,5 @@
 var assert = require('assert'),
-    Channel = require('../multivents.js');
+    Channel = require('../dist/multivents.umd.js');
 
 describe('Channel Constructor', function () {
   it('should return an object containing the methods used by minivents if called with new', function () {

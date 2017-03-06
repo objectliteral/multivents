@@ -1,5 +1,5 @@
 var assert = require('assert'),
-    Channel = require('../multivents.js');
+    Channel = require('../dist/multivents.umd.js');
 
 describe('`isSilenced` function', function () {
 

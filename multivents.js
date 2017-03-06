@@ -534,18 +534,3 @@ Channel = (function () {
     return ChannelConstructor;
 
 }());
-
-// see UMD pattern at https://github.com/umdjs/umd/blob/master/returnExports.js
-(function (root, factory) {
-    'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define([], factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.Channel = factory();
-    }
-}(this, function () {
-    'use strict';
-    return Channel;
-}));
