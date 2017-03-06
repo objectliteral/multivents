@@ -69,7 +69,7 @@ Channel = (function () {
                 list;
 
             if (silenced || (events[type] && events[type].silenced)) {
-                return this;
+                return channel;
             }
 
             list = (events[type] && events[type].callbacks) || [];
@@ -89,7 +89,6 @@ Channel = (function () {
                             function () {
 
                                 this.func.apply(this.context,
-                                    // [ this ].concat(this.data)
                                     this.data.concat([ this ])
                                 );
 
@@ -119,7 +118,7 @@ Channel = (function () {
                 }
             }
 
-            return this;
+            return channel;
 
         };
 
