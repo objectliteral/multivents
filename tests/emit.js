@@ -3,8 +3,20 @@ var assert = require('assert'),
 
 describe('`emit` function',  function () {
 
-    it('should return the channel it was called on when called with one arguments', function () {
+    it('should return the channel it was called on when called with one argument', function () {
       var channel = Channel();
+      assert.equal(channel, channel.emit('ping'));
+    });
+
+    it('should return the channel it was called on when called on a silenced channel', function () {
+      var channel = Channel();
+      channel.silence();
+      assert.equal(channel, channel.emit('ping'));
+    });
+
+    it('should return the channel it was called on when called on a silenced event', function () {
+      var channel = Channel();
+      channel.silence('ping');
       assert.equal(channel, channel.emit('ping'));
     });
 
