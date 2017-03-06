@@ -34,7 +34,10 @@ gulp.task('umd', function () {
             exports: function (file) {
                 return 'Channel';
             },
-            templateName: 'web'
+            templateName: 'returnExports',
+            namespace: function () {
+                return 'Channel';
+            }
         }))
         .pipe(gulp.dest('./dist'));
 });
