@@ -492,7 +492,7 @@
         "max-len": [
             "warn",
             {
-                "code": 120
+                "code": 640
             }
         ],
         "max-nested-callbacks": [
