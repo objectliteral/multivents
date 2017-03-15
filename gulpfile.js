@@ -16,7 +16,7 @@ gulp.task('lint', function () {
 });
 
 gulp.task('pre-test', [ 'build' ], function () {
-    return gulp.src('../dist/multivents.umd.js')
+    return gulp.src('./dist/multivents.umd.js')
         .pipe(istanbul())
         .pipe(istanbul.hookRequire());
 });
