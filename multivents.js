@@ -1,7 +1,20 @@
 /* global module,setTimeout */
 
+/**
+ * @author Peter Steinberg <objectliteral@outlook.com>
+ * @summary Multifunctional Event System
+ * @fileOverview This is the only source file of multivents. It includes all the functionality and API.
+ */
+
 var Channel;
 
+/**
+ * Calling the `Channel` function creates a new message channel over which messages can be sent. The function adds methods to an object that allow for listening to and triggering events. You can pass in an object to transform it into a message channel or a string to create a public named channel.
+ *
+ * @param {Object} [target] An object that is to be transormed into an event channel. If no object is given, a new one is being created.
+ * @exports Channel
+ * @constructor
+ */
 Channel = (function () {
 
     'use strict';
@@ -12,9 +25,7 @@ Channel = (function () {
     channels = { };
 
     /**
-     * Calling the `Channel` function creates a new message channel over which messages can be sent.
-     * The function adds methods to an object that allow for listening to and triggering events.
-     * You can pass in an object to transform it into a message channel or a string to create a public named channel.
+     * @alias Channel
      */
     ChannelConstructor = function ChannelConstructor (target) { // eslint-disable-line no-shadow
 
@@ -43,8 +54,9 @@ Channel = (function () {
         };
 
         /**
-         * The `events` variable saves the names of registered events and associates those names
-         * with arrays of callback functions to be called, when the event is triggered.
+         * The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called, when the event is triggered.
+         * 
+         * @member
          */
         events = {};
 
@@ -122,17 +134,18 @@ Channel = (function () {
 
         };
 
-        Object.assign(channel, {
+        Object.assign(channel, /** @lends Channel# */{
 
              /**
              * With this method you can register callbacks to be executed when a certain event is triggered.
              *
-             * @param {String} The name of the event is specified by a string. It doesn't matter,
+             * @param {String} type The name of the event is specified by a string. It doesn't matter,
              *                 whether this event name already exists or not.
-             * @param {Function} The function to be called, when the event is triggered.
-             * @param {Object} Optionally, you can provide a context for the callback function.
-             * @param {boolean} A preference regarding whether this callback shall the executed asynchronously.
+             * @param {Function} func The function to be called, when the event is triggered.
+             * @param {Object} [ctx] Optionally, you can provide a context for the callback function.
+             * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously.
              *                  (Not a guarantee!)
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "on": function on (type, func, ctx, async) { // eslint-disable-line id-length
 
@@ -154,12 +167,12 @@ Channel = (function () {
             /**
              * This method does the same as `on` but it registers a callback that will only be executed once.
              *
-             * @param {String} The name of the event is specified by a string. It doesn't matter,
-             *                 whether this event name already exists or not.
-             * @param {Function} The function to be called, when the event is triggered.
-             * @param {Object} Optionally, you can provide a context for the callback function.
-             * @param {boolean} A preference regarding whether this callback shall the executed
+             * @param {String} type The name of the event is specified by a string. It doesn't matter,  whether this event name already exists or not.
+             * @param {Function} func The function to be called, when the event is triggered.
+             * @param {Object} [ctx] Optionally, you can provide a context for the callback function.
+             * @param {boolean} [async] A preference regarding whether this callback shall the executed
              *                  asynchronously. (Not a guarantee!)
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "once": function once (type, func, ctx, async) {
 
@@ -189,8 +202,9 @@ Channel = (function () {
              * If no arguments are passed, all callbacks on all events are removed.
              * On public channels, only the first option (with both a type and a function reference) is permitted.
              *
-             * @param {String} Optional: The event name of the callbacks to be removed.
-             * @param {Function} Optional: The callback function to be removed.
+             * @param {String} [type] Optional: The event name of the callbacks to be removed.
+             * @param {Function} [func] Optional: The callback function to be removed.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "off": function off (type, func) {
 
@@ -238,8 +252,9 @@ Channel = (function () {
              * Calling this method triggers the specified event and will result in all registered callbacks being executed.
              * You should no rely on the order in which the callbacks are being invoked.
              *
-             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to
+             * @param {String} type The name of the event to be triggered. Any additional arguments will be passed to
              *                 the callback function.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "emit": function (type) {
                 return emit.call(this, type, Array.prototype.slice.call(arguments, 1));
@@ -248,8 +263,9 @@ Channel = (function () {
             /**
              * This method works like `emit` but guarantees synchronous execution of all callbacks for this event.
              *
-             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to
+             * @param {String} type The name of the event to be triggered. Any additional arguments will be passed to
              *                 the callback function.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "emitSync": function (type) {
                 return emit.call(this, type, Array.prototype.slice.call(arguments, 1), false);
@@ -258,8 +274,9 @@ Channel = (function () {
             /**
              * This method works like `emit` but guarantees asynchronous execution of all callbacks for this event.
              *
-             * @param {String} The name of the event to be triggered. Any additional arguments will be passed to
+             * @param {String} type The name of the event to be triggered. Any additional arguments will be passed to
              *                 the callback function.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "emitAsync": function (type) {
                 return emit.call(this, type, Array.prototype.slice.call(arguments, 1), true);
@@ -270,10 +287,12 @@ Channel = (function () {
              * Affects the entire channel or specific events or even specific callbacks.
              * Does not affect public channels at all.
              *
+             * @method
              * @param {String} Optional: The name of the event that is meant to be silenced.
              *                 If no event type is specified, the whole channel will be silenced.
              * @param {Function} Optional: The function that is no longer to be executed when the event is triggered.
              *                   If no function is specified the whole event type will be silenced.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "silence": (function () {
 
@@ -324,8 +343,9 @@ Channel = (function () {
              * This method does not check if the channel is public, because if it were, it could not
              * have been silenced in the first place.
              *
-             * @param {String} Optional: The name of the event that is meant to be unsilenced.
-             * @param {Function} Optional: The function that shall be executed again, after being silenced.
+             * @param {String} [type] Optional: The name of the event that is meant to be unsilenced.
+             * @param {Function} [func] Optional: The function that shall be executed again, after being silenced.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "unsilence": function unsilence (type, func) {
 
@@ -364,8 +384,10 @@ Channel = (function () {
              * `Lock` prevents new callbacks from being added. Affects the entire channel or specific events.
              * Does not affect public channels at all.
              *
-             * @param {String} Optional: The name of the event to which no new callbacks shall be registerd.
+             * @method
+             * @param {String} [type] Optional: The name of the event to which no new callbacks shall be registerd.
              *                 If no event name is specified, the whole channel will be locked.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "lock": (function () {
                 
@@ -395,7 +417,8 @@ Channel = (function () {
              * This method does not check if the channel is public, because if it were, it could not
              * have been locked in the first place.
              *
-             * @param {String} Optional: The name of the event that shall accept new callbacks again.
+             * @param {String} [type] Optional: The name of the event that shall accept new callbacks again.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "unlock": function unlock (type) {
 
@@ -413,8 +436,10 @@ Channel = (function () {
              * This lets you remove all event listeners from the message channel or from a specified event type.
              * (Also sets `silenced` and `locked` to `false`).
              *
-             * @param {String} Optional: The name of the event whose callbacks shall be removed.
+             * @method
+             * @param {String} [type] Optional: The name of the event whose callbacks shall be removed.
              *                 If no event type is given, the whole channel will be reset.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "reset": (function () {
                 
@@ -443,10 +468,11 @@ Channel = (function () {
             /**
              * Returns whether the channel or an event type or a specific callback is silenced.
              *
-             * @param {String} Optional: The name of the event whose status is being requested.
+             * @param {String} [type] Optional: The name of the event whose status is being requested.
              *                 If no event type is specified, the whole channel's status will be returned.
-             * @param {Function} Optional: The function whose status is being requested.
+             * @param {Function} [func] Optional: The function whose status is being requested.
              *                   If no function is specified the whole event type's status will be returned.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "isSilenced": function isSilenced (type, func) {
                 
@@ -483,10 +509,10 @@ Channel = (function () {
             },
 
             /**
-             * Returns whether the channel or an event type is locked.
+             * Returns whether the channel or a specifc event type on this channel is locked.
              *
-             * @param {String} Optional: The name of the event whose status is being requested.
-             *                 If no event type is specified, the whole channel's status will be returned.
+             * @param {String} [type] Optional: The name of the event whose status is being requested. If no event type is specified, the whole channel's status will be returned.
+             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "isLocked": function isLocked (type) {
                 
@@ -508,7 +534,7 @@ Channel = (function () {
 
         });
 
-        /**
+        /*
          * These aliases get added to give you the best expressability.
          * You can currently only delete them by creating a new channel and `delete channel.subscribe` etc.
          */
@@ -526,7 +552,7 @@ Channel = (function () {
      * This method returns a named channel.
      *
      * @param {String} The name of the public channel you want to retrieve.
-     * @return The public channel with the specified name
+     * @returns The public channel with the specified name
      */
     ChannelConstructor.get = function (name) {
         return channels[name];
