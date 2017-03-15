@@ -94,14 +94,6 @@ Those are the most important functions provided by *multivents*. If you want to 
 
 `function reset ( /* String */ type ? )`
 
-### Restricting
-
-You can create a wrapper object for an event channel so that you can give limited access to that channel, allowing other parts of your code to only access certain methods of the channel. For instance you may not want to allow a module to silence or lock a channel, but you want it to be able to trigger events. For this you can use the `restrict` method.
-
-`restrict`: You can pass in an array of methods you want to make accessible on the wrapper object.
-
-`function restrict ( /* String[] */ permissions ? )`
-
 ## Example Code
 
 ### Basic usage
@@ -224,19 +216,6 @@ channel.emit('peng'); // 'peng event fired'
 ```
 
 You can see, that attaching a new event listener when the channel was locked had no effect. You can also lock a single event.
-
-### Restricting
-
-You can create restricted access to a channel using the `restrict` method:
-
-```javascript
-var restrictedChannel = channel.restrict(['emit', 'on']);
-console.log(typeof restrictedChannel.emit); // 'function'
-console.log(typeof restrictedChannel.on); // 'function'
-console.log(typeof restrictedChannel.silence); // 'undefined'
-```
-
-The new object only provides the functions you chose in the `restrict`-call.
 
 ## Asynchronous Callback Execution
 
