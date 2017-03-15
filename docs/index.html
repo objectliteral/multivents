@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Channel.html">Channel</a><ul class='methods'><li data-type='method'><a href="Channel.html#emit">emit</a></li><li data-type='method'><a href="Channel.html#emitAsync">emitAsync</a></li><li data-type='method'><a href="Channel.html#emitSync">emitSync</a></li><li data-type='method'><a href="Channel.html#isLocked">isLocked</a></li><li data-type='method'><a href="Channel.html#isSilenced">isSilenced</a></li><li data-type='method'><a href="Channel.html#lock">lock</a></li><li data-type='method'><a href="Channel.html#off">off</a></li><li data-type='method'><a href="Channel.html#on">on</a></li><li data-type='method'><a href="Channel.html#once">once</a></li><li data-type='method'><a href="Channel.html#reset">reset</a></li><li data-type='method'><a href="Channel.html#silence">silence</a></li><li data-type='method'><a href="Channel.html#unlock">unlock</a></li><li data-type='method'><a href="Channel.html#unsilence">unsilence</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>multivents</h1><p><a href="https://travis-ci.org/objectliteral/multivents"><img src="https://img.shields.io/travis/objectliteral/multivents/master.svg?style=flat-square" alt="Build Status"></a> <a href="https://coveralls.io/github/objectliteral/multivents"><img src="https://img.shields.io/coveralls/objectliteral/multivents/master.svg?style=flat-square" alt="Coverage"></a> <a href="https://david-dm.org/objectliteral/multivents"><img src="https://david-dm.org/objectliteral/multivents/status.svg?style=flat-square" alt="Dependencies"></a> <a href="https://david-dm.org/objectliteral/multivents?type=dev"><img src="https://david-dm.org/objectliteral/multivents/dev-status.svg?style=flat-square" alt="DevDependencies"></a></p>
+<p> <strong>multivents</strong> is a small pub-sub library. It allows you to create event channels, send (asynchronous) events over those channels and subscribe to events.</p>
+<h2>Quick Start</h2><p>If you want to get started quickly, here is a basic example of how to use <strong>multivents</strong>:</p>
+<pre class="prettyprint source lang-javascript"><code>var Channel = require('multivents');
+
+var myChannel = new Channel();
+
+myChannel.on('greet', function (who) {
+    console.log('hello ' + who);
+});
+
+myChannel.emit('greet', 'world'); // 'hello world'</code></pre><p>If that's all you wanted to know, great! It's probably more than 90% of what you need this library for. If not, you may read on to find out more.</p>
+<h2>Installation</h2><p>There's not really anything to install. If you want to use <strong>multivents</strong> in your project, include <a href="https://raw.githubusercontent.com/objectliteral/multivents/master/multivents.js">multivents.js</a> and use it like described below.</p>
+<p><strong>multivents</strong> supports both CommonJS-style environments as well as AMD. You can install it via npm:</p>
+<pre class="prettyprint source"><code>npm install --save multivents</code></pre><p>If you want to extend <strong>multivents</strong> to your needs you might want to run tests. In order to do this, you can clone this repository and run <code>npm install</code> and <code>npm test</code>. Tests are written with <a href="https://github.com/defunctzombie/commonjs-assert">assert</a> and run with <a href="https://mochajs.org/">mocha</a> (<a href="https://github.com/sindresorhus/gulp-mocha">gulp-mocha</a>).</p>
+<h2>Terminology and Concept</h2><p>This library implements so called <em>message channels</em> or <em>event channels</em>. A channel is a communication device that has events associated with it. When a message is sent over a message channel, all callback functions registered for that specific message will be executed.</p>
+<p>The following documentation uses the terms <em>event</em> and <em>message</em> synonymously as well as event <em>name</em> and event <em>type</em>. <em>Listening for an event</em> or <em>adding a callback</em> is the process that registers a function to be executed when an event is <em>emitted</em> / <em>triggered</em> / <em>fired</em> i.e. a message is being <em>sent</em>.</p>
+<h2>How to use / API</h2><h3>Basic functions</h3><p><code>Channel</code> : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the <code>new</code> keyword if you want to) and a new channel object is created for you. You can also call <code>Channel</code> as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels in the <a href="#named-event-channels">extra paragraph I dedicated them</a>. A channel provides a handful of methods that are discussed below.</p>
+<p><code>on</code>: With this method you can register callbacks to be executed when a certain event is triggered. You have to pass in the event name and the callback function, but you can optionally provide a third argument. This third argument should be an object which is then used as the callback function's <code>this</code> (context injection). The fourth parameter of the <code>on</code> function is a boolean that gives a preference on whether the callback function shall be executed asynchronously. Note, however, that asynchronous execution is not guarenteed; read why <a href="#asynchronous-callback-execution">in this paragraph</a>.</p>
+<p><code>function on ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )</code></p>
+<p><code>attach</code>: Alias for <code>on</code>.</p>
+<p><code>once</code>: When you want a callback to be only executed once, you can use the <code>once</code> method (which is to be used just like <code>on</code>).</p>
+<p><code>function once ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )</code></p>
+<p><code>off</code> : Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling <code>off</code> without any arguments.</p>
+<p><code>function off ( /* String */ type ?, /* Function */ callback ? )</code></p>
+<p><code>detach</code>: Alias for <code>off</code>.</p>
+<p><code>emit</code>: Calling this method triggers the specified event and will result in all registered callbacks being executed. All arguments that get passed to the <code>emit</code> are provided to the callback function as arguments.</p>
+<p><code>function emit ( /* String */ type, ... )</code></p>
+<p><code>trigger</code>, <code>fire</code>: Aliases for <code>emit</code></p>
+<p>Those are the most important functions provided by <em>multivents</em>. If you want to get started now, skip on to the <a href="#example-code">example code</a>.</p>
+<h3>Silencing and locking</h3><p><code>silence</code>: This method prevents callbacks from being executed. You can use <code>silence</code> on different things depending on the arguments you provide. If you call it without any arguments, the whole message channel is silenced and emitting events on this channel won't work. If you call <code>silence</code> with one argument, you can specify an event that should no longer be emittable, while all other events on this channel will still work fine. If you call <code>silence</code> with two arguments, you can silence one specific callback function from executing. When the according event is triggered, all of its other callbacks are still being invoked, except the one you silenced.</p>
+<p><code>function silence ( /* String */ type ?, /* Function */ funct ? )</code></p>
+<p><code>unsilence</code>: After having silenced an event channel or an event or a single callback function, you can unsilence it with <code>unsilence</code>. If you unsilence a single event, but the entire channel is still silenced, triggering the event will still have no effect.</p>
+<p><code>function unsilence ( /* String */ type ?, /* Function */ funct ? )</code></p>
+<blockquote>
+<p>Silencing and locking have similar semantics. They give you the flexibility to target an entire channel or a specific event. Their effects work top-down meaning that, if a channel is silenced but an event is not, you cannot trigger this event. Here, the channel' silencing/locking state is more important than the one of single events.</p>
+</blockquote>
+<p><code>lock</code>: Locking means preventing new callbacks from being registered. Similar to silencing, you can lock an entire channel and prohibiting any callbacks from being registered to it, you can also lock a single event. You can call <code>lock</code> with no arguments (locking the entire channel) or with a string argument, specifying the event you want to lock.</p>
+<p><code>function lock ( /* String */ type ? )</code></p>
+<p><code>unlock</code>: Unlocking a channel or an event allows new callbacks to be attached to it. You can unlock a locked channel or just a single event by using the optional paramter.</p>
+<p><code>function unlock ( /* String */ type ? )</code></p>
+<p><code>reset</code>: This method lets you remove all callbacks from an event or even all callbacks of all events on an entire channel. If you call this function without any arguments, you reset the whole channel. Note, that <code>reset</code> also unsilences and unlocks an event.</p>
+<p><code>function reset ( /* String */ type ? )</code></p>
+<h3>Restricting</h3><p>You can create a wrapper object for an event channel so that you can give limited access to that channel, allowing other parts of your code to only access certain methods of the channel. For instance you may not want to allow a module to silence or lock a channel, but you want it to be able to trigger events. For this you can use the <code>restrict</code> method.</p>
+<p><code>restrict</code>: You can pass in an array of methods you want to make accessible on the wrapper object.</p>
+<p><code>function restrict ( /* String[] */ permissions ? )</code></p>
+<h2>Example Code</h2><h3>Basic usage</h3><p>First, you want to include <strong>multivents</strong> in your project. If you are writing for nodejs, you would <code>npm install multivents</code> and then in your project:</p>
+<pre class="prettyprint source lang-javascript"><code>var Channel = require('multivents');</code></pre><p>Now we can use <em>multivents</em>, to create a message channel using the <code>Channel</code> constructor (here in conjunction with the <code>new</code> keyword).</p>
+<pre class="prettyprint source lang-javascript"><code>var channel = new Channel();</code></pre><p>The new channel provides the <code>on</code> method that allows you to specify an event name and a function that is meant to be executed in case the given event is triggered.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.on('ping', function () {
+    console.log('ping event fired!');
+});</code></pre><p>Your function can also have parameters.</p>
+<pre class="prettyprint source lang-javascript"><code>var greet = function (who) {
+    console.log('hello' + who);
+};
+channel.on('ping', greet);</code></pre><p>You can trigger an event using the channel's <code>emit</code> method and optionally provide additional arguments that will be passed on to the callback.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.emit('ping', 'world');
+ // 'ping event fired!'
+ // 'hello world'</code></pre><p>When you want to remove a callback function, you can detach it from the event by using the <code>off</code> message and specifying the event and the function you want to detach.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.off('ping', greet);</code></pre><p>Now, when you fire the event again, the <code>greet</code> function will no longer be invoked.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.emit('event'); // 'ping event fired!'</code></pre><h3>Context injection</h3><p>When registering a callback, you can specify the context in which the callback function will be executed.</p>
+<pre class="prettyprint source lang-javascript"><code>var channel = new Channel();
+var bob = { name : 'Bob' };
+channel.on('greet', function () {
+    console.log('Hello, I\'m ' + this.name + '!');
+}, bob);
+channel.emit('greet'); // 'Hello, I'm Bob!'</code></pre><p>The <code>bob</code> object is used as the callback's <code>this</code> as it was provided to the <code>on</code> call as the third argument.</p>
+<h3>Silencing and locking</h3><p>Let's start again by creating a new event channel.</p>
+<pre class="prettyprint source lang-javascript"><code>var channel = Channel({});</code></pre><p>Remember that the <code>Channel</code> constructor can be passed an object to be transformed into a message channel. We now create two events and register callback functions to them.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.on('ping', function () {
+    console.log('ping event fired');
+});
+channel.on('pong', function () {
+    console.log('pong event fired');
+});</code></pre><p>When a channel is silenced, none of its events can be triggered. Notice though, that <strong>multivents</strong> will not throw any exceptions.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.silence();
+channel.emit('ping'); // [nothing happens]
+channel.emit('pong'); // [nothing happens]</code></pre><p>Let's now unsilence the channel and silence just the <code>pong</code> event.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.unsilence();
+channel.silence('pong');
+channel.emit('pong'); // [nothing happens]
+channel.emit('ping'); // 'ping event fired'</code></pre><p>When a channel is silenced, you can still attach new event listeners. That's not the case, when the channel is locked.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.silence();
+channel.on('peng', function () {
+    console.log('peng event fired');
+});
+channel.unsilence();
+channel.emit('peng'); // 'peng event fired'
+channel.lock();
+channel.on('pung', function () {
+    console.log('pung event fire');
+});
+channel.emit('pung'); // [nothing happens]
+channel.emit('peng'); // 'peng event fired'</code></pre><p>You can see, that attaching a new event listener when the channel was locked had no effect. You can also lock a single event.</p>
+<h3>Restricting</h3><p>You can create restricted access to a channel using the <code>restrict</code> method:</p>
+<pre class="prettyprint source lang-javascript"><code>var restrictedChannel = channel.restrict(['emit', 'on']);
+console.log(typeof restrictedChannel.emit); // 'function'
+console.log(typeof restrictedChannel.on); // 'function'
+console.log(typeof restrictedChannel.silence); // 'undefined'</code></pre><p>The new object only provides the functions you chose in the <code>restrict</code>-call.</p>
+<h2>Asynchronous Callback Execution</h2><p>By default, <strong>multivents</strong> calls event handler functions asynchronously.</p>
+<p>In some cases you might want to declare a callback that is explicitly meant to be invoked synchronously. You can do that with a fourth argument in  the <code>on</code> function.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.on('ping', f, null, false);</code></pre><p>Above you can see a callback registration that declares the callback's preference to be executed synchronously.</p>
+<p>You can also emit an event with a preference to have its callbacks be executed synchronously.</p>
+<pre class="prettyprint source lang-javascript"><code>channel.emitSync('ping');</code></pre><p>If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, <strong>multivents</strong> does it asynchronously. If one part (<code>emit</code> or <code>on</code>) states a preference and the other one doesn't, the preference will be respected. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the <code>emitSync</code> or <code>emitAsync</code> method, the according execution style is guaranteed. E.g. in the following case:</p>
+<pre class="prettyprint source lang-javascript"><code>channel.on('ping', f, null, false); // [`f` wants to be called synchronously]
+channel.emitAsync('ping'); // [`emitAsync` guarantees asynchronous execution]</code></pre><p>the callback will be executed asynchronously, because the <code>emitAsync</code> method was used and is stronger than the async flag in the <code>on</code> call.</p>
+<h2>Named Event channels</h2><p>When you call the <code>Channel</code> constructor and pass it a string value, you create a <em>named channel</em> or <em>public channel</em> (which are two terms for the same thing). Because it has a name, such an event channel is &quot;public&quot; and can be retrieved via its name. <strong>multivents</strong> contains a closure that keeps track of all named channels and allows you to retrieve them using the <code>Channel</code> constructor's <code>get</code> method.</p>
+<pre class="prettyprint source lang-javascript"><code>Channel('myEventchannel');
+var b = Channel.get('myEventchannel'); // [b now contains an event channel]</code></pre><p>Why? Well, unnamed channels have to be passed around in order to connect separate parts of an application. If you don't want to do that, you can use public channels.</p>
+<p>Because every part of your application will have access to public channels, they and their events can not be silenced or locked.</p>
+<h2>License</h2><p>The MIT License (MIT)</p>
+<p>Copyright © 2014-2017 Peter Steinberg</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></article>
+    </section>
+
+
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        multivents.js
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:objectliteral@outlook.com">Peter Steinberg</a></li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+        
+            <div class="description">This is the only source file of multivents. It includes all the functionality and API.</div>
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 15 2017 23:37:53 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
