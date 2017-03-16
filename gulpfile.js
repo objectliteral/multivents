@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
     mocha = require('gulp-mocha'),
+    jsdoc = require('gulp-jsdoc3'),
     gzip = require('gulp-gzip'),
     umd = require('gulp-umd');
 
@@ -57,4 +58,9 @@ gulp.task('compress', [ 'build' ], function () {
         .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('default', [ 'lint', 'test', 'build', 'compress' ]);
+gulp.task('docs', function () {
+    return gulp.src([''])
+        .pipe(jsdoc(require('./jsdoc.json')));
+});
+
+gulp.task('default', [ 'lint', 'test', 'build', 'compress', 'docs' ]);
