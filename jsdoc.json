@@ -1,6 +1,6 @@
 {
     "source": {
-        "include": [ "multivents.js" ]
+        
     },
     "opts": {
         "destination": "docs/",
