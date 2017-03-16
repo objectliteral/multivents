@@ -55,7 +55,7 @@ Channel = (function () {
 
         /**
          * The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called, when the event is triggered.
-         * 
+         *
          * @member
          */
         events = {};
