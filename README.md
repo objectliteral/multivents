@@ -40,60 +40,6 @@ This library implements so called *message channels* or *event channels*. A chan
 
 The following documentation uses the terms *event* and *message* synonymously as well as event *name* and event *type*. *Listening for an event* or *adding a callback* is the process that registers a function to be executed when an event is *emitted* / *triggered* / *fired* i.e. a message is being *sent*.
 
-## How to use / API
-
-### Basic functions
-
-`Channel` : This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel. You can read more on the semantics of named channels in the [extra paragraph I dedicated them](#named-event-channels). A channel provides a handful of methods that are discussed below.
-
-`on`: With this method you can register callbacks to be executed when a certain event is triggered. You have to pass in the event name and the callback function, but you can optionally provide a third argument. This third argument should be an object which is then used as the callback function's `this` (context injection). The fourth parameter of the `on` function is a boolean that gives a preference on whether the callback function shall be executed asynchronously. Note, however, that asynchronous execution is not guarenteed; read why [in this paragraph](#asynchronous-callback-execution).
-
-`function on ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )`
-
-`attach`: Alias for `on`.
-
-`once`: When you want a callback to be only executed once, you can use the `once` method (which is to be used just like `on`).
-
-`function once ( /* String */ type, /* Function */ callback, /* Object */ context ?, /* boolean*/ async? )`
-
-`off` : Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
-
-`function off ( /* String */ type ?, /* Function */ callback ? )`
-
-`detach`: Alias for `off`.
-
-`emit`: Calling this method triggers the specified event and will result in all registered callbacks being executed. All arguments that get passed to the `emit` are provided to the callback function as arguments.
-
-`function emit ( /* String */ type, ... )`
-
-`trigger`, `fire`: Aliases for `emit`
-
-Those are the most important functions provided by *multivents*. If you want to get started now, skip on to the [example code](#example-code).
-
-### Silencing and locking
-
-`silence`: This method prevents callbacks from being executed. You can use `silence` on different things depending on the arguments you provide. If you call it without any arguments, the whole message channel is silenced and emitting events on this channel won't work. If you call `silence` with one argument, you can specify an event that should no longer be emittable, while all other events on this channel will still work fine. If you call `silence` with two arguments, you can silence one specific callback function from executing. When the according event is triggered, all of its other callbacks are still being invoked, except the one you silenced.
-
-`function silence ( /* String */ type ?, /* Function */ funct ? )`
-
-`unsilence`: After having silenced an event channel or an event or a single callback function, you can unsilence it with `unsilence`. If you unsilence a single event, but the entire channel is still silenced, triggering the event will still have no effect.
-
-`function unsilence ( /* String */ type ?, /* Function */ funct ? )`
-
-> Silencing and locking have similar semantics. They give you the flexibility to target an entire channel or a specific event. Their effects work top-down meaning that, if a channel is silenced but an event is not, you cannot trigger this event. Here, the channel' silencing/locking state is more important than the one of single events.
-
-`lock`: Locking means preventing new callbacks from being registered. Similar to silencing, you can lock an entire channel and prohibiting any callbacks from being registered to it, you can also lock a single event. You can call `lock` with no arguments (locking the entire channel) or with a string argument, specifying the event you want to lock.
-
-`function lock ( /* String */ type ? )`
-
-`unlock`: Unlocking a channel or an event allows new callbacks to be attached to it. You can unlock a locked channel or just a single event by using the optional paramter.
-
-`function unlock ( /* String */ type ? )`
-
-`reset`: This method lets you remove all callbacks from an event or even all callbacks of all events on an entire channel. If you call this function without any arguments, you reset the whole channel. Note, that `reset` also unsilences and unlocks an event.
-
-`function reset ( /* String */ type ? )`
-
 ## Example Code
 
 ### Basic usage
