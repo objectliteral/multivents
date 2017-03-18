@@ -1,6 +1,6 @@
 {
   "name": "multivents",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Multifunctional Event System",
   "main": "dist/multivents.umd.js",
   "scripts": {
