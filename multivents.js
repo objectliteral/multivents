@@ -520,16 +520,6 @@ Channel = (function () {
 
         });
 
-        /*
-         * These aliases get added to give you the best expressability.
-         * You can currently only delete them by creating a new channel and `delete channel.subscribe` etc.
-         */
-        channel.subscribe = channel.attach = channel.on;
-        channel.unsubscribe = channel.detach = channel.off;
-        channel.publish = channel.fire = channel.trigger = channel.emit;
-        channel.publishSync = channel.fireSync = channel.triggerSync = channel.emitSync;
-        channel.publishAsync = channel.fireAsync = channel.triggerAsync = channel.emitAsync;
-
         return channel;
 
     };
