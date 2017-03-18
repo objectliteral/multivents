@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Channel.html">Channel</a><ul class='methods'><li data-type='method'><a href="Channel.html#emit">emit</a></li><li data-type='method'><a href="Channel.html#emitAsync">emitAsync</a></li><li data-type='method'><a href="Channel.html#emitSync">emitSync</a></li><li data-type='method'><a href="Channel.html#isLocked">isLocked</a></li><li data-type='method'><a href="Channel.html#isSilenced">isSilenced</a></li><li data-type='method'><a href="Channel.html#lock">lock</a></li><li data-type='method'><a href="Channel.html#off">off</a></li><li data-type='method'><a href="Channel.html#on">on</a></li><li data-type='method'><a href="Channel.html#once">once</a></li><li data-type='method'><a href="Channel.html#silence">silence</a></li><li data-type='method'><a href="Channel.html#unlock">unlock</a></li><li data-type='method'><a href="Channel.html#unsilence">unsilence</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Channel.html">Channel</a><ul class='methods'><li data-type='method'><a href="Channel.html#emit">emit</a></li><li data-type='method'><a href="Channel.html#emitAsync">emitAsync</a></li><li data-type='method'><a href="Channel.html#emitSync">emitSync</a></li><li data-type='method'><a href="Channel.html#isLocked">isLocked</a></li><li data-type='method'><a href="Channel.html#isSilenced">isSilenced</a></li><li data-type='method'><a href="Channel.html#lock">lock</a></li><li data-type='method'><a href="Channel.html#off">off</a></li><li data-type='method'><a href="Channel.html#on">on</a></li><li data-type='method'><a href="Channel.html#once">once</a></li><li data-type='method'><a href="Channel.html#silence">silence</a></li><li data-type='method'><a href="Channel.html#unlock">unlock</a></li><li data-type='method'><a href="Channel.html#unsilence">unsilence</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-async.html">Asynchronous Callback Execution</a></li><li><a href="tutorial-basics.html">Basic Usage</a></li><li><a href="tutorial-context.html">Injecting Context</a></li><li><a href="tutorial-named.html">Public Channels</a></li><li><a href="tutorial-silencing.html">Silencing and Locking</a></li></ul>
 </nav>
 
 <div id="main">
@@ -46,8 +46,15 @@
 
 
     <section class="readme">
-        <article><h1>multivents</h1><p><a href="https://travis-ci.org/objectliteral/multivents"><img src="https://img.shields.io/travis/objectliteral/multivents/master.svg?style=flat-square" alt="Build Status"></a> <a href="https://coveralls.io/github/objectliteral/multivents"><img src="https://img.shields.io/coveralls/objectliteral/multivents/master.svg?style=flat-square" alt="Coverage"></a> <a href="https://david-dm.org/objectliteral/multivents"><img src="https://david-dm.org/objectliteral/multivents/status.svg?style=flat-square" alt="Dependencies"></a> <a href="https://david-dm.org/objectliteral/multivents?type=dev"><img src="https://david-dm.org/objectliteral/multivents/dev-status.svg?style=flat-square" alt="DevDependencies"></a></p>
-<p> <strong>multivents</strong> is a small pub-sub library. It allows you to create event channels, send (asynchronous) events over those channels and subscribe to events.</p>
+        <article><h1 align="center">
+    <br />
+    <img src="./media/logo.PNG" width="300" />
+    <br />
+    <br />
+</h1>
+
+<p><a href="https://travis-ci.org/objectliteral/multivents"><img src="https://img.shields.io/travis/objectliteral/multivents/master.svg?style=flat-square" alt="Build Status"></a> <a href="https://coveralls.io/github/objectliteral/multivents"><img src="https://img.shields.io/coveralls/objectliteral/multivents/master.svg?style=flat-square" alt="Coverage"></a> <a href="https://david-dm.org/objectliteral/multivents"><img src="https://david-dm.org/objectliteral/multivents/status.svg?style=flat-square" alt="Dependencies"></a> <a href="https://david-dm.org/objectliteral/multivents?type=dev"><img src="https://david-dm.org/objectliteral/multivents/dev-status.svg?style=flat-square" alt="DevDependencies"></a></p>
+<p> <strong>multivents</strong> is a small yet flexible, multifunctional pub-sub library. It allows you to create event channels, send (asynchronous) events over those channels and subscribe to events.</p>
 <h2>Quick Start</h2><p>If you want to get started quickly, here is a basic example of how to use <strong>multivents</strong>:</p>
 <pre class="prettyprint source lang-javascript"><code>var Channel = require('multivents');
 
@@ -57,71 +64,30 @@ myChannel.on('greet', function (who) {
     console.log('hello ' + who);
 });
 
-myChannel.emit('greet', 'world'); // 'hello world'</code></pre><p>If that's all you wanted to know, great! It's probably more than 90% of what you need this library for. If not, you may read on to find out more.</p>
-<h2>Installation</h2><p>There's not really anything to install. If you want to use <strong>multivents</strong> in your project, include <a href="https://raw.githubusercontent.com/objectliteral/multivents/master/multivents.js">multivents.js</a> and use it like described below.</p>
-<p><strong>multivents</strong> supports both CommonJS-style environments as well as AMD. You can install it via npm:</p>
-<pre class="prettyprint source"><code>npm install --save multivents</code></pre><p>If you want to extend <strong>multivents</strong> to your needs you might want to run tests. In order to do this, you can clone this repository and run <code>npm install</code> and <code>npm test</code>. Tests are written with <a href="https://github.com/defunctzombie/commonjs-assert">assert</a> and run with <a href="https://mochajs.org/">mocha</a> (<a href="https://github.com/sindresorhus/gulp-mocha">gulp-mocha</a>).</p>
-<h2>Terminology and Concept</h2><p>This library implements so called <em>message channels</em> or <em>event channels</em>. A channel is a communication device that has events associated with it. When a message is sent over a message channel, all callback functions registered for that specific message will be executed.</p>
-<p>The following documentation uses the terms <em>event</em> and <em>message</em> synonymously as well as event <em>name</em> and event <em>type</em>. <em>Listening for an event</em> or <em>adding a callback</em> is the process that registers a function to be executed when an event is <em>emitted</em> / <em>triggered</em> / <em>fired</em> i.e. a message is being <em>sent</em>.</p>
-<h2>Example Code</h2><h3>Basic usage</h3><p>First, you want to include <strong>multivents</strong> in your project. If you are writing for nodejs, you would <code>npm install multivents</code> and then in your project:</p>
-<pre class="prettyprint source lang-javascript"><code>var Channel = require('multivents');</code></pre><p>Now we can use <em>multivents</em>, to create a message channel using the <code>Channel</code> constructor (here in conjunction with the <code>new</code> keyword).</p>
-<pre class="prettyprint source lang-javascript"><code>var channel = new Channel();</code></pre><p>The new channel provides the <code>on</code> method that allows you to specify an event name and a function that is meant to be executed in case the given event is triggered.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.on('ping', function () {
-    console.log('ping event fired!');
-});</code></pre><p>Your function can also have parameters.</p>
-<pre class="prettyprint source lang-javascript"><code>var greet = function (who) {
-    console.log('hello' + who);
-};
-channel.on('ping', greet);</code></pre><p>You can trigger an event using the channel's <code>emit</code> method and optionally provide additional arguments that will be passed on to the callback.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.emit('ping', 'world');
- // 'ping event fired!'
- // 'hello world'</code></pre><p>When you want to remove a callback function, you can detach it from the event by using the <code>off</code> message and specifying the event and the function you want to detach.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.off('ping', greet);</code></pre><p>Now, when you fire the event again, the <code>greet</code> function will no longer be invoked.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.emit('event'); // 'ping event fired!'</code></pre><h3>Context injection</h3><p>When registering a callback, you can specify the context in which the callback function will be executed.</p>
-<pre class="prettyprint source lang-javascript"><code>var channel = new Channel();
-var bob = { name : 'Bob' };
-channel.on('greet', function () {
-    console.log('Hello, I\'m ' + this.name + '!');
-}, bob);
-channel.emit('greet'); // 'Hello, I'm Bob!'</code></pre><p>The <code>bob</code> object is used as the callback's <code>this</code> as it was provided to the <code>on</code> call as the third argument.</p>
-<h3>Silencing and locking</h3><p>Let's start again by creating a new event channel.</p>
-<pre class="prettyprint source lang-javascript"><code>var channel = Channel({});</code></pre><p>Remember that the <code>Channel</code> constructor can be passed an object to be transformed into a message channel. We now create two events and register callback functions to them.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.on('ping', function () {
-    console.log('ping event fired');
-});
-channel.on('pong', function () {
-    console.log('pong event fired');
-});</code></pre><p>When a channel is silenced, none of its events can be triggered. Notice though, that <strong>multivents</strong> will not throw any exceptions.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.silence();
-channel.emit('ping'); // [nothing happens]
-channel.emit('pong'); // [nothing happens]</code></pre><p>Let's now unsilence the channel and silence just the <code>pong</code> event.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.unsilence();
-channel.silence('pong');
-channel.emit('pong'); // [nothing happens]
-channel.emit('ping'); // 'ping event fired'</code></pre><p>When a channel is silenced, you can still attach new event listeners. That's not the case, when the channel is locked.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.silence();
-channel.on('peng', function () {
-    console.log('peng event fired');
-});
-channel.unsilence();
-channel.emit('peng'); // 'peng event fired'
-channel.lock();
-channel.on('pung', function () {
-    console.log('pung event fire');
-});
-channel.emit('pung'); // [nothing happens]
-channel.emit('peng'); // 'peng event fired'</code></pre><p>You can see, that attaching a new event listener when the channel was locked had no effect. You can also lock a single event.</p>
-<h2>Asynchronous Callback Execution</h2><p>By default, <strong>multivents</strong> calls event handler functions asynchronously.</p>
-<p>In some cases you might want to declare a callback that is explicitly meant to be invoked synchronously. You can do that with a fourth argument in  the <code>on</code> function.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.on('ping', f, null, false);</code></pre><p>Above you can see a callback registration that declares the callback's preference to be executed synchronously.</p>
-<p>You can also emit an event with a preference to have its callbacks be executed synchronously.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.emitSync('ping');</code></pre><p>If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, <strong>multivents</strong> does it asynchronously. If one part (<code>emit</code> or <code>on</code>) states a preference and the other one doesn't, the preference will be respected. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the <code>emitSync</code> or <code>emitAsync</code> method, the according execution style is guaranteed. E.g. in the following case:</p>
-<pre class="prettyprint source lang-javascript"><code>channel.on('ping', f, null, false); // [`f` wants to be called synchronously]
-channel.emitAsync('ping'); // [`emitAsync` guarantees asynchronous execution]</code></pre><p>the callback will be executed asynchronously, because the <code>emitAsync</code> method was used and is stronger than the async flag in the <code>on</code> call.</p>
-<h2>Named Event channels</h2><p>When you call the <code>Channel</code> constructor and pass it a string value, you create a <em>named channel</em> or <em>public channel</em> (which are two terms for the same thing). Because it has a name, such an event channel is &quot;public&quot; and can be retrieved via its name. <strong>multivents</strong> contains a closure that keeps track of all named channels and allows you to retrieve them using the <code>Channel</code> constructor's <code>get</code> method.</p>
-<pre class="prettyprint source lang-javascript"><code>Channel('myEventchannel');
-var b = Channel.get('myEventchannel'); // [b now contains an event channel]</code></pre><p>Why? Well, unnamed channels have to be passed around in order to connect separate parts of an application. If you don't want to do that, you can use public channels.</p>
-<p>Because every part of your application will have access to public channels, they and their events can not be silenced or locked.</p>
+myChannel.emit('greet', 'world'); // 'hello world'</code></pre><p>If that's all you wanted to know, great! If not, you may read on to find out more.</p>
+<h2>Navigation</h2><ol>
+<li><a href="#features">Features</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#concepts">Concepts</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#acknowledgments">Acknowledgments</a></li>
+<li><a href="#license">License</a></li>
+</ol>
+<h2>Features</h2><ul>
+<li>Synchronous &amp; asynchronous callback execution</li>
+<li>No Dependencies</li>
+<li><a href="https://coveralls.io/github/objectliteral/multivents">Thoroughly tested</a></li>
+<li><a href="#concepts">Multifunctional™</a></li>
+</ul>
+<h2>Installation</h2><p>As <strong>multivents</strong> has no dependencies you can simply grab the <a href="https://github.com/objectliteral/multivents/releases/latest">latest release</a> and include it in your project. <strong>multivents</strong> uses <a href="https://github.com/umdjs/umd">UMD</a>, meaning it supports both CommonJS-style environments as well as AMD. </p>
+<p>You can also install it via <code>npm</code>:</p>
+<pre class="prettyprint source"><code>npm install multivents</code></pre><p>If you want to extend <strong>multivents</strong> to your needs, you might want to run tests. In order to do this, you can clone this repository and run <code>npm install</code> and <code>npm test</code>. Tests are written with <a href="https://github.com/defunctzombie/commonjs-assert">assert</a> and run with <a href="https://mochajs.org/">mocha</a>.</p>
+<h2>Examples</h2><p>Check out the <a href="https://objectliteral.github.io/multivents/tutorial-basics.html">examples</a> and <a href="https://objectliteral.github.io/multivents/Channel.html">API docs</a>.</p>
+<h2>Concepts</h2><p><strong>Multivents</strong> aims to be a highly flexible, multifunctional library that can be used in projects of all sizes. It tries to be as small and fast as possible while offering you all the semantics for event systems that you could wish for. <strong>multivents</strong> mainly wants to get out of your way and attempts that by providing a straightforward API that includes a lot of optional parameters. The goal is for you to use <strong>multivents</strong> the way you want to, and not to be limited by the library's opinions.</p>
+<h3>Terminology</h3><p>This README and all the documentation use a couple of terms synonymously: &quot;event&quot; and &quot;message&quot; are the same as well as event &quot;name&quot; and event &quot;type&quot;. &quot;Listening for an event&quot;, &quot;adding a callback&quot; and &quot;subscribing to an event&quot; all refer to the process of registering a function to be executed when an event is &quot;emitted&quot; / &quot;triggered&quot; / &quot;fired&quot;.</p>
+<h2>Contributing</h2><p>Contributions are welcome! Whether you want suggest or implement changes, check out the <a href="https://github.com/objectliteral/multivents/issues">issues</a> first and have a look at my <a href="https://github.com/objectliteral/multivents/blob/master/CONTRIBUTING.md">more detailed notes on contributing</a>.</p>
+<h2>Acknowledgments</h2><p>This library started out as a fork of <a href="https://github.com/allouis">Fabien O'Carroll's</a> <a href="https://github.com/allouis/minivents">minivents</a>.</p>
 <h2>License</h2><p>The MIT License (MIT)</p>
 <p>Copyright © 2014-2017 Peter Steinberg</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -251,7 +217,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Mar 16 2017 02:01:28 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Mar 17 2017 14:17:38 GMT+0100 (CET) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
