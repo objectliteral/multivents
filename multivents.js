@@ -106,7 +106,6 @@ Channel = (function () {
 
                             }.bind({
                                 "func": callback.callbackFunction,
-                                "context": callback.context,
                                 "name": type,
                                 "channel": channel,
                                 "async": true,
@@ -119,7 +118,6 @@ Channel = (function () {
                         list[index].callbackFunction.apply(list[index].context,
                             data.concat([ {
                                 "func": callback.callbackFunction,
-                                "context": callback.context,
                                 "name": type,
                                 "channel": channel,
                                 "async": false,
@@ -146,7 +144,7 @@ Channel = (function () {
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "on": function on (type, func, ctx, async) { // eslint-disable-line id-length
+            "on": function on (type, func, async) { // eslint-disable-line id-length
 
                 if (locked || (events[type] && events[type].locked)) {
                     return this;
@@ -154,7 +152,6 @@ Channel = (function () {
 
                 addEvent(type).callbacks.push({
                     "callbackFunction": func,
-                    "context": ctx,
                     "silenced": false,
                     "async": async === false ? -1 : async || 0
                 });
@@ -172,7 +169,7 @@ Channel = (function () {
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "once": function once (type, func, ctx, async) {
+            "once": function once (type, func, async) {
 
                 var callbackFunction,
                     called;
@@ -188,7 +185,7 @@ Channel = (function () {
                     }
                 };
 
-                this.on(type, callbackFunction, ctx, async);
+                this.on(type, callbackFunction, async);
 
                 return this;
 
