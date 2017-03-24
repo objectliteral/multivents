@@ -100,7 +100,7 @@ Channel = (function () {
 
                             function () {
 
-                                this.func.apply(this.context,
+                                this.func.apply(undefined,
                                     this.data.concat([ this ])
                                 );
 
@@ -115,7 +115,7 @@ Channel = (function () {
                         0);
 
                     } else if (asyncScore < 0 || asyncEvt === -1) {
-                        list[index].callbackFunction.apply(list[index].context,
+                        list[index].callbackFunction.apply(undefined,
                             data.concat([ {
                                 "func": callback.callbackFunction,
                                 "name": type,
