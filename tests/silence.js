@@ -65,6 +65,36 @@ describe('`silence` function', function () {
     channel.emit('pong');
   });
 
+  it('should disable triggering events of a certain type if called with a new event type, even when a callback for that event was added after silence was called', function () {
+    var channel = Channel({});
+    channel.on('pong', function () {
+      assert(true);
+    });
+    channel.silence('ping');
+    channel.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    channel.emit('ping');
+    channel.emit('pong');
+  });
+
+  it('should disable triggering events of a certain type if called with an already existing event type, even when a callback for that event was added after silence was called', function () {
+    var channel = Channel({});
+    channel.on('pong', function () {
+      assert(true);
+    });
+    channel.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    console.log('this');
+    channel.silence('ping');
+    channel.on('ping', function () {
+      assert.fail(undefined, undefined, 'This function must not be executed.');
+    });
+    channel.emit('ping');
+    channel.emit('pong');
+  });
+
   it('should prevent the specified callback from being triggered if called with the event type and callback function', function () {
     var channel = Channel({}),
       f = function () {
