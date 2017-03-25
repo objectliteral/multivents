@@ -6,6 +6,8 @@
  * @fileOverview This is the only source file of multivents. It includes all the functionality and API.
  */
 
+import once from './once.js';
+
 var Channel;
 
 /**
@@ -172,27 +174,7 @@ Channel = (function () {
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "once": function once (type, func, ctx, async) {
-
-                var callbackFunction,
-                    called;
-
-                called = false;
-
-                callbackFunction = function () {
-                    if (!called) {
-                        // I explicitly want to say, that disabling this rule is fine here, because I am sure, that the correct binding of 'this' gets taken care of!
-                        func.apply(this, [].slice.call(arguments)); // eslint-disable-line no-invalid-this
-                        channel.off(type, callbackFunction);
-                        called = true;
-                    }
-                };
-
-                this.on(type, callbackFunction, ctx, async);
-
-                return this;
-
-            },
+            "once": once(channel),
 
             /**
              * Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
@@ -547,3 +529,5 @@ Channel = (function () {
     return ChannelConstructor;
 
 }());
+
+export default Channel;

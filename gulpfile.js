@@ -7,6 +7,8 @@ var gulp = require('gulp'),
     mocha = require('gulp-mocha'),
     jsdoc = require('gulp-jsdoc3'),
     gzip = require('gulp-gzip'),
+    rollup = require('rollup-stream'),
+    source = require('vinyl-source-stream'),
     umd = require('gulp-umd');
 
 gulp.task('lint', function () {
@@ -28,8 +30,17 @@ gulp.task('test', [ 'pre-test' ], function () {
         .pipe(istanbul.writeReports({ reporters: [ 'text', 'html' ] }));
 });
 
+gulp.task('rollup', function () {
+    return rollup({
+        entry: './src/multivents.js',
+        format: 'cjs'
+    })
+    .pipe(source('multivents.umd.js'))
+    .pipe(gulp.dest('./dist'));
+});
+
 gulp.task('umd', function () {
-    return gulp.src('./multivents.js')
+    return gulp.src('./src/multivents.js')
         .pipe(rename('multivents.umd.js'))
         .pipe(umd({
             exports: function (file) {
@@ -43,7 +54,7 @@ gulp.task('umd', function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', [ 'umd' ], function () {
+gulp.task('build', [ 'rollup' ], function () {
     return gulp.src('./dist/multivents.umd.js')
         .pipe(rename('multivents.umd.min.js'))
         .pipe(sourcemaps.init())
