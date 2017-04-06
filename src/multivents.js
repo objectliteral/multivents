@@ -14,6 +14,9 @@ import silence from './silence.js';
 import unsilence from './unsilence.js';
 import lock from './lock.js';
 import unlock from './unlock.js';
+import reset from './reset.js';
+import isSilenced from './isSilenced.js';
+import isLocked from './isLocked.js';
 
 var Channel;
 
@@ -201,29 +204,7 @@ Channel = (function () {
              * @param {String} [type] Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "reset": (function () {
-                
-                if (isPublic === true) {
-                    return function () {
-                        return this;
-                    };
-                } else {
-                    return function reset (type) {
-                        
-                        if (events !== null) {
-                            if (typeof type === "undefined") {
-                                events = { };
-                            } else {
-                                addEvent(type, true);
-                            }
-                        }
-
-                        return this;
-                        
-                    };
-                }
-
-            }()),
+            "reset": reset(scope),
 
             /**
              * Returns whether the channel or an event type or a specific callback is silenced.
@@ -234,39 +215,7 @@ Channel = (function () {
              *                   If no function is specified the whole event type's status will be returned.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "isSilenced": function isSilenced (type, func) {
-                
-                return isPublic === false && (function () {
-
-                    var callbackCount,
-                        channelSilenced,
-                        evt,
-                        index;
-
-                    channelSilenced = false;
-
-                    if (typeof type === "undefined" || scope.silenced) {
-                        channelSilenced = scope.silenced;
-                    } else if (events[type] && (typeof func === "undefined" || events[type].silenced)) {
-                        channelSilenced = events[type].silenced;
-                    } else {
-                        evt = events[type];
-                        if (typeof evt !== "undefined") {
-                            callbackCount = evt.callbacks.length;
-                            for (index = 0; index < callbackCount; index = index + 1) {
-                                if (evt.callbacks[index].callbackFunction === func) {
-                                    channelSilenced = evt.callbacks[index].silenced;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    return channelSilenced;
-
-                }());
-
-            },
+            "isSilenced": isSilenced(scope),
 
             /**
              * Returns whether the channel or a specifc event type on this channel is locked.
@@ -274,23 +223,7 @@ Channel = (function () {
              * @param {String} [type] Optional: The name of the event whose status is being requested. If no event type is specified, the whole channel's status will be returned.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "isLocked": function isLocked (type) {
-                
-                return isPublic === false && (function () {
-                    
-                    var channelLocked;
-
-                    if (typeof type === "undefined" || scope.locked) {
-                        channelLocked = scope.locked;
-                    } else {
-                        channelLocked = (events[type] || false) && events[type].locked;
-                    }
-
-                    return channelLocked;
-
-                }());
-
-            }
+            "isLocked": isLocked(scope)
 
         });
 
