@@ -1,6 +1,8 @@
 var gulp = require('gulp'),
+    babel = require('gulp-babel'),
     uglify = require('gulp-uglify'),
     eslint = require('gulp-eslint'),
+    eslintConfig = require('./.eslintrc.json'),
     istanbul = require('gulp-istanbul'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
@@ -12,8 +14,8 @@ var gulp = require('gulp'),
     umd = require('gulp-umd');
 
 gulp.task('lint', function () {
-    return gulp.src('./multivents.js')
-        .pipe(eslint())
+    return gulp.src('./src/*.js')
+        .pipe(eslint(eslintConfig))
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 });
@@ -30,17 +32,18 @@ gulp.task('test', [ 'pre-test' ], function () {
         .pipe(istanbul.writeReports({ reporters: [ 'text', 'html' ] }));
 });
 
-gulp.task('rollup', function () {
+gulp.task('bundle', function () {
     return rollup({
         entry: './src/multivents.js',
-        format: 'cjs'
+        format: 'iife',
+        moduleName: 'Channel'
     })
-    .pipe(source('multivents.umd.js'))
+    .pipe(source('multivents.js'))
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('umd', function () {
-    return gulp.src('./src/multivents.js')
+gulp.task('umd', [ 'bundle' ], function () {
+    return gulp.src('./dist/multivents.js')
         .pipe(rename('multivents.umd.js'))
         .pipe(umd({
             exports: function (file) {
@@ -54,10 +57,11 @@ gulp.task('umd', function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', [ 'rollup' ], function () {
+gulp.task('build', [ 'umd' ], function () {
     return gulp.src('./dist/multivents.umd.js')
         .pipe(rename('multivents.umd.min.js'))
         .pipe(sourcemaps.init())
+            .pipe(babel({presets:['env']}))
             .pipe(uglify())
         .pipe(sourcemaps.write('./', {includeContent:false}))
         .pipe(gulp.dest('./dist/'));
