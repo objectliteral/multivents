@@ -6,7 +6,14 @@
  * @fileOverview This is the only source file of multivents. It includes all the functionality and API.
  */
 
+import emit from './emit.js';
+import on from './on.js';
 import once from './once.js';
+import off from './off.js';
+import silence from './silence.js';
+import unsilence from './unsilence.js';
+import lock from './lock.js';
+import unlock from './unlock.js';
 
 var Channel;
 
@@ -33,10 +40,11 @@ Channel = (function () {
 
         var addEvent,
             channel,
-            emit,
+            _emit,
             events,
             isPublic,
             locked,
+            scope,
             silenced;
 
         locked = silenced = false;
@@ -73,68 +81,9 @@ Channel = (function () {
             channel = this || {};
         }
 
-        emit = function emit (type, data, async) { // eslint-disable-line no-shadow
+        scope = { channel, events, isPublic, silenced, locked, addEvent };
 
-            var asyncEvt,
-                asyncScore,
-                callback,
-                index,
-                len,
-                list;
-
-            if (silenced || (events[type] && events[type].silenced)) {
-                return channel;
-            }
-
-            list = (events[type] && events[type].callbacks) || [];
-            len = list.length;
-            index = 0;
-
-            asyncEvt = async === false ? -1 : async || 0;
-
-            for (; index < len; index = index + 1) {
-                callback = list[index];
-                if (!callback.silenced) {
-                    asyncScore = callback.async + asyncEvt;
-                    if ((callback.async === 0 && asyncEvt === 0) || asyncScore > 0 || asyncEvt === 1) {
-
-                        setTimeout(
-
-                            function () {
-
-                                this.func.apply(this.context,
-                                    this.data.concat([ this ])
-                                );
-
-                            }.bind({
-                                "func": callback.callbackFunction,
-                                "context": callback.context,
-                                "name": type,
-                                "channel": channel,
-                                "async": true,
-                                "data": data
-                            }),
-
-                        0);
-
-                    } else if (asyncScore < 0 || asyncEvt === -1) {
-                        list[index].callbackFunction.apply(list[index].context,
-                            data.concat([ {
-                                "func": callback.callbackFunction,
-                                "context": callback.context,
-                                "name": type,
-                                "channel": channel,
-                                "async": false,
-                                "data": data
-                            } ])
-                        );
-                    }
-                }
-            }
-
-            return channel;
-
-        };
+        _emit = emit(scope);
 
         Object.assign(channel, /** @lends Channel# */{
 
@@ -148,22 +97,7 @@ Channel = (function () {
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "on": function on (type, func, ctx, async) { // eslint-disable-line id-length
-
-                if (locked || (events[type] && events[type].locked)) {
-                    return this;
-                }
-
-                addEvent(type).callbacks.push({
-                    "callbackFunction": func,
-                    "context": ctx,
-                    "silenced": false,
-                    "async": async === false ? -1 : async || 0
-                });
-
-                return this;
-
-            },
+            "on": on(scope),
 
             /**
              * This method does the same as `on` but it registers a callback that will only be executed once.
@@ -174,7 +108,7 @@ Channel = (function () {
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "once": once(channel),
+            "once": once(scope),
 
             /**
              * Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
@@ -184,47 +118,7 @@ Channel = (function () {
              * @param {Function} [func] The callback function to be removed.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "off": function off (type, func) {
-
-                var index,
-                    typeIndex;
-
-                if (locked === true) {
-                    return this;
-                }
-
-                if (isPublic === false) {
-                    if (typeof type === "undefined") {
-                        for (typeIndex in events) {
-                            if (events.hasOwnProperty(typeIndex)) {
-                                events[typeIndex].callbacks = [];
-                            }
-                        }
-                    } else if (events[type] && events[type].locked === false) {
-                        if (typeof func === "undefined") {
-                            events[type].callbacks = [];
-                        } else {
-                            for (index = 0; index < events[type].callbacks.length; index = index + 1) {
-                                events[type].callbacks.splice(index, 1);
-                            }
-                        }
-                    }
-
-                    return this;
-
-                }
-
-                if (typeof type !== "undefined" && events[type] && typeof func !== "undefined") {
-                    for (index = 0; index < events[type].callbacks.length; index = index + 1) {
-                        if (events[type].callbacks[index].callbackFunction === func) {
-                            events[type].callbacks.splice(index, 1);
-                        }
-                    }
-                }
-
-                return this;
-
-            },
+            "off": off(scope),
 
             /**
              * Calling this method triggers the specified event and will result in all registered callbacks being executed. All arguments that get passed to `emit` after the event name are provided as arguments to each callback function.
@@ -234,7 +128,7 @@ Channel = (function () {
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "emit": function (type) {
-                return emit.call(this, type, Array.prototype.slice.call(arguments, 1));
+                return _emit.call(this, type, Array.prototype.slice.call(arguments, 1));
             },
 
             /**
@@ -244,7 +138,7 @@ Channel = (function () {
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "emitSync": function (type) {
-                return emit.call(this, type, Array.prototype.slice.call(arguments, 1), false);
+                return _emit.call(this, type, Array.prototype.slice.call(arguments, 1), false);
             },
 
             /**
@@ -254,7 +148,7 @@ Channel = (function () {
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
             "emitAsync": function (type) {
-                return emit.call(this, type, Array.prototype.slice.call(arguments, 1), true);
+                return _emit.call(this, type, Array.prototype.slice.call(arguments, 1), true);
             },
 
             /**
@@ -266,48 +160,7 @@ Channel = (function () {
              * @param {Function} [func] The function that is no longer to be executed when the event is triggered. If no function is specified, the whole event type will be silenced.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "silence": (function () {
-
-                if (isPublic === true) {
-                    return function () {
-                        return this;
-                    };
-                } else {
-                    return function silence (type, func) {
-
-                        var callbackCount,
-                            evt,
-                            index;
-
-                        if (typeof type === "undefined") {
-                            silenced = true;
-
-                            return this;
-                        }
-
-                        if (typeof func === "undefined") {
-                            addEvent(type).silenced = true;
-
-                            return this;
-                        }
-
-                        evt = events[type];
-
-                        if (typeof evt !== "undefined") {
-                            callbackCount = evt.callbacks.length;
-                            for (index = 0; index < callbackCount; index = index + 1) {
-                                if (evt.callbacks[index].callbackFunction === func) {
-                                    evt.callbacks[index].silenced = true;
-                                }
-                            }
-                        }
-
-                        return this;
-
-                    };
-                }
-
-            }()),
+            "silence": silence(scope),
 
             /**
              * With this method you can enable message sending after it was disable using `silence`.
@@ -319,38 +172,7 @@ Channel = (function () {
              * @param {Function} [func] The function that shall be executed again, after being silenced. If no function is given, the whole event type will be unsilenced.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "unsilence": function unsilence (type, func) {
-
-                var callbackCount,
-                    evt,
-                    index;
-
-                if (typeof type === "undefined") {
-                    silenced = false;
-
-                    return this;
-                }
-
-                if (typeof func === "undefined") {
-                    addEvent(type).silenced = false;
-                    
-                    return this;
-                }
-
-                evt = events[type];
-
-                if (typeof evt !== "undefined") {
-                    callbackCount = evt.callbacks.length;
-                    for (index = 0; index < callbackCount; index = index + 1) {
-                        if (evt.callbacks[index].callbackFunction === func) {
-                            evt.callbacks[index].silenced = false;
-                        }
-                    }
-                }
-
-                return this;
-
-            },
+            "unsilence": unsilence(scope),
 
             /**
              * `Lock` prevents new callbacks from being registered. Similar to silencing, you can either lock an entire channel by calling `lock` with no arguments or lock a single event type by providing `lock` with that event's type.
@@ -360,27 +182,7 @@ Channel = (function () {
              * @param {String} [type] The name of the event to which no new callbacks shall be registerd. If no event name is specified, the whole channel will be locked.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "lock": (function () {
-                
-                if (isPublic === true) {
-                    return function () {
-                        return this;
-                    };
-                } else {
-                    return function lock (type) {
-
-                        if (typeof type === "undefined") {
-                            locked = true;
-                        } else {
-                            addEvent(type).locked = true;
-                        }
-
-                        return this;
-
-                    };
-                }
-
-            }()),
+            "lock": lock(scope),
 
             /**
              * `Unlock` allows callbacks from being added to a channel after it was locked. You can unlock a locked channel or just a single event type by using the optional parameter.
@@ -390,17 +192,7 @@ Channel = (function () {
              * @param {String} [type] The name of the event that shall accept new callbacks again. If no event type is given, the whole channel will be unlocked.
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
-            "unlock": function unlock (type) {
-
-                if (typeof type === "undefined") {
-                    locked = false;
-                } else {
-                    addEvent(type).locked = false;
-                }
-
-                return this;
-
-            },
+            "unlock": unlock(scope),
 
             /**
              * This lets you remove all event listeners from the message channel or from a specified event type.
@@ -453,8 +245,8 @@ Channel = (function () {
 
                     channelSilenced = false;
 
-                    if (typeof type === "undefined" || silenced) {
-                        channelSilenced = silenced;
+                    if (typeof type === "undefined" || scope.silenced) {
+                        channelSilenced = scope.silenced;
                     } else if (events[type] && (typeof func === "undefined" || events[type].silenced)) {
                         channelSilenced = events[type].silenced;
                     } else {
@@ -485,11 +277,11 @@ Channel = (function () {
             "isLocked": function isLocked (type) {
                 
                 return isPublic === false && (function () {
-
+                    
                     var channelLocked;
 
-                    if (typeof type === "undefined" || locked) {
-                        channelLocked = locked;
+                    if (typeof type === "undefined" || scope.locked) {
+                        channelLocked = scope.locked;
                     } else {
                         channelLocked = (events[type] || false) && events[type].locked;
                     }

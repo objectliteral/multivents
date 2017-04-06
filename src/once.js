@@ -1,4 +1,4 @@
-export default function (channel) {
+var once = function ({ channel, events, isPublic, silenced, locked, addEvent }) {
 
     return function once (type, func, ctx, async) {
 
@@ -23,3 +23,5 @@ export default function (channel) {
     };
 
 };
+
+export default once;
