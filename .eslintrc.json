@@ -1,6 +1,7 @@
 {
     "parserOptions": {
-        "ecmaVersion": 6
+        "ecmaVersion": 6,
+        "sourceType": "module"
     }, "env": {
         "browser": true,
         "commonjs": true
@@ -718,7 +719,7 @@
             "off"
         ],
         "node/no-unsupported-features": [
-            "error",
+            "off",
             {
                 "version": 6
             }
