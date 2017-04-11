@@ -66,30 +66,6 @@ describe('`emit` function',  function () {
         channel.emitSync('ping', 'foo', 'bar');
     });
 
-    it('should inject a callback\'s context',  function () {
-        var channel = Channel({}),
-            ctx = { }
-            f = function () { assert.equal(ctx, this); };
-        channel.on('ping', f, ctx);
-        channel.emit('ping');
-    });
-
-    it('should inject a callback\'s context when explicitly called with the async flag',  function () {
-        var channel = Channel({}),
-            ctx = { }
-            f = function () { assert.equal(ctx, this); };
-        channel.on('ping', f, ctx);
-        channel.emitAsync('ping');
-    });
-
-    it('should inject a callback\'s context when explicitly called with the sync flag',  function () {
-        var channel = Channel({}),
-            ctx = { }
-            f = function () { assert.equal(ctx, this); };
-        channel.on('ping', f, ctx);
-        channel.emitSync('ping');
-    });
-
     it('should inject an event object containing information about the event', function () {
         var channel = Channel({}),
             f = function (arg, evt) {
