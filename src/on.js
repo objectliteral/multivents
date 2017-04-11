@@ -1,8 +1,18 @@
-var on = function ({ channel, events, isPublic, silenced, locked, addEvent }) { // eslint-disable-line id-length
+import { isLocked } from './plugins/locking/index.js';
+
+var on = function (scope) { // eslint-disable-line id-length
+
+    var addEvent,
+        events,
+        locked;
+
+    addEvent = scope.addEvent;
+    events = scope.events;
+    locked = isLocked(scope);
 
     return function on (type, func, ctx, async) { // eslint-disable-line id-length
 
-        if (locked || (events[type] && events[type].locked)) {
+        if (locked(this) || (events[type] && events[type].locked)) {
             return this;
         }
 

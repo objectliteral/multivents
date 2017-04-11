@@ -10,13 +10,9 @@ import emit from './emit.js';
 import on from './on.js';
 import once from './once.js';
 import off from './off.js';
-import silence from './silence.js';
-import unsilence from './unsilence.js';
-import lock from './lock.js';
-import unlock from './unlock.js';
+import { silence, unsilence, isSilenced } from './plugins/silencing/index.js';
+import { lock, unlock, isLocked } from './plugins/locking/index.js';
 import reset from './reset.js';
-import isSilenced from './isSilenced.js';
-import isLocked from './isLocked.js';
 
 var Channel;
 
@@ -32,14 +28,12 @@ Channel = (function () {
     'use strict';
 
     var ChannelConstructor,
+        CoreChannelConstructor,
         channels;
 
     channels = { };
 
-    /**
-     * @alias Channel
-     */
-    ChannelConstructor = function ChannelConstructor (target) { // eslint-disable-line no-shadow
+    CoreChannelConstructor = function (target) { // eslint-disable-line no-shadow
 
         var addEvent,
             channel,
@@ -152,78 +146,7 @@ Channel = (function () {
              */
             "emitAsync": function (type) {
                 return _emit.call(this, type, Array.prototype.slice.call(arguments, 1), true);
-            },
-
-            /**
-             * The `silence` method prevents any new messages from being sent over the message channel. Affects the entire channel or specific events or even specific callbacks.
-             * Does not affect public channels at all.
-             *
-             * @method
-             * @param {String} [type] The name of the event that is meant to be silenced. If no event type is specified, the whole channel will be silenced.
-             * @param {Function} [func] The function that is no longer to be executed when the event is triggered. If no function is specified, the whole event type will be silenced.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "silence": silence(scope),
-
-            /**
-             * With this method you can enable message sending after it was disable using `silence`.
-             * If you unsilence a single event, but the entire channel is still silenced, triggering the event will still have no effect.
-             * This method does not check if the channel is public, because if it were, it could not have been silenced in the first place.
-             * Unsilencing a channel that was not silenced does not throw but instead just does nothing.
-             *
-             * @param {String} [type] The name of the event that is meant to be unsilenced. If no event type is given, the whole channel well be unlocked.
-             * @param {Function} [func] The function that shall be executed again, after being silenced. If no function is given, the whole event type will be unsilenced.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "unsilence": unsilence(scope),
-
-            /**
-             * `Lock` prevents new callbacks from being registered. Similar to silencing, you can either lock an entire channel by calling `lock` with no arguments or lock a single event type by providing `lock` with that event's type.
-             * Does not affect public channels at all.
-             *
-             * @method
-             * @param {String} [type] The name of the event to which no new callbacks shall be registerd. If no event name is specified, the whole channel will be locked.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "lock": lock(scope),
-
-            /**
-             * `Unlock` allows callbacks from being added to a channel after it was locked. You can unlock a locked channel or just a single event type by using the optional parameter.
-             * This method does not check if the channel is public, because if it were, it could not have been locked in the first place.
-             * Unlocking a channel that was already unlocked does not throw but instead just does nothing.
-             *
-             * @param {String} [type] The name of the event that shall accept new callbacks again. If no event type is given, the whole channel will be unlocked.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "unlock": unlock(scope),
-
-            /**
-             * This lets you remove all event listeners from the message channel or from a specified event type.
-             * (Also sets `silenced` and `locked` to `false`).
-             *
-             * @param {String} [type] Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "reset": reset(scope),
-
-            /**
-             * Returns whether the channel or an event type or a specific callback is silenced.
-             *
-             * @param {String} [type] Optional: The name of the event whose status is being requested.
-             *                 If no event type is specified, the whole channel's status will be returned.
-             * @param {Function} [func] Optional: The function whose status is being requested.
-             *                   If no function is specified the whole event type's status will be returned.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "isSilenced": isSilenced(scope),
-
-            /**
-             * Returns whether the channel or a specifc event type on this channel is locked.
-             *
-             * @param {String} [type] Optional: The name of the event whose status is being requested. If no event type is specified, the whole channel's status will be returned.
-             * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
-             */
-            "isLocked": isLocked(scope)
+            }
 
         });
 
@@ -231,11 +154,59 @@ Channel = (function () {
          * These aliases get added to give you the best expressability.
          * You can currently only delete them by creating a new channel and `delete channel.subscribe` etc.
          */
-        channel.subscribe = channel.attach = channel.on;
+        /*channel.subscribe = channel.attach = channel.on;
         channel.unsubscribe = channel.detach = channel.off;
         channel.publish = channel.fire = channel.trigger = channel.emit;
         channel.publishSync = channel.fireSync = channel.triggerSync = channel.emitSync;
-        channel.publishAsync = channel.fireAsync = channel.triggerAsync = channel.emitAsync;
+        channel.publishAsync = channel.fireAsync = channel.triggerAsync = channel.emitAsync;*/
+
+        return channel;
+
+    };
+
+    ChannelConstructor = function (target) {
+
+        var channel = { };
+        var core = new CoreChannelConstructor(target);
+        var meta = new CoreChannelConstructor();
+
+        meta.on('emit', function () {
+            core.emit.apply(this, Array.prototype.slice.call(arguments, 0, -1));
+        });
+
+        meta.on('emitAsync', function () {
+            core.emitAsync.apply(this, Array.prototype.slice.call(arguments));
+        });
+
+        meta.on('emitSync', function () {
+            core.emitSync.apply(this, Array.prototype.slice.call(arguments));
+        });
+
+        channel.emit = function (type) {
+            return meta.emitSync.apply(this, [ 'emit', type ].concat(Array.prototype.slice.call(arguments, 1)));
+        };
+
+        channel.emitAsync = function (type) {
+            return meta.emitSync.apply(this, [ 'emitAsync', type ].concat(Array.prototype.slice.call(arguments, 1)));
+        };
+
+        channel.emitSync = function (type) {
+            return meta.emitSync.apply(this, [ 'emitSync', type ].concat(Array.prototype.slice.call(arguments, 1)));
+        };
+
+        channel.on = core.on;
+        channel.once = core.once;
+        channel.off = core.off;
+
+        /*channel.silence = silence(scope).bind(channel);
+        channel.unsilence = unsilence(scope).bind(channel);
+        channel.isSilenced = isSilenced(scope).bind(channel);
+
+        channel.lock = lock(scope).bind(channel);
+        channel.unlock = unlock(scope).bind(channel);
+        channel.isLocked = isLocked(scope).bind(channel);
+
+        channel.reset = reset(scope).bind(channel);*/
 
         return channel;
 

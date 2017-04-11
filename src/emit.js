@@ -1,5 +1,15 @@
-var emit = function ({ channel, events, silenced }) {
+import { isSilenced } from './plugins/silencing/index.js';
+
+var emit = function (scope) {
     
+    var channel,
+        events,
+        silenced;
+    
+    channel = scope.channel;
+    events = scope.events;
+    silenced = isSilenced(scope);
+
     return function emit (type, data, async) { // eslint-disable-line no-shadow
 
         var asyncEvt,
@@ -9,7 +19,7 @@ var emit = function ({ channel, events, silenced }) {
             len,
             list;
 
-        if (silenced || (events[type] && events[type].silenced)) {
+        if (silenced(this) || (events[type] && events[type].silenced)) {
             return channel;
         }
 
@@ -59,7 +69,7 @@ var emit = function ({ channel, events, silenced }) {
             }
         }
 
-        return channel;
+        return this;
 
     };
 
