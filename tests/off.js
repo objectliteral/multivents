@@ -77,6 +77,15 @@ describe('`off` function', function () {
     channel.emit('ping');
   });
 
+  it('should result in all instances of the given callback no longer being triggered when called with an event type and a function reference', function () {
+    var channel = Channel({}),
+        f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
+    channel.on('ping', f);
+    channel.on('ping', f);
+    channel.off('ping', f);
+    channel.emit('ping');
+  });
+
   it('should result in callbacks for the given type no longer being triggered if called with an event type', function () {
     var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
@@ -105,7 +114,35 @@ describe('`off` function', function () {
     channel.on('ping', f);
     channel.on('ping', f2);
     channel.off('ping', f);
-    channel.emit('ping');
+    channel.emitSync('ping');
+  });
+
+  it('should not affect any other function except for the given one when called with an event type and a function reference (2)', function () {
+    var channel = Channel({}),
+        f = function () { test = true; },
+        f2 = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        test = false;
+    channel.on('ping', f);
+    channel.on('ping', f2);
+    channel.off('ping', f2);
+    channel.emitSync('ping');
+    assert(true, test);
+  });
+
+  it('should not affect any other function except for the given one when called with an event type and a function reference (3)', function () {
+    var channel = Channel({}),
+        f1 = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); },
+        f2 = function () { test1 = true; },
+        f3 = function () { test2 = true; },
+        test1 = false,
+        test2 = false;
+    channel.on('ping', f1);
+    channel.on('ping', f2);
+    channel.on('ping', f3);
+    channel.off('ping', f1);
+    channel.emitSync('ping');
+    assert.equal(true, test1);
+    assert.equal(true, test2);
   });
 
   it('should not affect any other events other than the given on if called with an event type', function () {
