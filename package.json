@@ -1,6 +1,6 @@
 {
   "name": "multivents",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "Multifunctional Event System",
   "main": "dist/multivents.umd.js",
   "scripts": {
@@ -43,9 +43,9 @@
     "gulp-gzip": "^1.4.0",
     "gulp-istanbul": "^1.1.1",
     "gulp-jsdoc3": "^1.0.1",
-    "gulp-mocha": "~4.1.0",
+    "gulp-mocha": "~4.3.0",
     "gulp-rename": "~1.2.2",
-    "gulp-sourcemaps": "~2.4.1",
+    "gulp-sourcemaps": "~2.6.0",
     "gulp-uglify": "~2.1.0",
     "gulp-umd": "^0.2.0",
     "jsdoc": "^3.4.3",
