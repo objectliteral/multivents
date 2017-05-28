@@ -80,10 +80,10 @@ describe('`off` function', function () {
   it('should result in all instances of the given callback no longer being triggered when called with an event type and a function reference', function () {
     var channel = Channel({}),
         f = function () { assert.fail(undefined, undefined, 'This function must not be executed.'); };
-    channel.on('ping', f);
-    channel.on('ping', f);
-    channel.off('ping', f);
-    channel.emit('ping');
+    channel.on('asdasd', f);
+    channel.on('asdasd', f);
+    channel.off('asdasd', f);
+    channel.emitSync('asdasd');
   });
 
   it('should result in callbacks for the given type no longer being triggered if called with an event type', function () {
@@ -93,7 +93,7 @@ describe('`off` function', function () {
     channel.on('ping', f);
     channel.on('ping', f2);
     channel.off('ping');
-    channel.emit('ping');
+    channel.emitSync('ping');
   });
 
   it('should result in no more callbacks being triggered if called with no arguments', function () {
@@ -103,8 +103,8 @@ describe('`off` function', function () {
     channel.on('ping', f);
     channel.on('pong', f2);
     channel.off();
-    channel.emit('ping');
-    channel.emit('pong');
+    channel.emitSync('ping');
+    channel.emitSync('pong');
   });
 
   it('should not affect any other function except for the given one when called with an event type and a function reference', function () {
@@ -152,8 +152,8 @@ describe('`off` function', function () {
     channel.on('ping', f);
     channel.on('pong', f2);
     channel.off('ping');
-    channel.emit('ping');
-    channel.emit('pong');
+    channel.emitSync('ping');
+    channel.emitSync('pong');
   });
 
   it('should not affect any other channels other than the given one if called with no arguments', function () {
@@ -164,8 +164,8 @@ describe('`off` function', function () {
     channel.on('ping', f);
     channel2.on('ping', f2);
     channel.off();
-    channel.emit('ping');
-    channel2.emit('ping');
+    channel.emitSync('ping');
+    channel2.emitSync('ping');
   });
 
   it('should not affect locked events when called with an event type and a function reference', function () {
