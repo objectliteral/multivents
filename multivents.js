@@ -140,7 +140,6 @@ Channel = (function () {
              * @param {String} type The name of the event is specified by a string. It doesn't matter,
              *                 whether this event name already exists or not.
              * @param {Function} func The function to be called, when the event is triggered.
-             * @param {Object} [ctx] The context for the callback function execution. If you pass in an object it will be used as the callback's `this`.
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
@@ -165,7 +164,6 @@ Channel = (function () {
              *
              * @param {String} type The name of the event is specified by a string. It doesn't matter,  whether this event name already exists or not.
              * @param {Function} func The function to be called, when the event is triggered.
-             * @param {Object} [ctx] The context for the callback function execution. If you pass in an object it will be used as the callback's `this`.
              * @param {boolean} [async] A preference regarding whether this callback shall the executed asynchronously. (Not a guarantee!)
              * @returns {Object} The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
              */
