@@ -86,7 +86,6 @@ describe('`silence` function', function () {
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
     });
-    console.log('this');
     channel.silence('ping');
     channel.on('ping', function () {
       assert.fail(undefined, undefined, 'This function must not be executed.');
