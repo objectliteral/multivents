@@ -46,7 +46,7 @@ describe('`once` method', function () {
 
     channel.once('test', function () {
       check = this;
-    }, obj);
+    }.bind(obj));
 
     channel.emitSync('test');
 

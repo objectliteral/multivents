@@ -56,4 +56,20 @@ describe('`on` function', function () {
     assert.equal(channel, channel.on('ping', function () {}, this, true));
   });
 
+  it('should preserve the injected context', function () {
+
+    var channel = new Channel(),
+      check,
+      obj = {};
+
+    channel.on('test', function () {
+      check = this;
+    }.bind(obj));
+
+    channel.emitSync('test');
+
+    assert.equal(obj, check);
+
+  });
+
 });
