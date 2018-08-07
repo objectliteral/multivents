@@ -78,4 +78,4 @@ This library started out as a fork of [Fabien O'Carroll's](https://github.com/al
 
 ## License
 
-[MIT License (MIT) © 2014-2017 Peter Steinberg](https://github.com/objectliteral/multivents/blob/master/LICENSE)
+[MIT License (MIT) © 2014-2018 Peter Steinberg](https://github.com/objectliteral/multivents/blob/master/LICENSE)

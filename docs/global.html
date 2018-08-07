@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Tutorial: Asynchronous Callback Execution - Documentation</title>
+    <title>Global - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,28 +27,181 @@
 
 <div id="main">
     
-    <h1 class="page-title">Tutorial: Asynchronous Callback Execution</h1>
+    <h1 class="page-title">Global</h1>
     
 
-    <section>
+    
+
+
+
+
+<section>
 
 <header>
     
-
-    <h2>Asynchronous Callback Execution</h2>
+        <h2>
+        
+        </h2>
+        
+    
 </header>
 
 <article>
-    <p>By default, <strong>multivents</strong> calls event handler functions asynchronously.</p>
-<p>In some cases you might want to declare a callback that is explicitly meant to be invoked synchronously. You can do that with a fourth argument in  the <code>on</code> function.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.on('ping', f, null, false);</code></pre><p>Above you can see a callback registration that declares the callback's preference to be executed synchronously.</p>
-<p>You can also emit an event with a preference to have its callbacks be executed synchronously.</p>
-<pre class="prettyprint source lang-javascript"><code>channel.emitSync('ping');</code></pre><p>If neither the callback registration code nor the event emitter make any statement on how callback execution should be handled, <strong>multivents</strong> does it asynchronously. If one part (<code>emit</code> or <code>on</code>) states a preference and the other one doesn't, the preference will be respected. If both have the same preference, well, that's what we're doing. If there is a conflict, the emitter wins. So basically, if you use the <code>emitSync</code> or <code>emitAsync</code> method, the according execution style is guaranteed. E.g. in the following case:</p>
-<pre class="prettyprint source lang-javascript"><code>channel.on('ping', f, null, false); // [`f` wants to be called synchronously]
-channel.emitAsync('ping'); // [`emitAsync` guarantees asynchronous execution]</code></pre><p>the callback will be executed asynchronously, because the <code>emitAsync</code> method was used and is stronger than the async flag in the <code>on</code> call.</p>
+    <div class="container-overview">
+    
+        
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="Channel"><span class="type-signature"></span>Channel<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
 </article>
 
 </section>
+
+
+
 
 </div>
 
