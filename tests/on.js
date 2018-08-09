@@ -72,4 +72,64 @@ describe('`on` function', function () {
 
   });
 
+  it('should not register callbacks for event types that do not match a certain naming pattern', function () {
+
+    var channel = new Channel(),
+      check = true;
+
+    channel.on('1twothree', function () {
+      check = false;
+    });
+
+    channel.emitSync('*');
+
+    assert.equal(check, true);
+
+  });
+
+  it('should not register callbacks for event types that do not match a certain naming pattern', function () {
+
+    var channel = new Channel(),
+      check = true;
+
+    channel.on('123', function () {
+      check = false;
+    });
+
+    channel.emitSync('*');
+
+    assert.equal(check, true);
+
+  });
+
+  it('should not register callbacks for event types that do not match a certain naming pattern', function () {
+
+    var channel = new Channel(),
+      check = true;
+
+    channel.on('asd!', function () {
+      check = false;
+    });
+
+    channel.emitSync('*');
+
+    assert.equal(check, true);
+
+  });
+
+  it('should not register callbacks for event types that do not match a certain naming pattern', function () {
+
+    var channel = new Channel(),
+      check = true;
+
+    channel.on('##', function () {
+      check = false;
+    });
+
+    channel.emitSync('*');
+
+    assert.equal(check, true);
+
+  });
+
 });

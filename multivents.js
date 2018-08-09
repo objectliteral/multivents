@@ -84,7 +84,16 @@ Channel = (function () {
                 return channel;
             }
 
-            list = (events[type] && events[type].callbacks) || [];
+            if (type !== '*') {
+                list = (events[type] && events[type].callbacks) || [];
+                list = list.concat(events['*'] && events['*'].callbacks || []);
+            } else {
+                list = (Object.keys(events).reduce(
+                    function (callbacks, event) { return callbacks.concat(events[event].callbacks); },
+                    [])
+                ) || [];
+            }
+            
             len = list.length;
             index = 0;
 
@@ -100,7 +109,7 @@ Channel = (function () {
 
                             function () {
 
-                                this.func.apply(undefined,
+                                this.func.apply(null,
                                     this.data.concat([ this ])
                                 );
 
@@ -115,7 +124,7 @@ Channel = (function () {
                         0);
 
                     } else if (asyncScore < 0 || asyncEvt === -1) {
-                        list[index].callbackFunction.apply(undefined,
+                        list[index].callbackFunction.apply(null,
                             data.concat([ {
                                 "func": callback.callbackFunction,
                                 "name": type,
@@ -146,6 +155,10 @@ Channel = (function () {
             "on": function on (type, func, async) { // eslint-disable-line id-length
 
                 if (locked || (events[type] && events[type].locked)) {
+                    return this;
+                }
+
+                if (typeof type !== 'string' || typeof type === 'string' && (!type.match(/^[a-zA-Z_#][a-zA-Z0-9_]*$/) && type !== '*')) {
                     return this;
                 }
 
