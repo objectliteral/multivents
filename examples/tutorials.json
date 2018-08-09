@@ -2,6 +2,9 @@
     "basics": {
         "title": "Basic Usage"
     },
+    "catchalls": {
+        "title": "Catchalls"
+    },
     "context": {
         "title": "Injecting Context"
     },
