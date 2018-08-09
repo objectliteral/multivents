@@ -6,7 +6,7 @@
  * @fileOverview This is the only source file of multivents. It includes all the functionality and API.
  */
 
-var Channel;
+var Channel; // eslint-disable-line no-unused-vars
 
 /**
  * This constructor function creates a new message channel. You can invoke the constructor without passing any arguments (using the `new` keyword if you want to) and a new channel object is created for you. You can also call `Channel` as a function and pass in an object, that you want to transform into a message channel. A third option would be to pass the constructor a string, which creates a named channel.
@@ -27,7 +27,7 @@ Channel = (function () {
     /**
      * @alias Channel
      */
-    ChannelConstructor = function ChannelConstructor (target) { // eslint-disable-line no-shadow
+    ChannelConstructor = function (target) {
 
         var addEvent,
             channel,
@@ -218,7 +218,7 @@ Channel = (function () {
                 var index,
                     typeIndex;
 
-                if (locked === true || type === '*') {
+                if (locked === true || type === '*') {
                     return this;
                 }
 
