@@ -98,8 +98,8 @@ describe('`emit` function',  function () {
                 assert.equal(undefined, evt.context);
                 assert.equal('ping', evt.name);
                 assert.equal(channel, evt.channel);
-                // assert.equal(true, evt.async);
-                //assert.equal(data, evt.data);
+                assert.equal(true, evt.async);
+                assert.deepEqual(['foo'], evt.data);
             };
         channel.on('ping', f);
         channel.emit('ping', 'foo');
