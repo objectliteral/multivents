@@ -90,7 +90,11 @@ Channel = (function () {
             } else {
                 list = (Object.keys(events).reduce(
                     function (callbacks, event) {
-                        return callbacks.concat(events[event].callbacks);
+                        if (events[event] && events[event].silenced) {
+                            return callbacks;
+                        } else {
+                            return callbacks.concat(events[event].callbacks);
+                        }
                     },
                     [])
                 ) || [];
