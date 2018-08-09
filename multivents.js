@@ -89,7 +89,9 @@ Channel = (function () {
                 list = list.concat(events['*'] && events['*'].callbacks || []);
             } else {
                 list = (Object.keys(events).reduce(
-                    function (callbacks, event) { return callbacks.concat(events[event].callbacks); },
+                    function (callbacks, event) {
+                        return callbacks.concat(events[event].callbacks);
+                    },
                     [])
                 ) || [];
             }
@@ -121,7 +123,8 @@ Channel = (function () {
                                 "data": data
                             }),
 
-                        0);
+                            0
+                        );
 
                     } else if (asyncScore < 0 || asyncEvt === -1) {
                         list[index].callbackFunction.apply(null,
@@ -143,7 +146,7 @@ Channel = (function () {
 
         Object.assign(channel, /** @lends Channel# */{
 
-             /**
+            /**
              * With this method you can register callbacks to be executed when a certain event is triggered. You have to pass in the event name and the callback function, but you can optionally provide a third argument. This third argument should be an object which is then used as the callback function's `this` (context injection). The fourth parameter of the `on` function is a boolean that gives a preference on whether the callback function shall be executed asynchronously. Note, however, that asynchronous execution is not guarenteed.
              *
              * @param {String} type The name of the event is specified by a string. It doesn't matter,
@@ -215,7 +218,7 @@ Channel = (function () {
                 var index,
                     typeIndex;
 
-                if (locked === true) {
+                if (locked === true || type === '*') {
                     return this;
                 }
 
