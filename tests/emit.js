@@ -88,7 +88,7 @@ describe('`emit` function',  function () {
             f = function () { assert.equal(ctx, this); };
         channel.on('ping', f.bind(ctx));
         channel.emitSync('ping');
-});
+    });
 
     it('should inject an event object containing information about the event', function () {
         var channel = Channel({}),
@@ -122,4 +122,5 @@ describe('`emit` function',  function () {
         channel.on('ping', f);
         channel.emitSync('ping', 'foo');
     });
+    
 });

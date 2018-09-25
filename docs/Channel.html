@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Channel.html">Channel</a><ul class='methods'><li data-type='method'><a href="Channel.html#emit">emit</a></li><li data-type='method'><a href="Channel.html#emitAsync">emitAsync</a></li><li data-type='method'><a href="Channel.html#emitSync">emitSync</a></li><li data-type='method'><a href="Channel.html#isLocked">isLocked</a></li><li data-type='method'><a href="Channel.html#isSilenced">isSilenced</a></li><li data-type='method'><a href="Channel.html#lock">lock</a></li><li data-type='method'><a href="Channel.html#off">off</a></li><li data-type='method'><a href="Channel.html#on">on</a></li><li data-type='method'><a href="Channel.html#once">once</a></li><li data-type='method'><a href="Channel.html#silence">silence</a></li><li data-type='method'><a href="Channel.html#unlock">unlock</a></li><li data-type='method'><a href="Channel.html#unsilence">unsilence</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-async.html">Asynchronous Callback Execution</a></li><li><a href="tutorial-basics.html">Basic Usage</a></li><li><a href="tutorial-context.html">Injecting Context</a></li><li><a href="tutorial-named.html">Public Channels</a></li><li><a href="tutorial-silencing.html">Silencing and Locking</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Channel.html">Channel</a><ul class='methods'><li data-type='method'><a href="Channel.html#emit">emit</a></li><li data-type='method'><a href="Channel.html#emitAsync">emitAsync</a></li><li data-type='method'><a href="Channel.html#emitSync">emitSync</a></li><li data-type='method'><a href="Channel.html#isLocked">isLocked</a></li><li data-type='method'><a href="Channel.html#isSilenced">isSilenced</a></li><li data-type='method'><a href="Channel.html#lock">lock</a></li><li data-type='method'><a href="Channel.html#off">off</a></li><li data-type='method'><a href="Channel.html#on">on</a></li><li data-type='method'><a href="Channel.html#once">once</a></li><li data-type='method'><a href="Channel.html#reset">reset</a></li><li data-type='method'><a href="Channel.html#silence">silence</a></li><li data-type='method'><a href="Channel.html#unlock">unlock</a></li><li data-type='method'><a href="Channel.html#unsilence">unsilence</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-async.html">Asynchronous Callback Execution</a></li><li><a href="tutorial-basics.html">Basic Usage</a></li><li><a href="tutorial-catchalls.html">Catchalls</a></li><li><a href="tutorial-context.html">Injecting Context</a></li><li><a href="tutorial-silencing.html">Silencing and Locking</a></li></ul>
 </nav>
 
 <div id="main">
@@ -211,7 +211,7 @@
 
         
             
-<h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="type-signature"></span></h4>
+<h4 class="name" id="~events"><span class="type-signature">(inner) </span>events<span class="type-signature"></span></h4>
 
 
 
@@ -222,7 +222,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line425">line 425</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -262,8 +262,7 @@
 
 
 <div class="description">
-    This lets you remove all event listeners from the message channel or from a specified event type.
-(Also sets `silenced` and `locked` to `false`).
+    The `events` variable saves the names of registered events and associates those names with arrays of callback functions to be called, when the event is triggered.
 </div>
 
 
@@ -296,7 +295,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line249">line 249</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line242">line 242</a>
     </li></ul></dd>
     
 
@@ -452,7 +451,7 @@ You should not rely on the order in which the callbacks are being invoked.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line269">line 269</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -607,7 +606,7 @@ You should not rely on the order in which the callbacks are being invoked.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line259">line 259</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line252">line 252</a>
     </li></ul></dd>
     
 
@@ -762,7 +761,7 @@ You should not rely on the order in which the callbacks are being invoked.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line498">line 498</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line453">line 453</a>
     </li></ul></dd>
     
 
@@ -929,7 +928,7 @@ You should not rely on the order in which the callbacks are being invoked.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line458">line 458</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line417">line 417</a>
     </li></ul></dd>
     
 
@@ -1131,7 +1130,7 @@ You should not rely on the order in which the callbacks are being invoked.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line376">line 376</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line356">line 356</a>
     </li></ul></dd>
     
 
@@ -1172,7 +1171,6 @@ You should not rely on the order in which the callbacks are being invoked.
 
 <div class="description">
     `Lock` prevents new callbacks from being registered. Similar to silencing, you can either lock an entire channel by calling `lock` with no arguments or lock a single event type by providing `lock` with that event's type.
-Does not affect public channels at all.
 </div>
 
 
@@ -1299,7 +1297,7 @@ Does not affect public channels at all.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line200">line 200</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -1340,7 +1338,6 @@ Does not affect public channels at all.
 
 <div class="description">
     Removes event listeners. Functions will no longer be invoked when the specified event is triggered. You can pass in the event name and a function reference to remove a specific function. If you just provide the first parameter, all callbacks for the given event type are removed. You can remove all event handlers from all events on this channel, by calling `off` without any arguments.
-On public channels, only the first option (with both a type and a function reference) is permitted.
 </div>
 
 
@@ -1730,7 +1727,7 @@ On public channels, only the first option (with both a type and a function refer
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line170">line 170</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -1947,6 +1944,174 @@ On public channels, only the first option (with both a type and a function refer
 
     
 
+    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">(type<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line394">line 394</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    This lets you remove all event listeners from the message channel or from a specified event type.
+(Also sets `silenced` and `locked` to `false`).
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional: The name of the event whose callbacks shall be removed. If no event type is given, the whole channel will be reset.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The channel object. Or rather: 'this'. So be careful with rebinding 'this'.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
     <h4 class="name" id="silence"><span class="type-signature"></span>silence<span class="signature">(type<span class="signature-attributes">opt</span>, func<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
@@ -1959,7 +2124,7 @@ On public channels, only the first option (with both a type and a function refer
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line282">line 282</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line274">line 274</a>
     </li></ul></dd>
     
 
@@ -2000,7 +2165,6 @@ On public channels, only the first option (with both a type and a function refer
 
 <div class="description">
     The `silence` method prevents any new messages from being sent over the message channel. Affects the entire channel or specific events or even specific callbacks.
-Does not affect public channels at all.
 </div>
 
 
@@ -2160,7 +2324,7 @@ Does not affect public channels at all.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line406">line 406</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line375">line 375</a>
     </li></ul></dd>
     
 
@@ -2201,7 +2365,6 @@ Does not affect public channels at all.
 
 <div class="description">
     `Unlock` allows callbacks from being added to a channel after it was locked. You can unlock a locked channel or just a single event type by using the optional parameter.
-This method does not check if the channel is public, because if it were, it could not have been locked in the first place.
 Unlocking a channel that was already unlocked does not throw but instead just does nothing.
 </div>
 
@@ -2329,7 +2492,7 @@ Unlocking a channel that was already unlocked does not throw but instead just do
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line335">line 335</a>
+        <a href="multivents.js.html">multivents.js</a>, <a href="multivents.js.html#line316">line 316</a>
     </li></ul></dd>
     
 
@@ -2371,7 +2534,6 @@ Unlocking a channel that was already unlocked does not throw but instead just do
 <div class="description">
     With this method you can enable message sending after it was disable using `silence`.
 If you unsilence a single event, but the entire channel is still silenced, triggering the event will still have no effect.
-This method does not check if the channel is public, because if it were, it could not have been silenced in the first place.
 Unsilencing a channel that was not silenced does not throw but instead just does nothing.
 </div>
 
@@ -2533,7 +2695,7 @@ Unsilencing a channel that was not silenced does not throw but instead just does
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun May 28 2017 12:55:44 GMT+0200 (CEST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Sep 25 2018 18:14:16 GMT+0200 (Central European Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

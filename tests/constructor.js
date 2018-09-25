@@ -17,15 +17,6 @@ describe('Channel Constructor', function () {
       assert.equal('object', typeof channel);
   });
 
-  it('should contain a `get` function', function () {
-    assert.equal(true, typeof Channel.get === 'function');
-  });
-
-  it('should make named channels available via a `get` method', function () {
-      var channel = Channel('test');
-      assert.equal(channel, Channel.get('test'));
-  });
-
   it('should modify original object that was passed to it', function () {
     var obj = { foo : 'bar' }; 
     eventedObj = Channel(obj);

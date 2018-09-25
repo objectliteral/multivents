@@ -45,23 +45,4 @@ describe('`lock` function', function () {
     channel.emit('pong');
   });
 
-  it('should not affect public channels if called with no argument', function () {
-    var channel = Channel('test');
-    channel.lock();
-    channel.on('ping', function () {
-      assert(true);
-    });
-    channel.emit('ping');
-  });
-
-  it('should not affect public channels if called with an event name', function () {
-    var channel = Channel('test');
-    channel.on('ping', function () {});
-    channel.lock('ping');
-    channel.on('ping', function () {
-      assert(true);
-    });
-    channel.emit('ping');
-  });
-
 });
