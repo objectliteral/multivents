@@ -107,22 +107,4 @@ describe('`silence` function', function () {
     channel.emit('ping');
   });
 
-  it('should not affect public channels if called with no arguments', function () {
-    var channel = Channel('test');
-    channel.on('ping', function () {
-      assert(true);
-    });
-    channel.silence();
-    channel.emit('ping');
-  });
-
-  it('should not affect public channels if called with an event type', function () {
-    var channel = Channel('test');
-    channel.on('ping', function () {
-      assert(true);
-    });
-    channel.silence('ping');
-    channel.emit('ping');
-  });
-
 });

@@ -53,15 +53,6 @@ describe('`reset` function',  function () {
     channel.emit('pong');
   });
 
-  it('should not affect public channels', function () {
-    var channel = Channel('test');
-    channel.on('ping', function () {
-      assert(true);
-    });
-    channel.reset();
-    channel.emit('ping');
-  });
-
   it('should unlock a locked channel if called with no arguments', function () {
     var channel = Channel();
     channel.lock();
