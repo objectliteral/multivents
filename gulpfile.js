@@ -1,4 +1,6 @@
-var gulp = require('gulp'),
+/* eslint-disable */
+
+var { src, dest, parallel, series } = require('gulp'),
     uglify = require('gulp-uglify'),
     eslint = require('gulp-eslint'),
     istanbul = require('gulp-istanbul'),
@@ -9,27 +11,15 @@ var gulp = require('gulp'),
     gzip = require('gulp-gzip'),
     umd = require('gulp-umd');
 
-gulp.task('lint', function () {
-    return gulp.src('./multivents.js')
+const lint = function () {
+    return src('./multivents.js')
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
-});
+};
 
-gulp.task('pre-test', [ 'build' ], function () {
-    return gulp.src('./dist/multivents.umd.js')
-        .pipe(istanbul())
-        .pipe(istanbul.hookRequire());
-});
-
-gulp.task('test', [ 'pre-test' ], function () {
-    return gulp.src('./tests/*.js')
-        .pipe(mocha({ reporter: 'progress' }))
-        .pipe(istanbul.writeReports({ reporters: [ 'text', 'html' ] }));
-});
-
-gulp.task('umd', function () {
-    return gulp.src('./multivents.js')
+const wrapUmd = function () {
+    return src('./multivents.js')
         .pipe(rename('multivents.umd.js'))
         .pipe(umd({
             exports: function (file) {
@@ -40,27 +30,44 @@ gulp.task('umd', function () {
                 return 'Channel';
             }
         }))
-        .pipe(gulp.dest('./dist'));
-});
+        .pipe(dest('./dist'));
+};
 
-gulp.task('build', [ 'umd' ], function () {
-    return gulp.src('./dist/multivents.umd.js')
+const build = series(wrapUmd, function () {
+    return src('./dist/multivents.umd.js')
         .pipe(rename('multivents.umd.min.js'))
         .pipe(sourcemaps.init())
             .pipe(uglify())
         .pipe(sourcemaps.write('./', {includeContent:false}))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(dest('./dist/'));
 });
 
-gulp.task('compress', [ 'build' ], function () {
-    return gulp.src('./dist/multivents.umd.min.js')
+const compress = series(build, function () {
+    return src('./dist/multivents.umd.min.js')
         .pipe(gzip())
-        .pipe(gulp.dest('./dist/'));
+        .pipe(dest('./dist/'));
 });
 
-gulp.task('docs', function () {
-    return gulp.src([''])
+const preTest = series(build, function () {
+    return src('./dist/multivents.umd.js')
+        .pipe(istanbul())
+        .pipe(istanbul.hookRequire());
+});
+
+const test = series(preTest, function () {
+    return src('./tests/*.js')
+        .pipe(mocha({ reporter: 'progress' }))
+        .pipe(istanbul.writeReports({ reporters: [ 'text', 'html' ] }));
+});
+
+const docs = function () {
+    return src(['multivents.js'])
         .pipe(jsdoc(require('./jsdoc.json')));
-});
+};
 
-gulp.task('default', [ 'lint', 'test', 'build', 'compress', 'docs' ]);
+exports.lint = lint;
+exports.test = test;
+exports.build = build;
+exports.compress = compress;
+exports.docs = docs;
+exports.default = parallel(lint, test, compress, docs);

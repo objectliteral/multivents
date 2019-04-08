@@ -38,7 +38,7 @@
     "eslint-plugin-no-unsafe-chars": "^1.0.2",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-objects": "^1.1.1",
-    "gulp": "~3.9.1",
+    "gulp": "~4.0.0",
     "gulp-eslint": "^5.0.0",
     "gulp-gzip": "^1.4.0",
     "gulp-istanbul": "^1.1.1",
