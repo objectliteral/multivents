@@ -149,7 +149,7 @@ Channel = function (target) {
                 return this;
             }
 
-            if (typeof type !== 'string' || typeof type === 'string' && (!type.match(/^[a-zA-Z_#][a-zA-Z0-9_]*$/) && type !== '*')) {
+            if (typeof type !== 'string' || typeof type === 'string' && (!type.match(/^[a-zA-Z_#][a-zA-Z0-9_-]*$/) && type !== '*')) {
                 return this;
             }
 
